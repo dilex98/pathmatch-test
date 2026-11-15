@@ -78,5 +78,38 @@ console.log('did the file give us text');
 ok('text one letter at a time is reported',R.readQuality("F r e n c h m o t h e r").singleRatio>0.35);
 ok('normal text is fine',R.readQuality("Production Coordinator at Northwind Manufacturing").singleRatio<0.1);
 
+console.log('\nreading a photo of a CV (OCR)');
+/* linesByPosition lives in the page, not in a module, so it is lifted out and run here. It only
+   handles plain objects, so it needs no browser. */
+const pageSrc = require('fs').readFileSync(require('path').join(__dirname,'..',process.argv[2]||'after-3','index.html'), 'utf8');
+const fnSrc = pageSrc.slice(pageSrc.indexOf('function linesByPosition'));
+const linesByPosition = new Function(fnSrc.slice(0, fnSrc.indexOf('\nasync function readOne')) + '\nreturn linesByPosition;')();
+const mk = (x0, y0, x1, y1, text) => ({ text: text, bbox: { x0: x0, y0: y0, x1: x1, y1: y1 } });
+/* The real failure, from a test photo with a shadow down one side: a right-aligned date comes back
+   in its own block, after the bullets of the job above it, and attaches to the wrong job. The years
+   came out 1.6 instead of 3.8 - student instead of mid-level. */
+const twoBlocks = { blocks: [
+  { paragraphs: [{ lines: [
+    mk(80, 200, 330, 224, 'Production Coordinator'),
+    mk(80, 240, 500, 262, 'Northwind Manufacturing, Montreal, QC'),
+    mk(95, 290, 870, 312, 'Request supplier quotes and handle purchasing.'),
+    mk(80, 400, 290, 422, 'Supply Chain Intern')] }] },
+  { paragraphs: [{ lines: [
+    mk(1000, 202, 1240, 224, 'March 2023 - Present'),
+    mk(960, 402, 1230, 424, 'January 2022 - April 2022')] }] }] };
+const rebuilt = linesByPosition(twoBlocks).split('\n');
+ok('a date on the right rejoins the job title on its own row',
+   /Production Coordinator\s+March 2023 - Present/.test(rebuilt[0]), rebuilt[0]);
+ok('...and so does the next one', /Supply Chain Intern\s+January 2022/.test(rebuilt[3]), rebuilt[3]);
+ok('the employer line is not swallowed into it', /^Northwind/.test(rebuilt[1]), rebuilt[1]);
+ok('lines that are not on the same row stay apart', rebuilt.length === 4, String(rebuilt.length));
+ok('a page with almost nothing on it falls back to the plain text',
+   linesByPosition({ blocks: [{ paragraphs: [{ lines: [mk(0, 0, 10, 10, 'one')] }] }] }) === null);
+ok('no positions at all also falls back', linesByPosition({}) === null);
+ok('the lighting is evened out before reading, for both a photo and a scanned PDF',
+   /evenLighting\(bmp\)/.test(pageSrc) && /evenLighting\(cv\)/.test(pageSrc));
+ok('there is a second place to get the reader from if the first is blocked',
+   /cdnjs[^"]*tesseract/.test(pageSrc) && /jsdelivr[^"]*tesseract/.test(pageSrc));
+
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);

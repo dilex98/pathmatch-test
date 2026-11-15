@@ -2128,18 +2128,102 @@ let READ_NOTE="",CVBAD="",CVFORCE=false,PDF_PAGES=null,CV_HEADINGS=[],READ_SCAN=
 function loadScript(src){
   return new Promise((ok,no)=>{const el=document.createElement("script");el.src=src;el.onload=ok;el.onerror=()=>no(new Error("could not load "+src));document.head.appendChild(el);});
 }
+/* Even out the lighting before reading. A photo taken by hand almost always has a shadow falling
+   across the page, and the reader simply does not see text in the dark part: a test photo with a
+   shadow down the right-hand side lost EVERY date on the CV, because the dates were right-aligned.
+   No dates means no career stage, which decides the whole list.
+   The fix is flat-field correction, the standard one: a heavily blurred copy of the page IS the
+   lighting, so dividing the page by it leaves the ink and removes the shadow. On the test photo it
+   lifted the right-hand third from 182 to 245 in brightness and brought back all three dates. */
+function evenLighting(src){
+  const w=src.width||src.naturalWidth,h=src.height||src.naturalHeight;
+  if(!w||!h)return src;
+  const cv=document.createElement("canvas");cv.width=w;cv.height=h;
+  const cx=cv.getContext("2d",{willReadFrequently:true});
+  cx.drawImage(src,0,0,w,h);
+  const img=cx.getImageData(0,0,w,h),d=img.data;
+  /* the lighting, from a cheap box blur of a small copy - the detail does not matter, only the glow */
+  const S=Math.max(1,Math.round(Math.max(w,h)/48));
+  const sw=Math.ceil(w/S),sh=Math.ceil(h/S),sum=new Float32Array(sw*sh),cnt=new Float32Array(sw*sh);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=(y*w+x)*4,g=(d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114);
+    const k=((y/S)|0)*sw+((x/S)|0);sum[k]+=g;cnt[k]++;
+  }
+  const bg=new Float32Array(sw*sh);
+  for(let k=0;k<bg.length;k++)bg[k]=cnt[k]?sum[k]/cnt[k]:255;
+  const R=2,sm=new Float32Array(sw*sh);          /* smooth it so blocks do not show as edges */
+  for(let y=0;y<sh;y++)for(let x=0;x<sw;x++){
+    let s=0,n=0;
+    for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){
+      const yy=y+dy,xx=x+dx;if(yy<0||xx<0||yy>=sh||xx>=sw)continue;s+=bg[yy*sw+xx];n++;
+    }
+    sm[y*sw+x]=s/n;
+  }
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=(y*w+x)*4,l=Math.max(1,sm[((y/S)|0)*sw+((x/S)|0)]);
+    const g=(d[i]*0.299+d[i+1]*0.587+d[i+2]*0.114);
+    const v=Math.max(0,Math.min(255,g/l*245));
+    d[i]=d[i+1]=d[i+2]=v;
+  }
+  cx.putImageData(img,0,0);
+  return cv;
+}
+/* Put the lines back where they are on the page. The reader returns text in ITS reading order, and
+   on a CV that means a right-aligned date is emitted after the bullets of the job above it - seven
+   lines from the title it belongs to. The dates then attach to the wrong job: on the test photo the
+   years came out 1.6 instead of 3.8, which is the difference between mid-level and student.
+   The reader does know where each line sits, so this rebuilds the page from those positions and
+   joins lines that share a row, whatever order they arrived in. It is the same thing cvread.js does
+   for a PDF, for the same reason. If the reader gives no positions, the plain text is used. */
+function linesByPosition(data){
+  const L=[];
+  const blocks=(data&&data.blocks)||[];
+  for(const b of blocks)for(const p of (b.paragraphs||[]))for(const ln of (p.lines||[])){
+    const t=(ln.text||"").replace(/\s+/g," ").trim();
+    const bb=ln.bbox;
+    if(!t||!bb)continue;
+    L.push({top:bb.y0,bot:bb.y1,left:bb.x0,text:t});
+  }
+  if(L.length<4)return null;                       /* not enough to trust - use the plain text */
+  L.sort((a,b)=>a.top-b.top||a.left-b.left);
+  const out=[];
+  for(const l of L){
+    const p=out[out.length-1];
+    if(p){
+      const ov=Math.min(p.bot,l.bot)-Math.max(p.top,l.top);
+      if(ov>0.55*Math.min(p.bot-p.top,l.bot-l.top)){      /* same row of the page */
+        p.text=p.left<=l.left?p.text+"   "+l.text:l.text+"   "+p.text;
+        p.top=Math.min(p.top,l.top);p.bot=Math.max(p.bot,l.bot);p.left=Math.min(p.left,l.left);
+        continue;
+      }
+    }
+    out.push({top:l.top,bot:l.bot,left:l.left,text:l.text});
+  }
+  return out.map(o=>o.text).join("\n");
+}
+async function readOne(worker,img){
+  const r=await worker.recognize(img,{},{text:true,blocks:true});
+  return linesByPosition(r.data)||r.data.text;
+}
 async function readPicture(f,onPct){
-  if(!window.Tesseract)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js");
+  if(!window.Tesseract){
+    /* one CDN is a single point of failure, and school and office networks do block them */
+    try{await loadScript("https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js");}
+    catch(e){await loadScript("https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js");}
+  }
   const worker=await Tesseract.createWorker(["eng","fra"],1,{logger:m=>{if(m.status==="recognizing text"&&onPct)onPct(Math.round(m.progress*100));}});
   try{
-    if(/\.(png|jpe?g)$/i.test(f.name)){const r=await worker.recognize(f);return r.data.text;}
+    if(/\.(png|jpe?g)$/i.test(f.name)){
+      const bmp=await createImageBitmap(f);
+      return await readOne(worker,evenLighting(bmp));
+    }
     const doc=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;
     const out=[];
     for(let i=1;i<=Math.min(doc.numPages,4);i++){
       const page=await doc.getPage(i),vp=page.getViewport({scale:2});
       const cv=document.createElement("canvas");cv.width=vp.width;cv.height=vp.height;
       await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
-      const r=await worker.recognize(cv);out.push(r.data.text);
+      out.push(await readOne(worker,evenLighting(cv)));
     }
     return out.join("\n\n");
   }finally{try{await worker.terminate();}catch(e){}}
