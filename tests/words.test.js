@@ -6,7 +6,7 @@
  */
 const fs = require("fs");
 const path = require("path");
-const dir = process.argv[2] || path.join(__dirname, "..", "after-3");
+const dir = path.join(__dirname, "..", process.argv[2] || "after-4");
 const M = require(path.join(dir, "matcher.js"));
 const eng = M.engine(JSON.parse(fs.readFileSync(path.join(dir, "skills.json"), "utf8")));
 

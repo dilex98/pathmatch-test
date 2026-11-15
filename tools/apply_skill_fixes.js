@@ -32,6 +32,13 @@ for (const n of F.new || []) {
   console.log("  NEW   " + n.n + "  (" + n.a.length + " spellings)");
 }
 if (miss.length) { console.error("\nnot applied:\n - " + miss.join("\n - ")); process.exit(1); }
+if (F.general && F.general.names) {
+  const known = new Set(d.skills.map((x) => x.n));
+  const miss = F.general.names.filter((n) => !known.has(n));
+  d.general = F.general.names.filter((n) => known.has(n)).sort();
+  console.log("  general " + d.general.length + " skills counted at a third (I-09)" +
+    (miss.length ? "; not in the dictionary, skipped: " + miss.join(", ") : ""));
+}
 if (F.falseFriends && F.falseFriends.words) {
   d.terms = d.terms || {};
   d.terms.falseFriends = F.falseFriends.words.map(fold).sort();
