@@ -61,6 +61,11 @@ ok('letters spaced one by one are joined',/French \(mother tongue\)/.test(R.fixL
 ok('a ligature becomes two letters',R.tidyText("Certiﬁcate")==="Certificate");
 ok('a word split across two lines is joined',R.tidyText("mainte-\nnance")==="maintenance");
 ok('an invisible character is removed',R.tidyText("Power​BI")==="PowerBI");
+ok('icon-font characters are dropped',R.tidyText("\uf095 514-555-0100").trim()==="514-555-0100");
+ok('one spaced-out word inside a normal line is joined',
+   R.fixLetterSpacing("Languages: F r e n c h and English")==="Languages: French and English");
+ok('ordinary short words are not glued together',
+   R.fixLetterSpacing("I am a B Eng in C S")==="I am a B Eng in C S");
 
 console.log('several versions in one file');
 const p1="Production Coordinator\nMarch 2023 - Present\nNorthwind Manufacturing\nInventory control and purchasing\nB.Eng. Industrial Engineering 2018 - 2022";

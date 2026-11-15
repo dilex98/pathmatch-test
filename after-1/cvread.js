@@ -67,13 +67,15 @@ function columnCuts(its){
    pdf.js gives a list of pieces; a piece can be a whole word or a single letter.
    Two pieces are joined with no space when the second starts where the first ended,
    one space for a normal word gap, three for a wide gap (a tab stop or a date column). */
-function pdfPageLines(items){
-  const its=[];
+function pdfPageLines(items,big){
+  const its=[],turned=[];
   for(const i of items){
     const str=i.str!=null?i.str:i.s;
     if(!str)continue;
     const t=i.transform;
     const h=Math.abs(i.height||(t?t[3]:i.h))||10;
+    /* (5c) text printed sideways, as in a vertical sidebar: read it along its own axis */
+    if(t&&Math.abs(t[1])>Math.abs(t[0])*2){turned.push({s:str,x:-t[5],y:t[4],w:i.width||0,h:h});continue;}
     its.push({s:str,x:t?t[4]:i.x,y:t?t[5]:i.y,w:i.width||i.w||0,h:h});
   }
   const cuts=columnCuts(its);
@@ -84,8 +86,22 @@ function pdfPageLines(items){
     for(let i=0;i<edges.length-1;i++)
       parts.push(its.filter(it=>{const m=it.x+it.w/2;return m>edges[i]&&m<=edges[i+1];}));
   }
-  const out=[];
-  for(const part of parts)for(const L of groupLines(part)){const t=lineText(L);if(t.trim())out.push(t);}
+  const out=[],heights=[];
+  const take=(part)=>{
+    for(const L of groupLines(part)){
+      const t=lineText(L);
+      if(!t.trim())continue;
+      out.push(t);
+      heights.push({t:t.trim(),h:Math.max.apply(null,L.items.map(i=>i.h||10))});
+    }
+  };
+  for(const part of parts)take(part);
+  if(turned.length>=6)take(turned);
+  if(big&&heights.length>6){
+    const sorted=heights.map(x=>x.h).slice().sort((a,b)=>a-b);
+    const mid=sorted[Math.floor(sorted.length/2)];
+    for(const x of heights)if(x.h>=mid*1.15&&x.t.length<=42&&!/\d/.test(x.t))big.add(x.t);
+  }
   return out;
 }
 
@@ -98,6 +114,7 @@ function tidyText(t){
     .replace(/\ufb00/g,"ff").replace(/\ufb01/g,"fi").replace(/\ufb02/g,"fl")
     .replace(/\ufb03/g,"ffi").replace(/\ufb04/g,"ffl").replace(/[\ufb05\ufb06]/g,"st")
     .replace(/[\u00ad\u200b\u200c\u200d\ufeff]/g,"")
+    .replace(/[\ue000-\uf8ff]/g," ")
     .replace(/[\u00a0\u2007\u202f]/g," ")
     .replace(/\r\n?/g,"\n");
   return t.replace(/([A-Za-z\u00c0-\u00ff])-\n([a-z\u00e0-\u00ff])/g,"$1$2");
@@ -138,9 +155,17 @@ var HEAD_MAP=[
   [/\b(experience|experiences|employment|work|worked|working|career|emploi\w*|parcours)\b/,"WORK EXPERIENCE"],
   [/\b(summary|profile|objective|about)\b/,"SUMMARY"]
 ];
+/* The Europass CV writes its section labels in ordinary text, not in capitals.
+   These exact labels are safe to treat as headings; anything else still needs
+   capitals or a larger size. */
+var EXACT_HEAD={"education and training":"EDUCATION","personal skills":"SKILLS",
+  "communication skills":"SKILLS","organisational skills":"SKILLS","organizational skills":"SKILLS",
+  "job-related skills":"SKILLS","computer skills":"SKILLS","digital skills":"SKILLS",
+  "mother tongue":"LANGUAGES","other languages":"LANGUAGES","personal information":"SUMMARY",
+  "work experience":"WORK EXPERIENCE","additional information":"AWARDS","top skills":"SKILLS","honors-awards":"AWARDS","licenses & certifications":"CERTIFICATIONS"};
 var NOT_HEAD=/\b(engineer|ingenieur|coordinator|coordonnateur|manager|gestionnaire|analyst|analyste|technician|technicien|technologue|specialist|specialiste|assistant|intern|stagiaire|director|directeur|supervisor|superviseur|consultant|developer|officer|clerk|commis|representative|designer|nurse|infirmier|accountant|comptable|administrator|operator|worker|agent|advisor|conseiller|president|teacher|enseignant)\b/;
 function foldLine(s){return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
-function markSections(text,known){
+function markSections(text,known,big){
   const kn=new Set((known||[]).map(h=>foldLine(h).trim()));
   const lines=String(text||"").split("\n"),out=[];let added=0,last="";
   for(let i=0;i<lines.length;i++){
@@ -148,9 +173,14 @@ function markSections(text,known){
     const letters=t.replace(/[^A-Za-z\u00c0-\u00ff]/g,"");
     const caps=letters.length>=3&&letters===letters.toUpperCase();
     const next=(lines[i+1]||"").trim()||(lines[i+2]||"").trim();
-    const looks=caps&&t.length<=42&&!/\d/.test(t)&&t.split(/\s+/).length<=5&&!/[,;:.]/.test(t)&&!NOT_HEAD.test(f)&&next.length>0;
-    if(looks&&!kn.has(f)){
-      const hit=HEAD_MAP.find(function(p){return p[0].test(f);});
+    /* the label may sit at the start of the line with its value beside it, as in a table */
+    let exact=EXACT_HEAD[f.replace(/[:\s]+$/,"")];
+    if(!exact)for(const k in EXACT_HEAD){
+      if(f.length>k.length&&f.slice(0,k.length)===k&&/^[:\s]+/.test(f.slice(k.length))){exact=EXACT_HEAD[k];break;}
+    }
+    const looks=(caps||(big&&big.has(t)))&&t.length<=42&&!/\d/.test(t)&&t.split(/\s+/).length<=5&&!/[,;:.]/.test(t)&&!NOT_HEAD.test(f)&&next.length>0;
+    if((looks||exact)&&!kn.has(f)){
+      const hit=exact?[null,exact]:HEAD_MAP.find(function(p){return p[0].test(f);});
       if(hit&&foldLine(hit[1])!==f&&foldLine(last)!==foldLine(hit[1])){out.push(hit[1]);added++;}
     }
     out.push(raw);
@@ -163,14 +193,17 @@ function markSections(text,known){
    If most of a line reads that way, glue the single letters back into words:
    one space between two single letters disappears, a wider gap stays a word break. */
 function fixLetterSpacing(text){
+  /* a run of four or more lone letters anywhere in a line: "F r e n c h" */
+  const squeezeRun=(ln)=>ln.replace(/(?:^|(?<=\s))((?:[A-Za-z\u00c0-\u00ff] ){3,}[A-Za-z\u00c0-\u00ff])(?=\s|$)/g,
+    (m,run)=>run.replace(/ /g,""));
   const fixLine=(ln)=>{
     const tok=ln.trim().split(/\s+/).filter(Boolean);
     if(tok.length<6)return ln;
     const singles=tok.filter(t=>t.length===1).length;
-    if(singles/tok.length<0.6)return ln;
+    if(singles/tok.length<0.8)return ln;   /* a mixed line is handled word by word below */
     return ln.split(/ {2,}/).map(part=>part.replace(/(?<=\S) (?=\S)/g,"")).join(" ");
   };
-  return text.split("\n").map(fixLine).join("\n");
+  return text.split("\n").map(fixLine).map(squeezeRun).join("\n");
 }
 
 /* Several versions of the same CV in one file (English + French, old drafts).

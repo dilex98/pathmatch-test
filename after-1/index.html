@@ -475,9 +475,9 @@ body.cmpon{padding-bottom:84px}
         <h2 id="cvH">1. Your CV</h2>
         <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload CV">
           <strong>Drop your CV here</strong>
-          <span>PDF, Word (.docx) or text. Or click to choose a file.</span>
+          <span>PDF, Word (.docx), text, or a photo. Or click to choose a file.</span>
         </div>
-        <input type="file" id="file" accept=".pdf,.docx,.txt,.md" hidden>
+        <input type="file" id="file" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg" hidden>
         <label for="paste">Or paste the text</label>
         <textarea id="paste" placeholder="Paste your CV text here"></textarea>
         <div class="row" style="margin-top:10px">
@@ -732,6 +732,38 @@ function paintStage(){
   }else if(cb===null)n.textContent="I could not tell your stage from this CV (no dates or years of experience found). Tap your stage on the trail.";
   else n.innerHTML=`Your CV reads as <b>${esc(BAND[cb].label)}</b>. Not right? Tap another stop.`;
 }
+/* What we read from the CV, in the open: the sections, every date we found and how it
+   was counted, and every skill with the line it came from. A person can see a bad read
+   here instead of wondering why their top 10 looks odd. */
+let CHECK_OPEN=false;
+const HOWCOUNTED={work:"counted as work",junior:"student work, counted at 40%",edu:"studies, not counted as work",other:"not counted as work"};
+function cvCheck(){
+  if(!CV)return "";
+  const cf=cvFound();
+  if(!cf)return `<p class="note">Reading your CV…</p>`;
+  const names=Object.keys(cf);
+  const secs={};names.forEach(n=>{const h=cf[n];const k=(!h.section||h.section==="HEADER")?"Top of the CV":h.section;secs[k]=(secs[k]||0)+1;});
+  const ents=(CV.lv&&CV.lv.entries)||[];
+  const dated=ents.filter(e=>e.kind==="work"||e.kind==="junior");
+  const verdict=names.length<5?"Almost nothing was read from your CV. Paste the text instead."
+    :!ents.length?`${names.length} skills were read, but no dates. Your stage is a guess: check it on the trail.`
+    :`${names.length} skills, ${Object.keys(secs).length} section${Object.keys(secs).length===1?"":"s"} and ${ents.length} dated item${ents.length===1?"":"s"} were read. ${dated.length} counted towards your years of work.`;
+  const mon=m=>m>=12?(Math.round(m/12*10)/10)+" yr":m+" mo";
+  const rows=ents.length?ents.map(e=>`<tr><td>${esc(e.label||"(no title found)")}</td><td class="note" style="white-space:nowrap">${mon(e.months)}</td><td class="note">${HOWCOUNTED[e.kind]}</td></tr>`).join(""):"";
+  const chips=names.map(n=>`<span class="off" style="padding-right:4px">${esc(n)} <button class="lnk" data-drop="${esc(n)}" title="This skill is not mine" style="border:0;background:none;cursor:pointer;color:#b3261e;font-weight:700">×</button></span>`).join("");
+  const back=DROPPED.size?`<p class="note" style="margin-top:8px">Removed by you: ${[...DROPPED].map(n=>`${esc(n)} <button class="lnk" data-back="${esc(n)}" style="border:0;background:none;cursor:pointer">put back</button>`).join(" · ")}</p>`:"";
+  return `<details class="old" id="cvcheck" style="margin-top:10px"${CHECK_OPEN?" open":""}><summary>Check what we read from your CV</summary>
+    <p style="margin:8px 0"><b>${esc(verdict)}</b></p>
+    <h4 style="margin:10px 0 4px">Sections found</h4>
+    <div class="kw sk">${Object.keys(secs).length?Object.keys(secs).map(k=>`<span class="off">${esc(k.charAt(0)+k.slice(1).toLowerCase())} · ${secs[k]}</span>`).join(""):'<span class="note">None. Your CV may have no headings we recognise.</span>'}</div>
+    <h4 style="margin:12px 0 4px">Dates we found, and how they were counted</h4>
+    ${rows?`<table style="width:100%;border-collapse:collapse"><tbody>${rows}</tbody></table>`:'<p class="note">No dates were found.</p>'}
+    <h4 style="margin:12px 0 4px">Skills found (${names.length})</h4>
+    <p class="note" style="margin:0 0 6px">Each one is written in your CV. Press × beside anything that is not yours.</p>
+    <div class="kw sk" style="max-height:220px;overflow:auto">${chips||'<span class="note">None.</span>'}</div>${back}
+    <p class="note" style="margin-top:10px">Something missing or wrong? Fix the text in the box above and press “Read my CV” again.</p>
+  </details>`;
+}
 function renderCvRead(){
   const el=$("cvread");
   if(!CV){el.hidden=true;return;}
@@ -739,7 +771,7 @@ function renderCvRead(){
   const lv=CV.lv,b=lv.band,cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
   const head=b===null?`<span class="pill">Stage not clear</span>`:`<span class="pill lvl lv${b}">${esc(BAND[b].label)}</span>`;
   const yrs=lv.years!=null&&b!==null?`<dd>About ${lv.years} year${lv.years===1?"":"s"} of work counted.</dd>`:"";
-  el.innerHTML=`<h2>How we read your CV</h2><dl><dt>${head}</dt>${yrs}</dl><ul>${(lv.why||[]).map(w=>`<li>${esc(cap(w))}</li>`).join("")}</ul><p class="note" style="margin:8px 0 0">The stage decides which postings come first. If it is wrong, tap the right stop on the trail.</p>`;
+  el.innerHTML=`<h2>How we read your CV</h2><dl><dt>${head}</dt>${yrs}</dl><ul>${(lv.why||[]).map(w=>`<li>${esc(cap(w))}</li>`).join("")}</ul>${cvCheck()}<p class="note" style="margin:8px 0 0">The stage decides which postings come first. If it is wrong, tap the right stop on the trail.</p>`;
 }
 function stageChanged(){paintStage();renderCvRead();renderDetails();run();writeHash();}
 
@@ -937,7 +969,21 @@ function unent(s){
   return String(s).replace(/&#x([0-9a-f]+);/gi,(m,h)=>ch(parseInt(h,16))).replace(/&#(\d+);/g,(m,d)=>ch(+d)).replace(/&([a-z]+);/gi,(m,n)=>ENT[n.toLowerCase()]!==undefined?ENT[n.toLowerCase()]:m);
 }
 const bodyOf=j=>unent(j.desc||"").split("\n").filter(l=>!/^\s*(JOB|COMPANY|SOURCE):/.test(l)).join("\n").trim();
-function cvFound(){if(!DICT||!CV)return null;if(!CV.py)CV.py=DICT.findCv(CV.raw);return CV.py;}
+let DROPPED=new Set();try{DROPPED=new Set(JSON.parse(localStorage.getItem("pm_notmine")||"[]"));}catch(e){}
+function saveDropped(){try{localStorage.setItem("pm_notmine",JSON.stringify([...DROPPED]));}catch(e){}}
+function dropSkill(n,back){
+  if(back)DROPPED.delete(n);else DROPPED.add(n);
+  saveDropped();if(CV)CV._pyf=null;
+  paintStage();renderCvRead();renderDetails();run();
+}
+/* The skills written on the CV, minus the ones the person has told us are not theirs. */
+function cvFound(){
+  if(!DICT||!CV)return null;
+  if(!CV.py)CV.py=DICT.findCv(CV.raw);
+  if(!DROPPED.size)return CV.py;
+  if(!CV._pyf){const o={};for(const k in CV.py)if(!DROPPED.has(k))o[k]=CV.py[k];CV._pyf=o;}
+  return CV._pyf;
+}
 /* the word index (for phrases that are not skills) is built from the CV alone: a short item such as "Dean's list" would otherwise match any posting that says "listings". Items are matched as skills only. */
 function cvIx(){if(!DICT||!CV)return null;if(!CV.ix)CV.ix=DICT.indexCv(CV.base);return CV.ix;}
 /* ---------- Profile extras: certifications, awards, languages and the like that the person adds by hand.
@@ -976,13 +1022,13 @@ function datedText(t){
   if(!PDF_PAGES)return t;
   const full=PDF_PAGES.join("\n\n");
   if(t===full)return dropRepeatedPages(PDF_PAGES).text;
-  if(t===markSections(full,CV_HEADINGS).text)return dropRepeatedPages(PDF_PAGES).text;
+  if(t===markSections(full,CV_HEADINGS,BIG_LINES).text)return dropRepeatedPages(PDF_PAGES).text;
   return t;
 }
 function mkCV(t0){
   const dated0=datedText(t0);
-  const t=markSections(t0,CV_HEADINGS).text;
-  const dated=markSections(dated0,CV_HEADINGS).text;
+  const t=markSections(t0,CV_HEADINGS,BIG_LINES).text;
+  const dated=markSections(dated0,CV_HEADINGS,BIG_LINES).text;
   const e=withExtras(t);
   return {raw:e.raw,base:t,extrasAt:e.at,xspans:e.spans,xsig:xSig(),lv:JobMeta.cvLevel(dated,new Date()),py:null,ix:null};
 }
@@ -1769,8 +1815,30 @@ function copyList(list,btn,label){
 function fallback(t,b){const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");b.textContent="Copied"}catch(e){b.textContent="Select and copy manually"}ta.remove()}
 
 /* ---------- reading the CV ---------- */
-let READ_NOTE="",CVBAD="",CVFORCE=false,PDF_PAGES=null,CV_HEADINGS=[],READ_SCAN=false;
+let READ_NOTE="",CVBAD="",CVFORCE=false,PDF_PAGES=null,CV_HEADINGS=[],READ_SCAN=false,BIG_LINES=new Set(),LAST_FILE=null;
 
+/* Reading a CV that is only a picture (a scan or a photo). The tool runs inside the
+   browser, so the CV still never leaves the computer. It is slow, so it is never
+   started on its own: the person asks for it. */
+function loadScript(src){
+  return new Promise((ok,no)=>{const el=document.createElement("script");el.src=src;el.onload=ok;el.onerror=()=>no(new Error("could not load "+src));document.head.appendChild(el);});
+}
+async function readPicture(f,onPct){
+  if(!window.Tesseract)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.1/tesseract.min.js");
+  const worker=await Tesseract.createWorker(["eng","fra"],1,{logger:m=>{if(m.status==="recognizing text"&&onPct)onPct(Math.round(m.progress*100));}});
+  try{
+    if(/\.(png|jpe?g)$/i.test(f.name)){const r=await worker.recognize(f);return r.data.text;}
+    const doc=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;
+    const out=[];
+    for(let i=1;i<=Math.min(doc.numPages,4);i++){
+      const page=await doc.getPage(i),vp=page.getViewport({scale:2});
+      const cv=document.createElement("canvas");cv.width=vp.width;cv.height=vp.height;
+      await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
+      const r=await worker.recognize(cv);out.push(r.data.text);
+    }
+    return out.join("\n\n");
+  }finally{try{await worker.terminate();}catch(e){}}
+}
 async function readFile(f){
   const name=f.name.toLowerCase();
   if(name.endsWith(".pdf")){
@@ -1779,7 +1847,7 @@ async function readFile(f){
     const pages=[];
     for(let p=1;p<=doc.numPages;p++){
       const c=await(await doc.getPage(p)).getTextContent();
-      pages.push(pdfPageLines(c.items).join("\n"));
+      pages.push(pdfPageLines(c.items,BIG_LINES).join("\n"));
     }
     PDF_PAGES=dropPageFurniture(pages).map(function(x){return fixLetterSpacing(tidyText(x));});
     READ_SCAN=PDF_PAGES.join("").replace(/\s/g,"").length<40;
@@ -1787,11 +1855,13 @@ async function readFile(f){
     READ_NOTE=d.dropped?("Your file holds "+(d.dropped+1)+" versions of your CV. Your skills were read from all of them; your dates from the first one."):"";
     return PDF_PAGES.join("\n\n");
   }
+  if(/\.(png|jpe?g)$/.test(name)){READ_SCAN=true;return "";}
   if(name.endsWith(".docx"))return tidyText((await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()})).value);
   return tidyText(await f.text());
 }
 async function handleFile(f){
-  $("status").textContent="Reading "+f.name+"…";READ_NOTE="";CVFORCE=false;PDF_PAGES=null;READ_SCAN=false;
+  LAST_FILE=f;
+  $("status").textContent="Reading "+f.name+"…";READ_NOTE="";CVFORCE=false;PDF_PAGES=null;READ_SCAN=false;BIG_LINES=new Set();
   try{
     const t=await readFile(f);
     if(t.trim().length<80)throw new Error("short");
@@ -1799,8 +1869,24 @@ async function handleFile(f){
     go(READ_NOTE);
   }catch(e){
     $("status").innerHTML=READ_SCAN
-      ?'<b style="color:#b3261e">This file is a picture of your CV.</b> A scan or a photo holds no text, so nothing can be read from it. Open your CV in Word or Pages, select all the text, copy it and paste it in the box above.'
-      :'<b style="color:#b3261e">We could not read that file.</b> Paste the text in the box above instead. Word (.docx), PDF and plain text work; the older .doc format does not.';
+      ?'<b style="color:#b3261e">This file is a picture of your CV.</b> A scan or a photo holds no text in it. '+
+       'The surest way is to open your CV in Word or Pages, select all the text, copy it and paste it above. '+
+       'Or we can try to read the picture here on your computer: it takes about a minute a page and is not perfect. '+
+       '<button class="lnk" id="ocrgo" style="margin-top:6px">Read the picture</button>'
+      :'<b style="color:#b3261e">We could not read that file.</b> Paste the text in the box above instead. Word (.docx), PDF, plain text and photos work; the older .doc format does not.';
+    const ob=$("ocrgo");
+    if(ob)ob.onclick=async()=>{
+      $("status").innerHTML='Reading the picture of your CV… <span id="ocrpc">0%</span>. Keep this tab open.';
+      try{
+        const t=await readPicture(LAST_FILE,pc=>{const e=$("ocrpc");if(e)e.textContent=pc+"%";});
+        if(String(t).trim().length<80)throw new Error("short");
+        PDF_PAGES=null;BIG_LINES=new Set();
+        $("paste").value=fixLetterSpacing(tidyText(t));
+        go("Read from the picture. Reading a picture is never perfect: check the text above before you go on.");
+      }catch(err){
+        $("status").innerHTML='<b style="color:#b3261e">We could not read the picture.</b> Open your CV in Word or Pages, select all the text, copy it and paste it in the box above.';
+      }
+    };
   }
 }
 function go(note){
@@ -2220,6 +2306,12 @@ $("dkind").addEventListener("change",e=>{
 $("dlang").addEventListener("change",e=>{P.lang=e.target.value;prefsChanged();});
 $("dwhen").addEventListener("change",e=>{P.within=+e.target.value;prefsChanged();});
 $("dgo").onclick=()=>showPage("matches",true);
+document.addEventListener("toggle",e=>{if(e.target.id==="cvcheck")CHECK_OPEN=e.target.open;},true);
+document.addEventListener("click",e=>{
+  const d=e.target.closest("[data-drop]"),b=e.target.closest("[data-back]");
+  if(d){e.preventDefault();dropSkill(d.dataset.drop,false);}
+  else if(b){e.preventDefault();dropSkill(b.dataset.back,true);}
+});
 $("dclear").onclick=()=>{
   CV=null;SCORED_FOR=null;T.shown=10;
   try{sessionStorage.removeItem("pm_cv");}catch(e){}

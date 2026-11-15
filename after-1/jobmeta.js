@@ -204,7 +204,7 @@
     const raw = String(text || "");
     const lines = raw.split(/\r?\n/);
     const nowIx = now.getFullYear() * 12 + now.getMonth();
-    const ft = [], junior = [], edu = [];
+    const ft = [], junior = [], edu = [], entries = [];
     const titles = [];
     let section = "";
     let anyDate = false;
@@ -227,11 +227,20 @@
         const prev = i > 0 ? fold(lines[i - 1]) : "";
         const ctx = line.length < 50 ? prev + " " + line : line;
         const isEdu = section === "edu" || DEGREE.test(ctx) || (SCHOOL.test(ctx) && !JOBWORD.test(ctx));
-        if (isEdu) { edu.push([a, b]); continue; }
-        if (section === "other") continue;
+        const label = (function () {
+          const clean = (x) => String(x || "").replace(/[\u2013\u2014]/g, "-")
+            .replace(new RegExp(RANGE_SRC, "gi"), " ").replace(/[-|,;:]+\s*$/, "").replace(/\s{2,}/g, " ").trim();
+          let t = clean(lines[i]);
+          for (let k = i - 1; k >= 0 && k >= i - 3 && t.length < 4; k--) t = clean(lines[k]);
+          return t.length > 64 ? t.slice(0, 64) + "\u2026" : t;
+        })();
+        const months = (lo, hi) => Math.max(0, hi - lo + 1);
+        if (isEdu) { entries.push({ kind: "edu", months: months(a, b), label: label }); edu.push([a, b]); continue; }
+        if (section === "other") { entries.push({ kind: "other", months: months(a, b), label: label }); continue; }
         if (a >= nowIx) continue;
-        if (JUNIORISH.test(ctx)) { junior.push([a, Math.min(b, nowIx)]); continue; }
+        if (JUNIORISH.test(ctx)) { entries.push({ kind: "junior", months: months(a, Math.min(b, nowIx)), label: label }); junior.push([a, Math.min(b, nowIx)]); continue; }
         if (a >= nowIx) continue;
+        entries.push({ kind: "work", months: months(a, Math.min(b, nowIx)), label: label });
         ft.push([a, Math.min(b, nowIx)]);
         const lv = jobLevel(ctx.replace(new RegExp(RANGE_SRC, "g"), " "), "", "");
         if (lv.src === "title") titles.push(lv.lvl);
@@ -256,7 +265,7 @@
       const eduSeen = DEGREE.test(f) || SCHOOL.test(f);
       if (studentCue || JUNIORISH.test(f)) { band = 0; conf = "cues"; why.push("student or internship wording, and no dated full-time job"); }
       else if (eduSeen && f.length < 6000) { band = 0; conf = "cues"; why.push("a degree and no dated full-time job"); }
-      else return { band: null, years: null, conf: "none", why: ["no dates or years of experience found on the CV"], titleMax: null };
+      else return { band: null, years: null, conf: "none", why: ["no dates or years of experience found on the CV"], titleMax: null, entries: entries };
     } else {
       band = useYears < 1 ? 0 : useYears < 3 ? 1 : useYears < 7 ? 2 : 3;   // years alone never make someone a director: that needs a director-level title
       if (fullM) why.push(Math.round(fullM / 12 * 10) / 10 + " years of dated full-time work");
@@ -266,7 +275,7 @@
       if (band === 0 && !fullM && !claim) why.push("no dated full-time job");
     }
     if (band >= 2 && studentCue && useYears < 2) band = 0;
-    return { band, years: Math.round(useYears * 10) / 10, conf, why, titleMax: titleMax || null, student: studentCue };
+    return { band, years: Math.round(useYears * 10) / 10, conf, why, titleMax: titleMax || null, student: studentCue, entries: entries };
   }
 
   /* how well a posting of level L suits a person of band B: rows are the person, columns the posting (0 intern .. 4 director) */
