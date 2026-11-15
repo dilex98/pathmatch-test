@@ -606,13 +606,25 @@
       "aspects areas issues needs levels operational appropriate various relevant necessary required " +
       "daily timely efficient effective overall general other others related applicable additional " +
       "suitable obtained assigned provided needed requested ongoing accessible internal external " +
-      "proper correct available possible usage use uses clean").split(/\s+/).filter(Boolean));
+      "proper correct available possible usage use uses clean " +
+      /* French. 1,010 postings were asking for "personne retenue" (the person selected), "conduire
+         valide" (from "permis de conduire valide", which belongs to the licence check) and
+         "diplome reconnu" as if they were skills. Accents are already stripped by fold(). */
+      "retenue retenu retenus suivantes suivants suivante suivant reconnu reconnue connexes connexe " +
+      "pouvant necessaires necessaire requises requise pertinentes pertinente appropriees appropriee " +
+      "diverses variees similaires associees demandees exigees preuve valide valides dessous " +
+      "souhaitable souhaitables").split(/\s+/).filter(Boolean));
     /* A phrase that BEGINS with one of these says nothing either. The two lists are kept apart on
      * purpose: "general labourer" and "heavy duty technician" are real jobs, and an earlier version
      * that used one list for both ends threw 771 real keywords away. */
     const FIRST_BAD = new Set(("efficient effective various relevant necessary appropriate ongoing proper " +
       "correct overall timely daily additional other others related applicable suitable accessible " +
-      "available possible operational").split(/\s+/).filter(Boolean));
+      "available possible operational " +
+      /* French openers that qualify rather than name: "bonne connaissance de", "interet marque",
+         "souhaitez parfaire". "marque" is deliberately NOT in LAST_BAD, because a phrase can end on
+         it and be real (image de marque, gestion de marque). */
+      "interet remarque remarques avancement souhaitez souhaite soutient taches bonne bonnes " +
+      "excellente excellentes solide solides forte fortes grande grandes").split(/\s+/).filter(Boolean));
 
     /* A posting's own form labels, read as one-word skills: "Description", "Schedule", "Standard",
      * "Office", "Fri". On their own they say nothing about the work. A dictionary skill of the same
@@ -624,7 +636,11 @@
       "january february march april june july august september october november december lundi mardi mercredi " +
       "jeudi vendredi samedi dimanche poste lieu salaire horaire statut categorie " +
       "usually typically often generally normally sometimes less more extensive several completion " +
-      "preferred asset minimum maximum equivalent plus various including etc may might").split(/\s+/).filter(Boolean));
+      "preferred asset minimum maximum equivalent plus various including etc may might " +
+      /* French form labels, read as one-word skills on their own */
+      "detenir posseder consentement exigence exigences atout atouts profil candidat candidats " +
+      "candidate candidature entreprise employeur offre mandat aptitudes remuneration avantages " +
+      "description sommaire responsabilite responsabilites qualification qualifications").split(/\s+/).filter(Boolean));
     function usefulKw(code) {
       const n = String(code).slice(3);
       if (String(code)[1] === "s") return true;                 /* a skill from the dictionary */

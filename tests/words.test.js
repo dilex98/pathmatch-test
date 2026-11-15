@@ -121,5 +121,21 @@ for (const real of ["sort incoming parts", "construction supervisors", "schedule
 for (const skill of ["Microsoft Office", "Scheduling", "Inventory control"])
   ok('the skill "' + skill + '" is never dropped', eng.usefulKw("Ks|" + skill));
 
+console.log("\nFrench form-filler is not a skill (I-13, the French side)");
+/* Every line here was really asked for by a posting in the frozen set, as if it were a skill.
+   1,010 postings carried at least one. */
+const frJunk = ["personne retenue", "conduire valide", "Faire preuve", "Détenir", "diplôme reconnu",
+  "tâches suivantes", "discipline connexe", "intérêt marqué", "remarque ci-dessous", "critères suivants",
+  "équivalence reconnue", "expertise reconnue", "adresse suivante", "souhaitez parfaire", "consentement"];
+for (const j of frJunk) ok("\"" + j + "\" is not asked for as a skill", !eng.usefulKw("|k|" + j));
+
+console.log("\n...and real French skills still are");
+/* The guard on the guard: these must survive, or the filter is too blunt. The lesson from phase 3,
+   where one word list for both ends of a phrase threw away 771 real keywords. */
+const frReal = ["gestion de marque", "image de marque", "soudure TIG", "dessin technique",
+  "conduite de chariot élévateur", "maintenance préventive", "contrôle de la qualité",
+  "service à la clientèle", "gestion des stocks", "sécurité au travail"];
+for (const j of frReal) ok("\"" + j + "\" is still a keyword", eng.usefulKw("|k|" + j));
+
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);
