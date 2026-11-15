@@ -1799,24 +1799,30 @@ function columnCuts(its){
   let lo=Infinity,hi=-Infinity,chars=0;
   for(const it of its){if(it.x<lo)lo=it.x;if(it.x+it.w>hi)hi=it.x+it.w;chars+=it.s.length;}
   const span=hi-lo;if(span<140)return [];
-  const STEP=2,n=Math.ceil(span/STEP)+1,cross=new Array(n).fill(0);
+  const row=it=>Math.round(it.y/6);
+  const allRows=new Set(its.map(row)).size;
+  /* Count the LINES that cross each narrow vertical band, not the pieces of text:
+     a file that stores one letter at a time would otherwise make a band look almost
+     empty while it is in fact slicing through twenty lines of a paragraph. */
+  const STEP=2,n=Math.ceil(span/STEP)+1,seen=[];
+  for(let k=0;k<n;k++)seen.push(null);
   for(const it of its){
-    const a=Math.max(0,Math.floor((it.x-lo)/STEP)),b=Math.min(n-1,Math.ceil((it.x+it.w-lo)/STEP));
-    for(let k=a;k<b;k++)cross[k]++;
+    const a=Math.max(0,Math.floor((it.x-lo)/STEP)),b=Math.min(n-1,Math.ceil((it.x+it.w-lo)/STEP)),r=row(it);
+    for(let k=a;k<b;k++){(seen[k]||(seen[k]=new Set())).add(r);}
   }
-  const tol=Math.max(1,Math.round(its.length*0.02));
+  const tol=Math.max(1,Math.round(allRows*0.04));
   const cand=[];let run=0;
   for(let k=0;k<=n;k++){
-    if(k<n&&cross[k]<=tol){run++;continue;}
+    if(k<n&&(!seen[k]||seen[k].size<=tol)){run++;continue;}
     if(run*STEP>=14){
       const mid=lo+(k-run/2)*STEP;
       if(mid-lo>span*0.15&&hi-mid>span*0.15)cand.push(mid);
     }
     run=0;
   }
-  /* Keep a break only when both sides are real columns: text on many rows on each side.
+  /* Keep a break only when both sides are real columns: text on many lines on each side.
      This is what tells a column apart from the empty strip before a right-aligned date. */
-  const rowsOf=a=>new Set(a.map(it=>Math.round(it.y/6))).size;
+  const rowsOf=a=>new Set(a.map(row)).size;
   const charsOf=a=>a.reduce((n,it)=>n+it.s.length,0);
   return cand.filter(c=>{
     const L=its.filter(it=>it.x+it.w/2<=c),R=its.filter(it=>it.x+it.w/2>c);
