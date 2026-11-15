@@ -43,15 +43,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- tools/skill_proposals.json tools/skill_proposals.md; then
-            echo "nothing new to propose"
-            exit 0
-          fi
-          BRANCH="skills-draft-$(date +%Y-%m-%d)"
+          BRANCH="skills-draft-$(date +%Y-%m-%d-%H%M)"
           git config user.name "skills-agent"
           git config user.email "noreply@anthropic.com"
           git checkout -b "$BRANCH"
+          # stage first: on the first run these files are NEW, and `git diff` does not see untracked
+          # files, so checking before staging reported "nothing to propose" and quietly did nothing.
           git add tools/skill_proposals.json tools/skill_proposals.md tools/unknown_skills.json
+          if git diff --cached --quiet; then
+            echo "nothing new to propose"
+            exit 0
+          fi
           git commit -m "Skills drafted for approval, $(date +%Y-%m-%d)"
           git push -u origin "$BRANCH"
           gh pr create \
