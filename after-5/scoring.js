@@ -25,7 +25,12 @@
 
   const CAP = { skills: 70, education: 20, credentials: 10 };
   /* a posting whose skills are covered this far earns the full 70 (full coverage is not realistic) */
-  const SKILL_FULL = 0.75;
+  /* Set from the real spread, not from optimism: across 75,810 postings the best match any of the
+     four test CVs had covered 32 to 46 per cent of what a posting asks for, and the median was 4 to
+     6 per cent. At 75 per cent the top of the scale could never be reached by anyone, so a good
+     match read as 58 and the band above 60 was dead. At 60 per cent the best real matches land in
+     the low 80s and 90 stays for something exceptional. */
+  const SKILL_FULL = 0.60;
   /* a posting with only a few keywords has not shown much: count a few absent keywords too, so 2 of 3 does not read as 67% */
   const PRIOR = 4;
   const TAGW = { T: 0, R: 1, K: 0.7, N: 0.7, P: 0.4 };
@@ -85,6 +90,12 @@
      Same level or higher in a related field is full marks. The same level in another field still
      shows the person can study at that level, so it keeps most of the points. One level short keeps
      half. Two levels short is a real gap. A degree in progress counts: the person will have it. */
+  /* A posting that states a degree is scored out of 90 and one that does not out of 70. A person who
+     holds the degree therefore scores a little higher on the posting that asks for it - about 13
+     points - for the same skills. That was looked at closely and kept: meeting a stated requirement
+     is really meeting one more of the posting's requirements, so the share is right. Handing the
+     same 20 points to everyone instead was tried and dropped: it lifted a posting covered 20 per
+     cent from 24 to 43, which is the inflation I-09 was about. */
   function education(asked, have, related) {
     if (!asked) return { pts: 0, asked: false };
     const gap = (have || 0) - asked;

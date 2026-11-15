@@ -25,7 +25,9 @@ console.log("the map itself");
 ok("every entry names an official source",
    C.entries.every((e) => e.source && /^https?:\/\//.test(e.source.url)),
    C.entries.filter((e) => !(e.source && /^https?:/.test(e.source.url))).map((e) => e.id).join(", "));
-ok("every entry still needs a person to sign it", C.entries.every((e) => e.checked === false));
+ok("every entry is signed by a person, with the day and the source they read",
+   C.entries.every((e) => typeof e.checked === "string" && e.checked.length > 3 && /^\d{4}-\d{2}-\d{2}$/.test(e.checked_on || "") && /^https?:/.test(e.checked_against || "")),
+   C.entries.filter((e) => !(typeof e.checked === "string" && e.checked_on)).map((e) => e.id).join(", "));
 ok("every skill a credential covers exists in the dictionary",
    C.entries.every((e) => (e.covers || []).every((c) => dict.skills.some((s) => s.n === c.skill))));
 ok("every skill says which words of the syllabus it came from",

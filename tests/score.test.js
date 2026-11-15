@@ -29,11 +29,13 @@ ok("a skill everyone has counts about a third",
 
 console.log("\nthe score follows the coverage");
 const low = S.compute(ten(2), {}), mid = S.compute(ten(5), {}), high = S.compute(ten(9), {});
-ok("covering 2 of 10 scores low", low.total < 30, String(low.total));
-ok("covering 5 of 10 scores in the middle", mid.total >= 40 && mid.total <= 70, String(mid.total));
-ok("covering 9 of 10 scores high", high.total >= 80, String(high.total));
+/* The bar for full skills points is 60% weighted coverage, set from the real spread: the best match
+   any test CV had across 75,810 postings covered 32 to 46 per cent. */
+ok("covering 2 of 10 scores low", low.total < 35, String(low.total));
+ok("covering 5 of 10 scores in the middle", mid.total >= 50 && mid.total <= 75, String(mid.total));
+ok("covering 9 of 10 scores high", high.total >= 85, String(high.total));
 ok("more coverage is always more points", low.total < mid.total && mid.total < high.total);
-ok("a posting covered 45% does not score 100", S.compute(ten(5), {}).total < 75, String(mid.total));
+ok("a posting covered half does not score 100", S.compute(ten(5), {}).total < 80, String(mid.total));
 ok("a Close counts half a Match",
    S.compute(ten(0).map((x, i) => (i < 4 ? Object.assign({}, x, { st: "R" }) : x)), {}).total <
    S.compute(ten(4), {}).total);
