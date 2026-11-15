@@ -78,6 +78,11 @@ ok('volunteering never counts as work, job title or not',
    !(lvl(vol).entries||[]).some(e=>e.kind==='work'&&/tutor/i.test(e.label)),
    JSON.stringify((lvl(vol).entries||[]).map(e=>e.kind+':'+e.label)));
 
+ok('a prize with a job-ish word in its name is not work',
+   !(lvl('WORK EXPERIENCE\nProduction Coordinator\nWajax\nMarch 2024 - Present\nAWARDS\nInspirational Boy Student Award\nSeptember 2015 - October 2016\n').entries||[])
+     .some(e=>(e.kind==='work'||e.kind==='junior')&&/Award/i.test(e.label||'')),
+   JSON.stringify((lvl('WORK EXPERIENCE\nProduction Coordinator\nWajax\nMarch 2024 - Present\nAWARDS\nInspirational Boy Student Award\nSeptember 2015 - October 2016\n').entries||[]).map(e=>e.kind+':'+e.label)));
+
 console.log('names on the page');
 const lab='WORK EXPERIENCE\nProduction Coordinator\nWajax Limited\nMarch 2026 - Present\nBuying and shipments.\n';
 ok('an entry is named by its job title, not by its employer',

@@ -201,6 +201,9 @@
   const SCHOOL = /\b(university|universite|college|cegep|ecole|school|institute|polytechni\w*|academy)\b/;
   /* headings that list prizes, where a job title beside the dates still means a job (see below) */
   const PRIZE_SEC = /^(awards?|achievements?|accomplishments?|distinctions?|honou?rs)\b/;
+  /* the name of a prize is not a job title, even when it holds a word like "student" or "engineer"
+     ("Inspirational Boy Student Award", "Dean's Merit Scholarship") */
+  const PRIZE_NAME = /\b(award|awards|prize|prizes|scholarship|bursary|medal|trophy|honou?r roll|dean'?s list|principal'?s list|certificate of (appreciation|achievement|recognition|excellence)|winner|finalist|laureat|boursier|bourse|prix|mention honorable)\b/;
   const JOBWORD = /\b(assistant|engineer|ingenieur|developer|analyst|analyste|manager|gestionnaire|coordinat\w*|specialist|technician|technicien|officer|consultant|teacher|enseignant|nurse|infirmi\w*|clerk|representative|agent|advisor|conseiller|designer|researcher|director|directeur|lead|supervisor|superviseur|associate|accountant|comptable|programmer|architect|administrator|operator|operateur|worker|planner|planificateur|buyer|acheteur|controller|controleur|scheduler|tutor|tuteur|cashier|caissier|driver|chauffeur|server|serveur|cook|cuisinier|apprentice|apprenti|trainee|stagiaire|intern|lecturer|professor|instructor)\b/;
   const JUNIORISH = /\b(interns?|internships?|stagiaires?|stages?|co-?op|coop|students?|etudiants?|volunteer\w*|benevole\w*|apprentic\w*|apprenti\w*|alternan\w*|contrat de professionnalisation|professionnalisation|seasonal|saisonnier|work[- ]study|summer|part[- ]time|temps partiel|externship|placement|research assistant|teaching assistant|assistant de recherche|assistant d'enseignement|tutor|work-study)\b/;
   /* Wording that says the person is studying RIGHT NOW. Weaker wording, such as
@@ -310,7 +313,8 @@
            ACHIEVEMENTS heading, and that job is real work. The title must sit on the dates' line or
            above it: a title below belongs to the next entry, so a prize does not borrow it.
            Volunteering keeps its own rule and never counts, job title or not. */
-        if (section === "other" && !(PRIZE_SEC.test(section_head) && nearKind === "job" && nearAt <= i)) {
+        const titleIsPrize = nearAt >= 0 && nearAt < lines.length && PRIZE_NAME.test(fold(lines[nearAt]));
+        if (section === "other" && !(PRIZE_SEC.test(section_head) && nearKind === "job" && nearAt <= i && !titleIsPrize)) {
           entries.push({ kind: "other", months: months(a, b), label: label, at: i, endAgeY: Math.max(0, (nowIx - Math.min(b, nowIx)) / 12) }); continue;
         }
         if (a >= nowIx) continue;
