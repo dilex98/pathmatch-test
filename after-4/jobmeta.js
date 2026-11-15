@@ -462,7 +462,9 @@
       let what = null;
       const m = /((?:[A-Z][\w&().'-]*\s+){0,4}(?:Certificate|Certification|Licen[cs]e|Permit|Designation|Card|Ticket|Red Seal))\b/.exec(name)
         || /\b(P\.? ?Eng|OIQ|PEO|CPA|CFA|PMP|CAPM|CSCP|CPIM|RSE|Red Seal|WHMIS|SIMDUT|ASP Construction|CSTS|H2S Alive|TDG)\b/i.exec(name);
-      if (m) what = m[1].replace(/\s+/g, " ").trim();
+      if (m) what = m[1].replace(/[)\](,;]+/g, " ").replace(/\s+/g, " ").trim();
+      /* "License" on its own names nothing we could look for on a CV: keep it as a note, not a block */
+      if (what && !/\s/.test(what) && !/^(p\.? ?eng|oiq|peo|cpa|cfa|pmp|capm|cscp|cpim|whmis|simdut|csts|tdg)$/i.test(what)) what = null;
       out.push({ driving: driving, what: what, text: name.length > 150 ? name.slice(0, 150) + "\u2026" : name });
       if (out.length >= 4) break;
     }
@@ -493,7 +495,10 @@
      0 not said · 1 no degree · 2 high school · 3 college, CEGEP or trade · 4 bachelor · 5 master · 6 doctorate. */
   const EDU_RE = [
     [6, /\b(ph\.? ?d|doctorate|doctorat|post-?doc)\b/],
-    [5, /\b(master'?s?|maitrise|m\.? ?sc|m\.? ?eng|meng|msc|mba|m\.? ?a\b|graduate degree|deuxieme cycle|doctor of medicine|\bmd\b|pharm\.? ?d|jd\b|llm)\b/],
+    /* "maîtrise" in French usually means being good at something ("maîtrise du français"), not a
+       master's degree. Only "maîtrise en/ès <subject>" and "diplôme de maîtrise" are the degree:
+       of 575 postings using the word, 539 meant proficiency. */
+    [5, /\b(master'?s?|m\.? ?sc|m\.? ?eng|meng|msc|mba|m\.? ?a\b|graduate degree|deuxieme cycle|doctor of medicine|\bmd\b|pharm\.? ?d|jd\b|llm)\b|\bmaitrise\s+(en|es)\b|\bdiplome de maitrise\b/],
     [4, /\b(bachelor'?s?|baccalaureat|undergraduate degree|b\.? ?sc|b\.? ?eng|beng|bsc|b\.? ?a\b|b\.? ?comm?|bba|bcom|four-?year degree|university degree|diplome universitaire|premier cycle|licence universitaire)\b/],
     [3, /\b(college|cegep|dec\b|dep\b|aec\b|diploma|diplome d'etudes collegiales|technical diploma|trade (school|certificate|qualification)|apprenticeship certificate|red seal|associate degree|two-?year (program|diploma)|polytechnic)\b/],
     [2, /\b(high school|secondary school|diplome d'etudes secondaires|\bdes\b|\bged\b|secondary (v|5))\b/],
@@ -506,8 +511,12 @@
   function eduAsked(text) {
     const t = fold(text || "");
     if (!t) return 0;
-    for (const [lvl, re] of EDU_RE) if (re.test(t)) return lvl;
-    return 0;
+    /* A posting often names more than one ("Bachelor's required, a Master's or PhD an asset").
+       What it asks for is the lowest bar it names, not the highest: the higher ones are wishes.
+       Reading the highest turned 427 postings into doctorate jobs. */
+    let low = 0;
+    for (const [lvl, re] of EDU_RE) if (re.test(t)) low = low ? Math.min(low, lvl) : lvl;
+    return low;
   }
   /* the degrees on a CV: the highest one, and the fields they are in. A degree in progress counts:
      the person will have it. Only the education part of the CV is read, so a posting's words quoted

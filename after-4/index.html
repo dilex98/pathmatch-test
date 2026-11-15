@@ -1444,9 +1444,10 @@ function cvEduInfo(){
 }
 /* the degree a posting asks for, on the 0 to 6 scale (0 = it does not say) */
 function eduAskedOf(j){
-  if(j.od&&j.od.e)return j.od.e;
-  if(hasText(j))return JobMeta.eduAsked(j.title+"\n"+(j.desc||""));
-  return 0;
+  if(j.od&&j.od.e)return j.od.e;        /* Job Bank open data states it */
+  if(j.ea)return j.ea;                  /* read from the posting's own text when it was collected */
+  if(j.desc)return JobMeta.eduAsked(j.title+"\n"+j.desc);
+  return 0;                             /* the posting does not say: this part is left out */
 }
 function scoreJob(j){
   const T=norm(j.title+" "+j.type);
@@ -1474,9 +1475,11 @@ function scoreJob(j){
      written on the CV, the job leaves the top 10 and says why. A driver's licence is a note only:
      most people have one and few write it down. */
   let blocked=null;
-  if(hasText(j)){
+  {
     const cvTxt=norm((CV&&CV.raw)||"");
-    for(const mh of JobMeta.mustHaves(j.desc||"")){
+    /* worked out when the postings were read (j.mh); the text itself is not held in memory */
+    const list=j.mh||(j.desc?JobMeta.mustHaves(j.desc):[]);
+    for(const mh of list){
       if(mh.driving){flags.push(["w","Driver's licence asked for: add it to your CV if you have one"]);continue;}
       if(!mh.what){flags.push(["w","A certificate or licence is called mandatory: read the posting"]);continue;}
       if(cvTxt.indexOf(norm(mh.what))>=0){flags.push(["g","Mandatory "+mh.what+": on your CV"]);continue;}

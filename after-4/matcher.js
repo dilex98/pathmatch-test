@@ -600,11 +600,20 @@
      * ("efficient manner", "oversee operational", "coordinate activities", "accessible manner"). A
      * phrase that begins or ends on one of these words says nothing on its own, so it is dropped.
      * A skill from the dictionary is never dropped: only loose phrases. */
-    const EDGE_WORD = new Set(("manner manners basis way ways activities activity tasks task duties duty matters items " +
-      "aspects areas issues needs levels level standards practices procedures? conditions requirements environment " +
-      "operational appropriate various relevant necessary required daily timely efficient effective overall general " +
-      "other others related applicable additional applicable suitable obtained assigned provided needed requested " +
-      "ongoing accessible internal external proper correct available possible").split(/\s+/).filter(Boolean));
+    /* A phrase that ENDS on one of these says nothing on its own: "efficient manner", "oversee
+     * operational", "coordinate activities". */
+    const LAST_BAD = new Set(("manner manners basis way ways activities activity tasks duties matters items " +
+      "aspects areas issues needs levels operational appropriate various relevant necessary required " +
+      "daily timely efficient effective overall general other others related applicable additional " +
+      "suitable obtained assigned provided needed requested ongoing accessible internal external " +
+      "proper correct available possible usage use uses clean").split(/\s+/).filter(Boolean));
+    /* A phrase that BEGINS with one of these says nothing either. The two lists are kept apart on
+     * purpose: "general labourer" and "heavy duty technician" are real jobs, and an earlier version
+     * that used one list for both ends threw 771 real keywords away. */
+    const FIRST_BAD = new Set(("efficient effective various relevant necessary appropriate ongoing proper " +
+      "correct overall timely daily additional other others related applicable suitable accessible " +
+      "available possible operational").split(/\s+/).filter(Boolean));
+
     /* A posting's own form labels, read as one-word skills: "Description", "Schedule", "Standard",
      * "Office", "Fri". On their own they say nothing about the work. A dictionary skill of the same
      * name (Microsoft Office, Scheduling) is untouched: this only drops loose single words. */
@@ -614,7 +623,6 @@
       "mon tue tues wed thu thur thurs fri sat sun monday tuesday wednesday thursday friday saturday sunday " +
       "january february march april june july august september october november december lundi mardi mercredi " +
       "jeudi vendredi samedi dimanche poste lieu salaire horaire statut categorie " +
-      /* qualifiers from a requirements sentence: "usually requires", "or less extensive experience" */
       "usually typically often generally normally sometimes less more extensive several completion " +
       "preferred asset minimum maximum equivalent plus various including etc may might").split(/\s+/).filter(Boolean));
     function usefulKw(code) {
@@ -622,7 +630,7 @@
       if (String(code)[1] === "s") return true;                 /* a skill from the dictionary */
       const w = fold(n).split(/[^a-z0-9+#]+/).filter(Boolean);
       if (!w.length) return false;
-      if (EDGE_WORD.has(w[0]) || EDGE_WORD.has(w[w.length - 1])) return false;
+      if (FIRST_BAD.has(w[0]) || LAST_BAD.has(w[w.length - 1])) return false;
       if (w.length === 1 && LABEL_WORD.has(w[0])) return false;
       if (JUNK_TERM.test(n)) return false;
       return true;
