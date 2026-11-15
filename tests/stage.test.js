@@ -48,5 +48,19 @@ console.log('counting');
 const overlap='WORK EXPERIENCE\nProduction Coordinator\nNorthwind\nJanuary 2022 - December 2024\nPart-time server\nCafe\nJune 2022 - August 2022\n';
 ok('a student job inside a full-time job is not counted twice',Math.abs(lvl(overlap).years-3)<0.2,String(lvl(overlap).years));
 
+console.log('date formats');
+const job=(d)=>'WORK EXPERIENCE\nProduction Coordinator\nNorthwind Manufacturing\n'+d+'\nPurchasing and shipments.\n';
+for (const [d,lo,hi] of [['March 2023 - Present',3.5,4],['03/2023 - Present',3.5,4],
+    ['2023-03 to 2026-08',3.2,3.8],['Since March 2023',3.5,4],['Depuis mars 2023',3.5,4],
+    ['From January 2022',4.7,5.2],['2023 - 2026',2.8,3.3],['Mar. 2023 \u2013 Aug. 2026',3.2,3.8]])
+  ok('"'+d+'" is read as a job that long',lvl(job(d)).years>=lo&&lvl(job(d)).years<=hi,String(lvl(job(d)).years));
+ok('a job that has not started yet is not counted',kinds(lvl(job('January 2027 - May 2027'))).indexOf('work')<0);
+
+console.log('student words that are not studies');
+const senior='WORK EXPERIENCE\nOperations Manager\nWajax\nJune 2014 - July 2026\nVOLUNTEERING\nTreasurer, student association\n2012 - 2013\n';
+ok('a senior who helped a student association is not a student',lvl(senior).band===3,BAND[lvl(senior).band]+' '+lvl(senior).years+'y');
+const grad='WORK EXPERIENCE\nMechanical Engineer\nAcme Ltd\nJune 2021 - November 2026\nPROFILE\nRecent graduate of Concordia University\n';
+ok('"recent graduate" on its own does not undo five years of work',lvl(grad).band>=2,BAND[lvl(grad).band]+' '+lvl(grad).years+'y');
+
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);

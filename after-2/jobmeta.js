@@ -156,9 +156,11 @@
   /* ------------------------------------------------------------------ level of a person ------------------------------------------------------------------ */
 
   const MON = "(?:jan\\w*|feb\\w*|fev\\w*|mar\\w*|apr\\w*|avr\\w*|may|mai|jun\\w*|juin|jul\\w*|juil\\w*|aug\\w*|aou\\w*|sep\\w*|oct\\w*|nov\\w*|dec\\w*)\\.?";
-  const D = "(?:" + MON + "[\\s,.'-]*(?:19|20)\\d{2}|\\d{1,2}\\/(?:19|20)\\d{2}|(?:19|20)\\d{2})";
+  const D = "(?:" + MON + "[\\s,.'-]*(?:19|20)\\d{2}|(?:19|20)\\d{2}[-\\/](?:0?[1-9]|1[0-2])(?![\\d])|\\d{1,2}\\/(?:19|20)\\d{2}|(?:19|20)\\d{2})";
   const PRESENT = "present|current|currently|now|today|ongoing|en cours|aujourd'hui|presentement|maintenant|a ce jour|to date";
   const RANGE_SRC = "(" + D + ")\\s*(?:-|to|until|through|au|a)\\s*(" + D + "|" + PRESENT + ")";
+  /* an open-ended job: "since March 2023", "depuis mars 2023" */
+  const SINCE_SRC = "(?:since|depuis|from)\\s+(" + D + ")\\s*$";
   const MONTHS = { jan: 1, feb: 2, fev: 2, mar: 3, apr: 4, avr: 4, may: 5, mai: 5, jun: 6, juin: 6, jul: 7, juil: 7, aug: 8, aou: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
 
   function parseDate(s, isEnd, now) {
@@ -167,6 +169,8 @@
     const y = /((?:19|20)\d{2})/.exec(s);
     if (!y) return null;
     const year = +y[1];
+    const iso = /^((?:19|20)\d{2})[-\/](\d{1,2})$/.exec(s);
+    if (iso) return +iso[1] * 12 + (+iso[2] - 1);
     const num = /^(\d{1,2})\//.exec(s);
     if (num) return year * 12 + (+num[1] - 1);
     const mm = new RegExp("^" + MON.replace("\\.?", "")).exec(s) ? s.match(/[a-z]+/)[0] : null;
@@ -197,6 +201,10 @@
   const SCHOOL = /\b(university|universite|college|cegep|ecole|school|institute|polytechni\w*|academy)\b/;
   const JOBWORD = /\b(assistant|engineer|ingenieur|developer|analyst|analyste|manager|gestionnaire|coordinat\w*|specialist|technician|technicien|officer|consultant|teacher|enseignant|nurse|infirmi\w*|clerk|representative|agent|advisor|conseiller|designer|researcher|director|directeur|lead|supervisor|superviseur|associate|accountant|comptable|programmer|architect|administrator|operator|operateur|worker|planner|planificateur|buyer|acheteur|controller|controleur|scheduler|tutor|tuteur|cashier|caissier|driver|chauffeur|server|serveur|cook|cuisinier|apprentice|apprenti|trainee|stagiaire|intern|lecturer|professor|instructor)\b/;
   const JUNIORISH = /\b(interns?|internships?|stagiaires?|stages?|co-?op|coop|students?|etudiants?|volunteer\w*|benevole\w*|apprentic\w*|apprenti\w*|alternan\w*|contrat de professionnalisation|professionnalisation|seasonal|saisonnier|work[- ]study|summer|part[- ]time|temps partiel|externship|placement|research assistant|teaching assistant|assistant de recherche|assistant d'enseignement|tutor|work-study)\b/;
+  /* Wording that says the person is studying RIGHT NOW. Weaker wording, such as
+     "student association" or "recent graduate", is deliberately left out: it also
+     appears on the CV of someone with years of work behind them. */
+  const STUDY_NOW = /\b(currently (pursuing|enrolled|studying|completing)|presently (pursuing|enrolled)|expected (graduation|completion|date)|anticipated (graduation|completion)|graduating (in )?(spring|summer|fall|winter|20\d\d)|candidate for|co-?op student|student at|etudiant(e)? (a|au|en)|en cours d'etudes|diplome prevu|graduation prevue)\b/;
   const STUDENT_CUE = /\b(currently (pursuing|enrolled|studying|completing)|presently (pursuing|enrolled)|expected (graduation|completion|date)|anticipated (graduation|completion)|graduating (in )?(spring|summer|fall|winter|20\d\d)|candidate for|etudiant(e)? (a|au|en)|student at|in progress|en cours d'etudes|diplome prevu|graduation prevue|co-?op student|student association|recent graduate|new graduate|nouveau diplome|jeune diplome)\b/;
 
   function cvLevel(text, now) {
@@ -245,9 +253,15 @@
         if (SEC.other.test(head)) { section = "other"; continue; }
       }
       const re = new RegExp(RANGE_SRC, "g");
+      const pairs = [];
       let m;
-      while ((m = re.exec(line))) {
-        let a = parseDate(m[1], false, now), b = parseDate(m[2], true, now);
+      while ((m = re.exec(line))) pairs.push([m[1], m[2]]);
+      if (!pairs.length) {
+        const sm = new RegExp(SINCE_SRC).exec(line);
+        if (sm) pairs.push([sm[1], "present"]);
+      }
+      for (const pair of pairs) {
+        let a = parseDate(pair[0], false, now), b = parseDate(pair[1], true, now);
         if (a == null || b == null || b < a || a < 1970 * 12 || b - a > 50 * 12) continue;
         anyDate = true;
         /* "August 2022 - 2023 (1 month each)" is two months of work, not a year. */
@@ -310,8 +324,13 @@
       if (band === 0 && !fullM && !claim) why.push("no dated full-time job");
     }
     const workingNow = ft.some(([, b]) => b >= nowIx - 2);
-    const studyingNow = edu.some(([, b]) => b >= nowIx - 1) || STUDENT_CUE.test(f);
-    if (studyingNow && !workingNow && band !== null && band > 0) {
+    const eduRunning = edu.some(([, b]) => b >= nowIx - 1);     // a degree that has not finished
+    const studyCue = STUDY_NOW.test(f);
+    const studyingNow = eduRunning || studyCue;
+    /* Someone studying now, with no job running now, is looking for student work.
+       A degree that has not finished is proof on its own; wording alone only counts
+       for someone who has not already built a long career. */
+    if (band !== null && band > 0 && !workingNow && (eduRunning || (studyCue && useYears < 5))) {
       band = 0;
       why.push("studying now, with no job running now: internships and entry-level jobs come first");
     } else if (band >= 2 && studentCue && useYears < 2) band = 0;
