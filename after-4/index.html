@@ -2506,7 +2506,11 @@ function rankPool(cap,maxPer){
      a technician job with 47 just because the CV says "stage". */
   const best=use.reduce((m,r)=>Math.max(m,(r.s&&r.s.total)||0),0);
   const worth=r=>((r.s&&r.s.total)||0)>=best*0.5;
-  const key=r=>fieldRank(r.j)*10+((g&&g.kind==="intern"&&lvOf(r.j).lvl===0&&worth(r))?0:2)+((b!==null&&lvOf(r.j).lvl===b&&worth(r))?0:1);
+  /* Which level to show first among the ones this person can get. If the CV asks for an internship,
+     internships. Otherwise the highest level they can get: a new graduate wants the entry-level job
+     before the internship, not the other way round. */
+  const want=(g&&g.kind==="intern")?0:(b===null?null:STAGE_OK[b][STAGE_OK[b].length-1]);
+  const key=r=>fieldRank(r.j)*10+((want!==null&&lvOf(r.j).lvl===want&&worth(r))?0:2);
   const pool=use.map((r,i)=>[key(r),i,r]).sort((x,y)=>x[0]-y[0]||x[1]-y[1]).map(x=>x[2]);
   const per=new Map(),all=[];
   for(const r of pool){
