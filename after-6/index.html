@@ -1157,7 +1157,7 @@ const xSig=()=>JSON.stringify(XTRA.map(x=>[x.k,x.t,x.w,x.y]));
 /* Skills are read from the whole file. Dates are read from the pages that say something new:
    a file holding the same CV in two languages must not count the same job twice. */
 function datedText(t){
-  if(!PDF_PAGES)return t;
+  if(typeof PDF_PAGES==="undefined"||!PDF_PAGES)return t;   /* the pages are not always in scope */
   const full=PDF_PAGES.join("\n\n");
   if(t===full)return dropRepeatedPages(PDF_PAGES).text;
   if(t===markSections(full,CV_HEADINGS,BIG_LINES).text)return dropRepeatedPages(PDF_PAGES).text;

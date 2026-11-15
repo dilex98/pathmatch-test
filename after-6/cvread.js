@@ -260,4 +260,6 @@ function readQuality(text){
     singleRatio:tok.length?singles/tok.length:0};
 }
 
-if(typeof module!=="undefined"&&module.exports)module.exports={tidyText,fixLetterSpacing,dropPageFurniture,dropRepeatedPages,markSections,groupLines,lineText,columnCuts,pdfPageLines,readQuality,pageWords,pageDates};
+var CvRead={tidyText:tidyText,fixLetterSpacing:fixLetterSpacing,dropPageFurniture:dropPageFurniture,dropRepeatedPages:dropRepeatedPages,markSections:markSections,groupLines:groupLines,lineText:lineText,columnCuts:columnCuts,pdfPageLines:pdfPageLines,readQuality:readQuality,pageWords:pageWords,pageDates:pageDates};
+if(typeof self!=="undefined")self.CvRead=CvRead;
+if(typeof module!=="undefined"&&module.exports)module.exports=CvRead;
