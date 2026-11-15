@@ -55,15 +55,25 @@
     return t * (/[\s-]/.test(String(x.n).trim()) ? 0.8 : 0.35);
   }
 
+  /* One count, used by the score and by every place that shows numbers: the keywords this posting
+     really asks for. A word from the job title is not one of them, because it earns nothing. */
+  function counts(rows) {
+    let asked = 0, matched = 0, close = 0;
+    for (const x of rows || []) {
+      if (!(weight(x) > 0 || x.cred)) continue;
+      asked++;
+      if (x.st === "M") matched++; else if (x.st === "R") close++;
+    }
+    return { asked: asked, matched: matched, close: close, gap: asked - matched - close };
+  }
+
   /* Skills: how much of what the posting asks for is on the CV, weighted. */
   function skills(rows) {
-    let w = 0, c = 0, matched = 0, close = 0, asked = 0;
+    let w = 0, c = 0;
+    const n = counts(rows);
+    const matched = n.matched, close = n.close, asked = n.asked;
     for (const x of rows) {
       const k = weight(x);
-      if (k > 0) {
-        asked++;
-        if (x.st === "M") matched++; else if (x.st === "R") close++;
-      }
       w += k; c += k * credit(x);
     }
     const cov = w ? c / (w + PRIOR) : 0;
@@ -115,5 +125,5 @@
     };
   }
 
-  return { CAP, SKILL_FULL, PRIOR, weight, skills, education, credentials, compute };
+  return { CAP, SKILL_FULL, PRIOR, weight, counts, skills, education, credentials, compute };
 });

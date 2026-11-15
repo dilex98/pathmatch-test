@@ -1246,16 +1246,17 @@ function skillsRow(j){
   const rows=rowsOf(j)||[],where=isOcc(j)?"occupation profile":hasText(j)?"posting":"title";
   const need=isOcc(j)||(hasText(j)&&!j.partial&&!j.pasted)?"":" Only "+(hasText(j)?"a short snippet":"the title")+" is available: open the card and paste the full description.";
   if(!rows.length)return `<div class="skills"><span class="note">No keywords were found in the ${where}.${need}</span></div>`;
-  const M=rows.filter(x=>x.st==="M").length,C=rows.filter(x=>x.st==="R").length,G=rows.length-M-C,MAX=16;
+  /* I-16: the same count as the score and as the detail view */
+  const nc=Scoring.counts(rows),M=nc.matched,C=nc.close,G=nc.gap,ASK=nc.asked,MAX=16;
   const chips=rows.slice(0,MAX).map(x=>{
     const t=x.st==="M"?"Match: on your CV.":x.st==="R"?"Close: not the same words. Counts half, never a match.":"Gap: not written on your CV.";
     return `<span class="${x.st}${x.kind==="t"?" t":""}" title="${esc((TAGNAME[x.tag]?TAGNAME[x.tag]+": ":"")+t)}">${esc(x.n)}</span>`;
   }).join("");
   const more=rows.length-MAX;
-  const cover=Math.round((M+0.5*C)/rows.length*100);
+  const rr=RES.find(x=>x.j===j),cover=Math.round(((rr&&rr.s)?rr.s.cov:(M+0.5*C)/Math.max(1,ASK))*100);
   const cbar=["M","R","G"].map(st=>rows.filter(x=>x.st===st).map(x=>`<i class="${st}"></i>`).join("")).join("");
-  const covHtml=`<div class="cov" role="img" aria-label="Keyword coverage ${cover} percent: ${M} Match, ${C} Close at half credit, ${G} Gap, out of ${rows.length}"><span class="cbar" aria-hidden="true">${cbar}</span><span><b>${cover}%</b> coverage</span></div>`;
-  return `<div class="skills"><div class="sk-h"><b>${M} Match · ${C} Close · ${G} Gap</b> of the ${rows.length} main keywords of this ${where}${j.pasted?" · from the text you pasted":isOcc(j)?" · from the official description of the occupation":j.partial?" · short snippet only: open the card to paste the full text":hasText(j)?"":" · title only: open the card to paste the full text"}</div>${covHtml}
+  const covHtml=`<div class="cov" role="img" aria-label="Keyword coverage ${cover} percent: ${M} Match, ${C} Close at half credit, ${G} Gap, out of ${ASK}"><span class="cbar" aria-hidden="true">${cbar}</span><span><b>${cover}%</b> coverage</span></div>`;
+  return `<div class="skills"><div class="sk-h"><b>${M} Match · ${C} Close · ${G} Gap</b> of the ${ASK} keywords this ${where} asks for${j.pasted?" · from the text you pasted":isOcc(j)?" · from the official description of the occupation":j.partial?" · short snippet only: open the card to paste the full text":hasText(j)?"":" · title only: open the card to paste the full text"}</div>${covHtml}
     <div class="kw sk">${chips}${more>0?`<span class="more">+${more} more, open the card</span>`:""}</div></div>`;
 }
 function pasteBox(j){
@@ -1419,7 +1420,7 @@ function mapPanel(j){
      further down count every phrase of the posting, including the ones the score leaves out; the
      line under them says so. */
   const rr0=RES.find(x=>x.j===j),sc0=rr0&&rr0.s;
-  const lead=sc0?`<p class="note" style="margin:4px 0 10px"><b>${sc0.matched} Match \u00b7 ${sc0.close} Close \u00b7 ${Math.max(0,sc0.asked-sc0.matched-sc0.close)} Gap</b> of the ${sc0.asked} skills this posting asks for \u2014 the count the score is made of, the same one on the card.</p>`:"";
+  const lead=sc0?`<p class="note" style="margin:4px 0 10px"><b>${sc0.matched} Match \u00b7 ${sc0.close} Close \u00b7 ${Math.max(0,sc0.asked-sc0.matched-sc0.close)} Gap</b> of the ${sc0.asked} keywords this posting asks for \u2014 the count the score is made of, the same one on the card. Words from the job title are not among them: they earn nothing.</p>`:"";
   const head='<h3>Every keyword of the posting against your CV</h3>'+lead+pasteBox(j);
   if(!DICT)return head+'<p class="note">The dictionary is loading…</p>';
   const m=mapData(j),r=m.r,cv=m.cvf,t=m.tot;
@@ -1706,7 +1707,7 @@ function breakdown(j,s){
     ? `The posting names ${s.credWant} certificate${s.credWant===1?"":"s"} or licence${s.credWant===1?"":"s"}; ${s.credGot} ${s.credGot===1?"is":"are"} on your CV.`
     : "This posting names no certificate, so this part is left out and the rest is scaled up to 100.";
   return `<table class="how"><tbody>
-    <tr><th>Skills ${s.skills}/70</th><td>${s.matched} Match and ${s.close} Close, out of the ${s.asked} skills this posting asks for (${pct}% weighted coverage; ${full}% earns the full 70). A Close counts half. Words from the job title give no points. Few keywords means a cautious score. Confidence: ${s.conf}.</td></tr>
+    <tr><th>Skills ${s.skills}/70</th><td>${s.matched} Match and ${s.close} Close, out of the ${s.asked} keywords this posting asks for (${pct}% weighted coverage; ${full}% earns the full 70). A Close counts half. Words from the job title give no points. Few keywords means a cautious score. Confidence: ${s.conf}.</td></tr>
     <tr><th>Education ${s.education}/20</th><td>${eduTxt}</td></tr>
     <tr><th>Credentials ${s.credentials}/10</th><td>${credTxt}</td></tr>
     <tr><th>Out of ${s.available}</th><td>The parts this posting actually asks for. The score shown is ${s.skills}+${s.education}+${s.credentials} = ${s.skills+s.education+s.credentials} of ${s.available}, written out of 100. Your career stage gives no points: it decides which postings are in the list at all.</td></tr></tbody></table>`;
