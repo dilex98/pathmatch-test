@@ -56,7 +56,18 @@ jobs:
           fi
           git commit -m "Skills drafted for approval, $(date +%Y-%m-%d)"
           git push -u origin "$BRANCH"
-          gh pr create \
-            --title "Skills drafted for approval, $(date +%Y-%m-%d)" \
-            --body-file .github/skills-pr-body.md \
-            --base main --head "$BRANCH"
+          # Opening the PR needs "Allow GitHub Actions to create and approve pull requests" in
+          # Settings -> Actions -> General. If it is off, the drafts are still safely on the branch,
+          # so say where they are rather than failing a run that did its work.
+          if gh pr create \
+               --title "Skills drafted for approval, $(date +%Y-%m-%d)" \
+               --body-file .github/skills-pr-body.md \
+               --base main --head "$BRANCH"; then
+            echo "pull request opened"
+          else
+            echo "::warning::Could not open the pull request - this is usually the repository setting"
+            echo "::warning::Settings -> Actions -> General -> Workflow permissions ->"
+            echo "::warning::'Allow GitHub Actions to create and approve pull requests'."
+            echo "The drafts are pushed and safe on branch $BRANCH. Open the PR from:"
+            echo "  https://github.com/${{ github.repository }}/compare/main...$BRANCH"
+          fi
