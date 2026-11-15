@@ -55,17 +55,6 @@
   ]
  },
  {
-  "phrase": "Ordre professionnel",
-  "postings": 172,
-  "trades": 51,
-  "seen_in": [
-   "Infirmier(ère) - Urgence Sept-Îles | Côte-Nord.",
-   "Inhalothérapeute - Côte-Nord",
-   "Infirmier(ère) - CHSLD Rivière-Bleue à Témiscouata | Bas-Saint-Laurent",
-   "Technologue en imagerie médicale - Cote Nord - Remplacement d'été"
-  ]
- },
- {
   "phrase": "Project Manager",
   "postings": 161,
   "trades": 43,
@@ -99,28 +88,6 @@
   ]
  },
  {
-  "phrase": "Frequent lifting",
-  "postings": 133,
-  "trades": 38,
-  "seen_in": [
-   "Baker-Full Time",
-   "Sales Team Leader",
-   "Baker",
-   "Sales Assistant - COBS Bread - FT or PT"
-  ]
- },
- {
-  "phrase": "Continuous standing",
-  "postings": 125,
-  "trades": 40,
-  "seen_in": [
-   "Baker-Full Time",
-   "Sales Team Leader",
-   "Baker",
-   "Account Manager - Point of Care (Halifax)"
-  ]
- },
- {
   "phrase": "Account Executive",
   "postings": 116,
   "trades": 30,
@@ -129,17 +96,6 @@
    "Account Executive ",
    "Large Group Account Executive, Group Benefits",
    "Enterprise Account Executive"
-  ]
- },
- {
-  "phrase": "personal hygiene",
-  "postings": 111,
-  "trades": 14,
-  "seen_in": [
-   "Personal Care Provider - Homecare",
-   "personal support worker - home support",
-   "home child care provider",
-   "child caregiver - private home"
   ]
  },
  {
@@ -162,17 +118,6 @@
    "Senior Software Developer 2",
    "Senior Software Developer",
    "Développeur(euse) logiciel / Software Developer - Appliances Platform (Edge OS)"
-  ]
- },
- {
-  "phrase": "order supplies",
-  "postings": 109,
-  "trades": 27,
-  "seen_in": [
-   "cook",
-   "bartender",
-   "unit clerk",
-   "line cook"
   ]
  },
  {
@@ -3290,6 +3235,61 @@
  },
  {
   "phrase": "food order summaries",
+  "postings": 30,
+  "trades": 5,
+  "seen_in": [
+   "food service supervisor",
+   "kitchen manager",
+   "unit supervisor - food services",
+   "shift manager - fast food restaurant"
+  ]
+ },
+ {
+  "phrase": "special diet trays",
+  "postings": 30,
+  "trades": 5,
+  "seen_in": [
+   "food service supervisor",
+   "kitchen manager",
+   "unit supervisor - food services",
+   "shift manager - fast food restaurant"
+  ]
+ },
+ {
+  "phrase": "plan cafeteria menus",
+  "postings": 30,
+  "trades": 5,
+  "seen_in": [
+   "food service supervisor",
+   "kitchen manager",
+   "unit supervisor - food services",
+   "shift manager - fast food restaurant"
+  ]
+ },
+ {
+  "phrase": "order ingredients",
+  "postings": 30,
+  "trades": 5,
+  "seen_in": [
+   "food service supervisor",
+   "kitchen manager",
+   "unit supervisor - food services",
+   "shift manager - fast food restaurant"
+  ]
+ },
+ {
+  "phrase": "meal preparation",
+  "postings": 30,
+  "trades": 5,
+  "seen_in": [
+   "food service supervisor",
+   "kitchen manager",
+   "unit supervisor - food services",
+   "shift manager - fast food restaurant"
+  ]
+ },
+ {
+  "phrase": "chef according",
   "postings": 30,
   "trades": 5,
   "seen_in": [

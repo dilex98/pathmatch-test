@@ -121,8 +121,9 @@ ok("French spellings reach the credentials people actually write",
    fr("first-aid").also.includes("secourisme") &&
    fr("red-seal").also.includes("sceau rouge") &&
    fr("whmis").also.includes("simdut"));
-ok("the new Quebec entries are drafted but NOT yet in use",
-   ["oiq", "asp-construction", "ccq-competence"].every((id) => fr(id).checked === false));
+ok("the Quebec entries have been signed, so the page uses them",
+   ["oiq", "asp-construction", "ccq-competence"].every((id) =>
+     typeof fr(id).checked === "string" && fr(id).checked_on === "2026-11-15"));
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);
