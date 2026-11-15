@@ -632,6 +632,9 @@
       if (!w.length) return false;
       if (FIRST_BAD.has(w[0]) || LAST_BAD.has(w[w.length - 1])) return false;
       if (w.length === 1 && LABEL_WORD.has(w[0])) return false;
+      /* the degree a posting asks for is scored in the education part; as a "skill" it is a phrase
+         nobody can have ("post-secondary education program", "completion of a college program") */
+      if (/\b(post-?secondary|education program|degree program|diploma program|completion of|undergraduate degree|graduate degree)\b/.test(fold(n))) return false;
       if (JUNK_TERM.test(n)) return false;
       return true;
     }

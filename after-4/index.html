@@ -1444,10 +1444,11 @@ function cvEduInfo(){
 }
 /* the degree a posting asks for, on the 0 to 6 scale (0 = it does not say) */
 function eduAskedOf(j){
-  if(j.od&&j.od.e)return j.od.e;        /* Job Bank open data states it */
-  if(j.ea)return j.ea;                  /* read from the posting's own text when it was collected */
-  if(j.desc)return JobMeta.eduAsked(j.title+"\n"+j.desc);
-  return 0;                             /* the posting does not say: this part is left out */
+  /* 0 means the education part is left out and the rest is scaled up to 100. A posting that says
+     "no degree required" (1) is left out for the same reason: the employer does not care, so a
+     degree must not earn 20 free points there. 5,958 Job Bank postings say exactly that. */
+  const e=(j.od&&j.od.e)||j.ea||(j.desc?JobMeta.eduAsked(j.title+"\n"+j.desc):0);
+  return e>1?e:0;
 }
 function scoreJob(j){
   const T=norm(j.title+" "+j.type);
@@ -2808,7 +2809,7 @@ async function loadServer(){
     for(const x of d.jobs){
       const k=norm(x.company)+"|"+norm(x.title)+(x.province?"|"+x.province:"");
       if(m.has(k))continue;
-      m.set(k,{company:x.company,title:x.title,loc:x.loc,date:x.date,type:x.type||"",sources:x.sources,desc:x.desc||"",id:x.id||"",dl:x.dl!=null?x.dl:(x.desc||"").length,lv:x.lv||null,lg:x.lg||null,df:x.df||null,province:x.province||"",kw:x.kw||null,kt:x.kt||0,
+      m.set(k,{company:x.company,title:x.title,loc:x.loc,date:x.date,type:x.type||"",sources:x.sources,desc:x.desc||"",id:x.id||"",dl:x.dl!=null?x.dl:(x.desc||"").length,ea:x.ea||0,mh:x.mh||null,lv:x.lv||null,lg:x.lg||null,df:x.df||null,province:x.province||"",kw:x.kw||null,kt:x.kt||0,
         ageH:x.postedAt?(Date.now()-Date.parse(x.postedAt))/36e5:x.ageH!=null?x.ageH+(Date.now()-at)/36e5:null,snap:!!d.mock,partial:!!x.partial,noc:x.noc||null,op:x.op||0});
     }
     const before=new Set(JOBS.map(jkey)),wasFresh=new Set(JOBS.filter(j=>j.fresh).map(jkey));
