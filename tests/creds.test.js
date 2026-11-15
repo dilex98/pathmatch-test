@@ -25,9 +25,21 @@ console.log("the map itself");
 ok("every entry names an official source",
    C.entries.every((e) => e.source && /^https?:\/\//.test(e.source.url)),
    C.entries.filter((e) => !(e.source && /^https?:/.test(e.source.url))).map((e) => e.id).join(", "));
-ok("every entry is signed by a person, with the day and the source they read",
-   C.entries.every((e) => typeof e.checked === "string" && e.checked.length > 3 && /^\d{4}-\d{2}-\d{2}$/.test(e.checked_on || "") && /^https?:/.test(e.checked_against || "")),
-   C.entries.filter((e) => !(typeof e.checked === "string" && e.checked_on)).map((e) => e.id).join(", "));
+const signed = C.entries.filter((e) => typeof e.checked === "string");
+const waiting = C.entries.filter((e) => e.checked === false);
+ok("every signed entry names the person, the day and the source they read",
+   signed.every((e) => e.checked.length > 3 && /^\d{4}-\d{2}-\d{2}$/.test(e.checked_on || "") && /^https?:/.test(e.checked_against || "")),
+   signed.filter((e) => !e.checked_on).map((e) => e.id).join(", "));
+ok("an entry is either signed or plainly waiting to be - never something in between",
+   signed.length + waiting.length === C.entries.length,
+   C.entries.filter((e) => typeof e.checked !== "string" && e.checked !== false).map((e) => e.id).join(", "));
+/* The gate itself. An unsigned entry is drafted and visible in the file, and the page skips it, so
+   nothing reaches an applicant that a person has not read. This is what makes it safe to let the
+   agent and the drafting tool write into this file at all. */
+ok("the page skips unsigned entries",
+   /!CREDS\.draft_mode\s*&&\s*!e\.checked\s*\)\s*continue/.test(
+     fs.readFileSync(path.join(base, "index.html"), "utf8")));
+ok("and the map is not in draft mode, so that skipping is live", C.draft_mode === false, String(C.draft_mode));
 ok("every skill a credential covers exists in the dictionary",
    C.entries.every((e) => (e.covers || []).every((c) => dict.skills.some((s) => s.n === c.skill))));
 ok("every skill says which words of the syllabus it came from",
@@ -89,6 +101,28 @@ console.log("\nthe licence question");
 const mh = J.mustHaves("A valid Water Treatment Operator Certificate is mandatory.");
 ok("a mandatory licence is still found and named", mh.length === 1 && /Water Treatment/.test(mh[0].what || ""));
 ok("a licence with no name to look for is only a note", J.mustHaves("A valid License is required.")[0].what === null);
+
+console.log("\nQuebec and French credentials");
+const fr = (id) => C.entries.find((e) => e.id === id);
+ok("the Quebec engineering licence is in the map, apart from the Engineers Canada one",
+   !!fr("oiq") && !!fr("p-eng") && fr("oiq").id !== fr("p-eng").id);
+ok("a CV saying \"ing.\" or \"membre de l'OIQ\" finds it",
+   ["ing.", "membre de l'ordre des ingenieurs", "cpi"].every((a) => fr("oiq").also.includes(a)));
+ok("the ASP Construction card is in, with its 19 modules as the source",
+   !!fr("asp-construction") && /asp-construction\.org/.test(fr("asp-construction").source.url));
+ok("...and it covers confined space and lockout in full",
+   (fr("asp-construction").covers || []).some((c) => c.skill === "Confined space" && c.level === "core"));
+ok("what a reviewer took out of it stays out, with the reason",
+   !(fr("asp-construction").covers || []).some((c) => /Mentoring|Physics/.test(c.skill)) &&
+   Object.values(fr("asp-construction").drop).every((r) => r.length > 20));
+ok("the CCQ competency certificate is in", !!fr("ccq-competence"));
+ok("French spellings reach the credentials people actually write",
+   fr("forklift").also.includes("cariste") &&
+   fr("first-aid").also.includes("secourisme") &&
+   fr("red-seal").also.includes("sceau rouge") &&
+   fr("whmis").also.includes("simdut"));
+ok("the new Quebec entries are drafted but NOT yet in use",
+   ["oiq", "asp-construction", "ccq-competence"].every((id) => fr(id).checked === false));
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);
