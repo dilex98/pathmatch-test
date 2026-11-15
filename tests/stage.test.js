@@ -1,0 +1,52 @@
+/* Checks on reading the career stage from a CV. Run: node tests/stage.test.js
+   The CVs here are invented. The shapes are the ones that read wrong before phase 2. */
+const J=require('../after-2/jobmeta.js')||globalThis.JobMeta;
+const M=(J&&J.cvLevel)?J:globalThis.JobMeta;
+const NOW=new Date('2026-11-14T12:00:00-05:00');
+const BAND=['Student or new graduate','Early career','Mid-level','Senior','Executive'];
+let pass=0,fail=0;
+const ok=(name,cond,extra)=>{if(cond){pass++;console.log('  ok   '+name);}else{fail++;console.log('  FAIL '+name+(extra?'  → '+extra:''));}};
+const lvl=t=>M.cvLevel(t,NOW);
+const kinds=r=>(r.entries||[]).map(e=>e.kind+':'+e.months).join(' ');
+
+console.log('the same CV written three ways gives the same answer');
+const A='WORK EXPERIENCE\nProduction Coordinator, Northwind Manufacturing, March 2023 - Present\nPurchasing and shipments.\nSupply Chain Intern, Lakeside Pharma, January 2022 - April 2022\nRan MRP.\nEDUCATION\nB.Eng. Industrial Engineering, Concordia University, 2016 - 2020\n';
+const B='WORK EXPERIENCE\nProduction Coordinator\nNorthwind Manufacturing\nMarch 2023 - Present\nPurchasing and shipments.\nSupply Chain Intern\nLakeside Pharma\nJanuary 2022 - April 2022\nRan MRP.\nEDUCATION\nB.Eng. Industrial Engineering\nConcordia University\n2016 - 2020\n';
+const C='WORK EXPERIENCE\nMarch 2023 - Present    Production Coordinator, Northwind Manufacturing\n                        Purchasing and shipments.\nJanuary 2022 - April 2022    Supply Chain Intern, Lakeside Pharma\n                        Ran MRP.\nEDUCATION\n2016 - 2020    B.Eng. Industrial Engineering, Concordia University\n';
+const ra=lvl(A),rb=lvl(B),rc=lvl(C);
+ok('dates on the title line, on their own line, or in a column agree',
+   ra.years===rb.years&&rb.years===rc.years&&ra.band===rb.band&&rb.band===rc.band,
+   `${ra.years} / ${rb.years} / ${rc.years}`);
+ok('an internship is student work whichever way it is written',
+   [ra,rb,rc].every(r=>kinds(r).includes('junior:4')),kinds(rb));
+
+console.log('what counts as work');
+ok('an apprenticeship is student work',
+   kinds(lvl('WORK EXPERIENCE\nApprentice technician\nOrtec, Lorient\nSeptember 2024 - August 2025\n')).includes('junior'));
+ok('an alternance is student work',
+   kinds(lvl('EXPERIENCES\nAlternance en maintenance industrielle\nBrunet Snere\nseptembre 2024 - aout 2025\n')).includes('junior'));
+ok('a research assistant during a degree is student work',
+   kinds(lvl('WORK EXPERIENCE\nResearch Assistant\nUniversity lab\nSeptember 2018 - August 2021\n')).includes('junior'));
+ok('"1 month each" is two months, not a year',
+   kinds(lvl('WORK EXPERIENCE\nSeasonal operator\nMr Bricolage\nAugust 2022 - 2023 (1 month each)\n')).includes(':2'),
+   kinds(lvl('WORK EXPERIENCE\nSeasonal operator\nMr Bricolage\nAugust 2022 - 2023 (1 month each)\n')));
+ok('a scholarship is not work',
+   kinds(lvl('AWARDS\nMerit scholarship\n2019 - 2022\n')).indexOf('work')<0);
+ok('an award is not work',
+   kinds(lvl('ACHIEVEMENTS\nPrincipal’s list student\n2015 - 2017\n')).indexOf('work')<0);
+ok('a degree is not work',
+   kinds(lvl('EDUCATION\nB.Eng. Industrial Engineering\nConcordia University\n2016 - 2020\n')).indexOf('work')<0);
+
+console.log('studying now');
+const studentCV='EDUCATION\nMaster of Engineering\nConcordia University\nSeptember 2025 - May 2027\nWORK EXPERIENCE\nMechanical Engineer\nAcme Ltd\nJanuary 2021 - June 2024\n';
+ok('a student with no job running now is a student, whatever they did before',lvl(studentCV).band===0,BAND[lvl(studentCV).band]);
+const workingStudent='EDUCATION\nMaster of Engineering\nConcordia University\nSeptember 2025 - May 2027\nWORK EXPERIENCE\nProduction Coordinator\nWajax\nMarch 2021 - Present\n';
+ok('a student who also works full time keeps the stage their years give',lvl(workingStudent).band===2,BAND[lvl(workingStudent).band]);
+ok('the reason is written down',(lvl(studentCV).why||[]).join(' ').includes('studying now'));
+
+console.log('counting');
+const overlap='WORK EXPERIENCE\nProduction Coordinator\nNorthwind\nJanuary 2022 - December 2024\nPart-time server\nCafe\nJune 2022 - August 2022\n';
+ok('a student job inside a full-time job is not counted twice',Math.abs(lvl(overlap).years-3)<0.2,String(lvl(overlap).years));
+
+console.log('\n'+pass+' passed, '+fail+' failed');
+process.exit(fail?1:0);
