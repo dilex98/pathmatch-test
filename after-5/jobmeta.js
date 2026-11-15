@@ -466,9 +466,24 @@
       /* "License" on its own names nothing we could look for on a CV: keep it as a note, not a block */
       if (what && !/\s/.test(what) && !/^(p\.? ?eng|oiq|peo|cpa|cfa|pmp|capm|cscp|cpim|whmis|simdut|csts|tdg)$/i.test(what)) what = null;
       out.push({ driving: driving, what: what, text: name.length > 150 ? name.slice(0, 150) + "\u2026" : name });
-      if (out.length >= 4) break;
+      if (out.length >= 6) break;
     }
-    return out;
+    /* The same requirement is often written twice in one posting ("current TDG and IATA
+       certification", then "TDG Certification required"). Keep the fullest name of each thing, so
+       the card does not flag one licence three times. */
+    const keep = [];
+    for (const m of out) {
+      const k = plain(m.what || m.text);
+      let skip = false;
+      for (let i = 0; i < keep.length; i++) {
+        const o = plain(keep[i].what || keep[i].text);
+        if (!m.what || !keep[i].what) continue;
+        if (o.indexOf(k) >= 0) { skip = true; break; }
+        if (k.indexOf(o) >= 0) { keep[i] = m; skip = true; break; }
+      }
+      if (!skip) keep.push(m);
+    }
+    return keep.slice(0, 3);
   }
 
   function descFlags(desc) {
