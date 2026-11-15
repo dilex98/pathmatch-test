@@ -1421,8 +1421,17 @@ function stageOk(j){
     return b!==0||/no experience|aucune experience|no prior experience|will train|entry[- ]level|debutant/i.test(j.title+" "+(j.desc||""));
   return STAGE_OK[b].indexOf(lv.lvl)>=0;
 }
-/* a job one stage above: kept for the career path, not shown in the top 10 */
-const nextStep=j=>{const b=meBand();if(b===null)return false;return JobMeta.relation(b,lvOf(j).lvl)==="step";};
+/* A job one step above what this person can get now: kept for the career path, never shown in the
+   top 10. It is read from the same table as the filter, not from the old fit scores, which called a
+   manager posting a fit for someone with four years. */
+function nextStep(j){
+  const b=meBand();
+  if(b===null)return false;
+  const lv=lvOf(j);
+  if(lv.src==="default")return false;          /* the posting never said its level: not a step up either */
+  const top=STAGE_OK[b][STAGE_OK[b].length-1];
+  return lv.lvl===top+1;
+}
 
 /* what the CV shows for the education part of the score, worked out once per CV */
 let EDU_CACHE=null;
