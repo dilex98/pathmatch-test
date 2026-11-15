@@ -199,6 +199,8 @@
   };
   const DEGREE = /\b(bachelor|b\.? ?sc|b\.? ?eng|b\.? ?a\b|b\.? ?comm?|beng|bsc|master|m\.? ?sc|m\.? ?eng|m\.? ?a\b|meng|msc|mba|ph\.? ?d|doctorat|diploma|diplome|degree|licence|baccalaureat|maitrise|gpa|coursework|dec (en|in)|deec|aec\b|major in|minor in|honours)\b/;
   const SCHOOL = /\b(university|universite|college|cegep|ecole|school|institute|polytechni\w*|academy)\b/;
+  /* headings that list prizes, where a job title beside the dates still means a job (see below) */
+  const PRIZE_SEC = /^(awards?|achievements?|accomplishments?|distinctions?|honou?rs)\b/;
   const JOBWORD = /\b(assistant|engineer|ingenieur|developer|analyst|analyste|manager|gestionnaire|coordinat\w*|specialist|technician|technicien|officer|consultant|teacher|enseignant|nurse|infirmi\w*|clerk|representative|agent|advisor|conseiller|designer|researcher|director|directeur|lead|supervisor|superviseur|associate|accountant|comptable|programmer|architect|administrator|operator|operateur|worker|planner|planificateur|buyer|acheteur|controller|controleur|scheduler|tutor|tuteur|cashier|caissier|driver|chauffeur|server|serveur|cook|cuisinier|apprentice|apprenti|trainee|stagiaire|intern|lecturer|professor|instructor)\b/;
   const JUNIORISH = /\b(interns?|internships?|stagiaires?|stages?|co-?op|coop|students?|etudiants?|volunteer\w*|benevole\w*|apprentic\w*|apprenti\w*|alternan\w*|contrat de professionnalisation|professionnalisation|seasonal|saisonnier|work[- ]study|summer|part[- ]time|temps partiel|externship|placement|research assistant|teaching assistant|assistant de recherche|assistant d'enseignement|tutor|work-study)\b/;
   /* Wording that says the person is studying RIGHT NOW. Weaker wording, such as
@@ -214,30 +216,32 @@
     const nowIx = now.getFullYear() * 12 + now.getMonth();
     const ft = [], junior = [], edu = [], entries = [];
     const titles = [];
-    let section = "";
+    let section = "", section_head = "";
     /* What a date belongs to is named on a nearby line: a job title, a degree, a school.
        It can sit on the same line, above it, or below it, depending on how the CV is laid
        out, so look around instead of at one fixed place. This is what makes the same CV
        give the same years however it was copied or exported. */
+    let nearAt = -1, nearKind = "";        /* the line near() chose, and what made it the one: used as the entry's name, and to tell a job from a prize */
     function near(i) {
       const strip = (k) => {
         if (k < 0 || k >= lines.length) return "";
         return fold(lines[k]).replace(new RegExp(RANGE_SRC, "g"), " ").replace(/\s{2,}/g, " ").trim();
       };
       const order = [i, i - 1, i - 2, i + 1, i + 2];
+      nearAt = -1; nearKind = "";
       /* A job title wins over the name of the place: "Research Assistant" at a
          "University lab" is student work, not studies. */
       for (const k of order) {
         const t = strip(k);
-        if (t.length >= 3 && (JOBWORD.test(t) || JUNIORISH.test(t))) return t;
+        if (t.length >= 3 && (JOBWORD.test(t) || JUNIORISH.test(t))) { nearAt = k; nearKind = "job"; return t; }
       }
       for (const k of order) {
         const t = strip(k);
-        if (t.length >= 3 && (DEGREE.test(t) || SCHOOL.test(t))) return t;
+        if (t.length >= 3 && (DEGREE.test(t) || SCHOOL.test(t))) { nearAt = k; nearKind = "edu"; return t; }
       }
       for (const k of order) {
         const t = strip(k);
-        if (t.length >= 3) return t;
+        if (t.length >= 3) { nearAt = k; nearKind = "plain"; return t; }
       }
       return "";
     }
@@ -250,7 +254,7 @@
         const head = line.replace(/[:\s]+$/, "");
         if (SEC.edu.test(head)) { section = "edu"; continue; }
         if (SEC.exp.test(head)) { section = "exp"; continue; }
-        if (SEC.other.test(head)) { section = "other"; continue; }
+        if (SEC.other.test(head)) { section = "other"; section_head = head; continue; }
       }
       const re = new RegExp(RANGE_SRC, "g");
       const pairs = [];
@@ -277,14 +281,38 @@
         const isEdu = section === "edu" || DEGREE.test(ctx) || (SCHOOL.test(ctx) && !JOBWORD.test(ctx));
         const label = (function () {
           const clean = (x) => String(x || "").replace(/[\u2013\u2014]/g, "-")
-            .replace(new RegExp(RANGE_SRC, "gi"), " ").replace(/[-|,;:]+\s*$/, "").replace(/\s{2,}/g, " ").trim();
-          let t = clean(lines[i]);
-          for (let k = i - 1; k >= 0 && k >= i - 3 && t.length < 4; k--) t = clean(lines[k]);
+            .replace(new RegExp(RANGE_SRC, "gi"), " ").replace(/\(\s*\)/g, " ").replace(/^[\s,;:|.\-\u2022\u00b7\u25cf\u25aa*]+/, "")
+            .replace(/[-|,;:]+\s*$/, "").replace(/\s{2,}/g, " ").trim();
+          /* a name must say what the thing is: not a heading, not a note in brackets, not a place or a number */
+          const usable = (t) => t.length >= 4 && /\p{L}{3}/u.test(t) && !/^\(/.test(t) &&
+            !SEC.edu.test(fold(t)) && !SEC.exp.test(fold(t)) && !SEC.other.test(fold(t)) &&
+            !/^(cgpa|gpa|moyenne)\b/i.test(t);
+          /* the line the job title was read from comes first, but only when it sits on the dates'
+             line or above: a line below belongs to the next entry, so a prize does not take its name */
+          const tries = [];
+          if (nearAt >= 0 && nearAt <= i) tries.push(nearAt);
+          tries.push(i, i - 1, i - 2, i - 3);
+          if (nearAt > i) tries.push(nearAt);
+          tries.push(i + 1, i + 2);
+          for (const k of tries) {
+            if (k < 0 || k >= lines.length) continue;
+            const t = clean(lines[k]);
+            if (usable(t)) return t.length > 64 ? t.slice(0, 64) + "\u2026" : t;
+          }
+          const t = clean(lines[i]);
           return t.length > 64 ? t.slice(0, 64) + "\u2026" : t;
         })();
         const months = (lo, hi) => Math.max(0, hi - lo + 1);
         if (isEdu) { entries.push({ kind: "edu", months: months(a, b), label: label }); edu.push([a, b]); continue; }
-        if (section === "other") { entries.push({ kind: "other", months: months(a, b), label: label }); continue; }
+        /* Awards, prizes, hobbies, projects and volunteering do not count as work. The one exception
+           is a prizes heading with a job title sitting right beside the dates ("Graduate Engineer
+           Trainee"): in a two-column CV the reading order can carry the next job in under an
+           ACHIEVEMENTS heading, and that job is real work. The title must sit on the dates' line or
+           above it: a title below belongs to the next entry, so a prize does not borrow it.
+           Volunteering keeps its own rule and never counts, job title or not. */
+        if (section === "other" && !(PRIZE_SEC.test(section_head) && nearKind === "job" && nearAt <= i)) {
+          entries.push({ kind: "other", months: months(a, b), label: label }); continue;
+        }
         if (a >= nowIx) continue;
         if (JUNIORISH.test(ctx)) { entries.push({ kind: "junior", months: months(a, Math.min(b, nowIx)), label: label }); junior.push([a, Math.min(b, nowIx)]); continue; }
         if (a >= nowIx) continue;

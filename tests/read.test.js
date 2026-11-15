@@ -1,6 +1,6 @@
 /* Checks on the CV reader. Run: node tests/read.test.js
    Each case is a shape of CV that broke the reader at least once. */
-const R=require('../after-1/cvread.js');
+const R=require(require('path').join(__dirname,'..',process.argv[2]||'after-3','cvread.js'));
 let pass=0,fail=0;
 const ok=(name,cond,extra)=>{if(cond){pass++;console.log('  ok   '+name);}else{fail++;console.log('  FAIL '+name+(extra?'  → '+extra:''));}};
 

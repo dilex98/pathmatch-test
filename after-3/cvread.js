@@ -169,7 +169,21 @@ function markSections(text,known,big){
   const kn=new Set((known||[]).map(h=>foldLine(h).trim()));
   const lines=String(text||"").split("\n"),out=[];let added=0,last="";
   for(let i=0;i<lines.length;i++){
-    const raw=lines[i],t=raw.trim(),f=foldLine(t);
+    const raw=lines[i];let t=raw.trim(),f=foldLine(t),joined=0;
+    /* A heading can be broken over two lines by a narrow column ("CENTRES" / "D'INTERET"). When a
+       short line and the next one together make a heading we know, read them as one. */
+    if(t&&t.length<=22&&t.split(/\s+/).length<=2&&!/\d/.test(t)&&!/[,;:.]/.test(t)){
+      for(let j=1;j<=2&&i+j<lines.length;j++){
+        const nx=(lines[i+j]||"").trim();
+        if(!nx){continue;}
+        if(nx.length>22||/\d/.test(nx)||nx.split(/\s+/).length>2)break;
+        const pair=foldLine(t+" "+nx);
+        if(HEAD_MAP.some(function(pr){return pr[0].test(pair);})&&!HEAD_MAP.some(function(pr){return pr[0].test(f);})){
+          t=t+" "+nx;f=pair;joined=j;break;
+        }
+        break;
+      }
+    }
     const letters=t.replace(/[^A-Za-z\u00c0-\u00ff]/g,"");
     const caps=letters.length>=3&&letters===letters.toUpperCase();
     const next=(lines[i+1]||"").trim()||(lines[i+2]||"").trim();
@@ -184,6 +198,7 @@ function markSections(text,known,big){
       if(hit&&foldLine(hit[1])!==f&&foldLine(last)!==foldLine(hit[1])){out.push(hit[1]);added++;}
     }
     out.push(raw);
+    if(joined){for(let j=1;j<=joined;j++){out.push(lines[i+j]);}i+=joined;}
     if(t)last=t;
   }
   return {text:out.join("\n"),added:added};

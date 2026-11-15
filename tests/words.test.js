@@ -109,5 +109,17 @@ ok("a high-school line is not matched",
 ok("a university line is still matched",
    has("EDUCATION\nMaster of Engineering, mechanical design option\n", "Mechanical design"));
 
+console.log("\nI-13 round 2 · the Job Bank occupations' own keyword lists");
+for (const junk of ["efficient manner", "oversee operational", "coordinate activities", "accessible manner",
+                    "information obtained", "Store items", "general clean", "internal usage"])
+  ok('"' + junk + '" is not kept as a keyword', !eng.usefulKw("Kt|" + junk));
+for (const label of ["Description", "Schedule", "Standard", "Fri", "ops", "Conditions"])
+  ok('the form label "' + label + '" is not kept as a keyword', !eng.usefulKw("Kt|" + label));
+for (const real of ["sort incoming parts", "construction supervisors", "schedule production runs",
+                    "production schedule", "office administration"])
+  ok('"' + real + '" is still a keyword', eng.usefulKw("Kt|" + real));
+for (const skill of ["Microsoft Office", "Scheduling", "Inventory control"])
+  ok('the skill "' + skill + '" is never dropped', eng.usefulKw("Ks|" + skill));
+
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);

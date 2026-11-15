@@ -595,6 +595,36 @@
     /* a phrase that is plainly not a skill: a postal code, an amount of money, a code, a bare number */
     const JUNK_TERM = /\b[a-z]\d[a-z]\s?\d[a-z]\d\b|\$|\b\d+[.,]\d{2}\b|\b(?:\d+\s*)?(?:per|par)\s*(?:hour|heure|annum|an|year|annee)\b|^\W*\d[\d\s.,-]*\W*$|\b[a-z]{1,3}\d{3,}\b|\b(\w+)\s+\1\b/i;
 
+    /* I-13, part two. The Job Bank occupations come with their keywords worked out in advance, so they
+     * never pass through profile() above. Half a sentence is listed as a skill the CV is missing
+     * ("efficient manner", "oversee operational", "coordinate activities", "accessible manner"). A
+     * phrase that begins or ends on one of these words says nothing on its own, so it is dropped.
+     * A skill from the dictionary is never dropped: only loose phrases. */
+    const EDGE_WORD = new Set(("manner manners basis way ways activities activity tasks task duties duty matters items " +
+      "aspects areas issues needs levels level standards practices procedures? conditions requirements environment " +
+      "operational appropriate various relevant necessary required daily timely efficient effective overall general " +
+      "other others related applicable additional applicable suitable obtained assigned provided needed requested " +
+      "ongoing accessible internal external proper correct available possible").split(/\s+/).filter(Boolean));
+    /* A posting's own form labels, read as one-word skills: "Description", "Schedule", "Standard",
+     * "Office", "Fri". On their own they say nothing about the work. A dictionary skill of the same
+     * name (Microsoft Office, Scheduling) is untouched: this only drops loose single words. */
+    const LABEL_WORD = new Set(("description schedule standard conditions requirements qualifications responsibilities " +
+      "overview summary benefits salary wage department location title posting position status type category shift " +
+      "hours ops opsops apply application deadline reference competition division classification union grade " +
+      "mon tue tues wed thu thur thurs fri sat sun monday tuesday wednesday thursday friday saturday sunday " +
+      "january february march april june july august september october november december lundi mardi mercredi " +
+      "jeudi vendredi samedi dimanche poste lieu salaire horaire statut categorie").split(/\s+/).filter(Boolean));
+    function usefulKw(code) {
+      const n = String(code).slice(3);
+      if (String(code)[1] === "s") return true;                 /* a skill from the dictionary */
+      const w = fold(n).split(/[^a-z0-9+#]+/).filter(Boolean);
+      if (!w.length) return false;
+      if (EDGE_WORD.has(w[0]) || EDGE_WORD.has(w[w.length - 1])) return false;
+      if (w.length === 1 && LABEL_WORD.has(w[0])) return false;
+      if (JUNK_TERM.test(n)) return false;
+      return true;
+    }
+
     function profile(title, body, max) {
       max = max || 40;
       title = cleanTitle(title);
@@ -643,7 +673,7 @@
         }
       }
       rows.sort((a, b) => TAGRANK[a.t] - TAGRANK[b.t] || a.k - b.k || b.w - a.w || b.c - a.c || a.f - b.f);
-      const keep = rows.filter(r => r.t !== "A");
+      const keep = rows.filter(r => r.t !== "A" && usefulKw(r.code));
       return { kw: keep.slice(0, max).map(r => r.code), kt };
     }
     /* the words of a stored keyword, the same way terms() cut them (cached: the same phrase turns up in many postings) */
@@ -662,7 +692,7 @@
     }
     /* A stored profile against a CV: [{n, kind: "s"|"t", tag, st: "M"|"R"|"G"}]. Close ("R") is never a match. */
     function profileStatus(kw, cvFound, ix) {
-      const dec = kw.map(c => ({ n: c.slice(3), kind: c[1], tag: c[0] }));
+      const dec = kw.filter(usefulKw).map(c => ({ n: c.slice(3), kind: c[1], tag: c[0] }));
       const skills = dec.filter(x => x.kind === "s");
       const linked = new Set();
       if (skills.length) {
@@ -678,7 +708,7 @@
       });
     }
 
-    return { profile, cleanTitle, profileStatus, termWords, find, findCv, report, flags, sections, tagOf, terms, indexCv, matchTerms, termsOn, stopWords: [...stop].sort(), weakWords: [...weak].sort(), meta: dict.meta || {}, size: skills.length, soft: dict.soft || [] };
+    return { profile, cleanTitle, profileStatus, usefulKw, termWords, find, findCv, report, flags, sections, tagOf, terms, indexCv, matchTerms, termsOn, stopWords: [...stop].sort(), weakWords: [...weak].sort(), meta: dict.meta || {}, size: skills.length, soft: dict.soft || [] };
   }
 
   /* The text as safe HTML, with <mark class="..."> around each mark {a, b, cls, title}. Where marks overlap, the one

@@ -750,7 +750,12 @@ function cvCheck(){
     :`${names.length} skills, ${Object.keys(secs).length} section${Object.keys(secs).length===1?"":"s"} and ${ents.length} dated item${ents.length===1?"":"s"} were read. ${dated.length} counted towards your years of work.`;
   const mon=m=>m>=12?(Math.round(m/12*10)/10)+" yr":m+" mo";
   const rows=ents.length?ents.map(e=>`<tr><td>${esc(e.label||"(no title found)")}</td><td class="note" style="white-space:nowrap">${mon(e.months)}</td><td class="note">${HOWCOUNTED[e.kind]}</td></tr>`).join(""):"";
-  const chips=names.map(n=>`<span class="off" style="padding-right:4px">${esc(n)} <button class="lnk" data-drop="${esc(n)}" title="This skill is not mine" style="border:0;background:none;cursor:pointer;color:#b3261e;font-weight:700">×</button></span>`).join("");
+  /* the words on the CV that switched each skill on, so a wrong one can be traced to its cause */
+  const CVTXT=(CV&&CV.raw)||"";
+  const from=n=>{const h=cf[n];if(!h)return "";
+    const w=[...new Set((h.spans||[]).map(([a,b])=>CVTXT.slice(a,b).replace(/\s+/g," ").trim()).filter(Boolean))].slice(0,2);
+    return w.length?"Read from your CV: “"+w.join("”, “")+"”":"";};
+  const chips=names.map(n=>`<span class="off" style="padding-right:4px" title="${esc(from(n))}">${esc(n)} <small class="note" style="font-weight:400">${esc(from(n).replace(/^Read from your CV: /,"").slice(0,30))}</small> <button class="lnk" data-drop="${esc(n)}" title="This skill is not mine" style="border:0;background:none;cursor:pointer;color:#b3261e;font-weight:700">×</button></span>`).join("");
   const back=DROPPED.size?`<p class="note" style="margin-top:8px">Removed by you: ${[...DROPPED].map(n=>`${esc(n)} <button class="lnk" data-back="${esc(n)}" style="border:0;background:none;cursor:pointer">put back</button>`).join(" · ")}</p>`:"";
   return `<details class="old" id="cvcheck" style="margin-top:10px"${CHECK_OPEN?" open":""}><summary>Check what we read from your CV</summary>
     <p style="margin:8px 0"><b>${esc(verdict)}</b></p>

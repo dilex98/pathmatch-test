@@ -1,6 +1,10 @@
 /* Checks on reading the career stage from a CV. Run: node tests/stage.test.js
    The CVs here are invented. The shapes are the ones that read wrong before phase 2. */
-const J=require('../after-2/jobmeta.js')||globalThis.JobMeta;
+const path=require('path');
+/* which copy of the site to check: node tests/stage.test.js after-2 */
+const DIR=process.argv[2]||'after-3';
+const J=require(path.join(__dirname,'..',DIR,'jobmeta.js'))||globalThis.JobMeta;
+console.log('checking '+DIR);
 const M=(J&&J.cvLevel)?J:globalThis.JobMeta;
 const NOW=new Date('2026-11-14T12:00:00-05:00');
 const BAND=['Student or new graduate','Early career','Mid-level','Senior','Executive'];
@@ -61,6 +65,32 @@ const senior='WORK EXPERIENCE\nOperations Manager\nWajax\nJune 2014 - July 2026\
 ok('a senior who helped a student association is not a student',lvl(senior).band===3,BAND[lvl(senior).band]+' '+lvl(senior).years+'y');
 const grad='WORK EXPERIENCE\nMechanical Engineer\nAcme Ltd\nJune 2021 - November 2026\nPROFILE\nRecent graduate of Concordia University\n';
 ok('"recent graduate" on its own does not undo five years of work',lvl(grad).band>=2,BAND[lvl(grad).band]+' '+lvl(grad).years+'y');
+
+console.log('two-column reading order');
+const award='WORK EXPERIENCE\nInnovation Engineer\nHavells\nFebruary 2023 - Present\nACHIEVEMENTS\nDean\u2019s Merit scholarship for the top 10% at TIET, Patiala\n(07/2019 - 07/2022)\nGraduate Engineer Trainee\nJindal Steel and Power Ltd\n07/2022 - 01/2023\n';
+ok('a job carried in under an ACHIEVEMENTS heading still counts as work',
+   kinds(lvl(award)).split(' ').filter(k=>k.startsWith('work')).length===2,kinds(lvl(award)));
+ok('a scholarship under the same heading still does not count as work',
+   (lvl(award).entries||[]).some(e=>e.kind==='other'&&/scholarship/i.test(e.label)),
+   JSON.stringify((lvl(award).entries||[]).map(e=>e.kind+':'+e.label)));
+const vol='WORK EXPERIENCE\nInventory Planner\nWajax\nJanuary 2021 - Present\nVOLUNTEER EXPERIENCE\nTutor\nLocal library\nSeptember 2015 - September 2016\n';
+ok('volunteering never counts as work, job title or not',
+   !(lvl(vol).entries||[]).some(e=>e.kind==='work'&&/tutor/i.test(e.label)),
+   JSON.stringify((lvl(vol).entries||[]).map(e=>e.kind+':'+e.label)));
+
+console.log('names on the page');
+const lab='WORK EXPERIENCE\nProduction Coordinator\nWajax Limited\nMarch 2026 - Present\nBuying and shipments.\n';
+ok('an entry is named by its job title, not by its employer',
+   (lvl(lab).entries||[]).some(e=>/Production Coordinator/.test(e.label)),
+   JSON.stringify((lvl(lab).entries||[]).map(e=>e.label)));
+const head='EDUCATION\nB.Eng. Industrial Engineering\nConcordia University\n2016 - 2020\n';
+ok('an entry is never named after a heading',
+   !(lvl(head).entries||[]).some(e=>/^EDUCATION$/i.test(e.label)),
+   JSON.stringify((lvl(head).entries||[]).map(e=>e.label)));
+const cg='EDUCATION\nB.Tech Mechanical Engineering\nTIET Patiala\n, CGPA 9.3 (Top 10% of Branch)\n2018 - 2022\n';
+ok('an entry is never named after a grade average',
+   !(lvl(cg).entries||[]).some(e=>/CGPA/i.test(e.label)),
+   JSON.stringify((lvl(cg).entries||[]).map(e=>e.label)));
 
 console.log('\n'+pass+' passed, '+fail+' failed');
 process.exit(fail?1:0);
