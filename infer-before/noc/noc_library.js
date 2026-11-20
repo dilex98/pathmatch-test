@@ -1,0 +1,442 @@
+// Path Match NOC library: helpers to use noc_library.json (browser or Node 18+, ES module, no dependencies).
+//
+//   import * as nl from "./noc_library.js";
+//   const lib = await nl.load("noc_library.lite.json");        // browser: fetch; Node: pass the parsed JSON to nl.prepare()
+//   const fits = nl.findOccupations(lib, cvText);              // CV -> best occupations
+//   const result = nl.compare(lib, cvText, "13201.01", { postingLanguage: "English and French" });
+//   nl.translate(lib, "inventory control");                     // English <-> French
+//   nl.similar(lib, "13201.01");                                // nearby occupations
+//
+// Every item gets one of 3 labels: Matched, Missing, Guess (see lib.rules).
+// Same rules as noc_library.py. Data: OaSIS / SIPeC 2025 (ESDC), Open Government Licence - Canada.
+
+const LINKS = new Set("de des du d la l a au aux en le les of the and et ou or to for in on".split(" "));
+const STOP = new Set([...LINKS, ..."un une with par pour sur dans avec by from as at".split(" ")]);
+
+// ------------------------------------------------------------------ text helpers
+export function norm(text) {
+  let t = String(text ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  t = t.replace(/[’'`]/g, " ").replace(/[^a-z0-9+#&\-. ]+/g, " ");
+  return t.replace(/\s+/g, " ").trim();
+}
+
+export function stem(w) {
+  if (w.length > 4 && w.endsWith("ies")) return w.slice(0, -3) + "y";
+  if (w.length > 4 && /(ches|shes|sses|xes|zes)$/.test(w)) return w.slice(0, -2);
+  if (w.length > 3 && w.endsWith("s") && !/(ss|us|is|as|os|ys)$/.test(w)) return w.slice(0, -1);
+  return w;
+}
+
+const fuzzy = (w) => (w.length >= 7 ? w.slice(0, 6) : w);
+const strip = (w) => w.replace(/^[.-]+|[.-]+$/g, "");
+export const tokens = (text) => norm(text).split(" ").map(strip).filter(Boolean).map(stem);
+
+export class Text {
+  constructor(text) {
+    this.raw = text || "";
+    this.norm = norm(text);
+    this.toks = tokens(text);
+    this.pos = new Map();
+    this.fpos = new Map();
+    this.toks.forEach((t, i) => {
+      if (!this.pos.has(t)) this.pos.set(t, []);
+      this.pos.get(t).push(i);
+      const f = fuzzy(t);
+      if (!this.fpos.has(f)) this.fpos.set(f, []);
+      this.fpos.get(f).push(i);
+    });
+  }
+  // true if all content words of `phrase` appear close together; loose also accepts other forms of a word
+  has(phrase, { window = 6, loose = false } = {}) {
+    let words = tokens(phrase).filter((t) => !STOP.has(t));
+    if (!words.length) return false;
+    let pos = this.pos;
+    if (loose) { words = words.map(fuzzy); pos = this.fpos; }
+    const first = pos.get(words[0]);
+    if (!first) return false;
+    if (words.length === 1) return true;
+    return first.some((i) => words.slice(1).every((w) => (pos.get(w) || []).some((j) => Math.abs(j - i) <= window + words.length)));
+  }
+}
+
+const asText = (t) => (t instanceof Text ? t : new Text(t));
+
+export async function load(url = "noc_library.lite.json") {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error("Could not load the NOC library: HTTP " + r.status);
+  return prepare(await r.json());
+}
+export const prepare = (json) => json;
+
+// ------------------------------------------------------------------ CV -> occupations
+const FIELD_TO_TITLE = [["engineering", "engineer"], ["nursing", "nurse"], ["accounting", "accountant"], ["pharmacy", "pharmacist"],
+  ["dentistry", "dentist"], ["architecture", "architect"], ["physiotherapy", "physiotherapist"],
+  ["genie industriel", "ingenieur industriel"], ["genie mecanique", "ingenieur mecanique"],
+  ["genie civil", "ingenieur civil"], ["genie electrique", "ingenieur electricien"], ["soins infirmiers", "infirmier"]];
+export function findOccupations(lib, cvText, top = 5) {
+  const cv = asText(cvText);
+  const w = lib.rules.occupation_detection;
+  const score = new Map(), evidence = new Map();
+  const add = (c, s, e) => { score.set(c, (score.get(c) || 0) + s); if (e) { if (!evidence.has(c)) evidence.set(c, []); evidence.get(c).push(e); } };
+  const words = cv.norm.split(" ");
+  const seen = new Set();
+  for (let size = 6; size >= 1; size--) {
+    for (let i = 0; i + size <= words.length; i++) {
+      const gram = words.slice(i, i + size).join(" ");
+      if (seen.has(gram)) continue;
+      seen.add(gram);
+      let key = gram, label = "title: ", factor = 1;
+      if (!(gram in lib.title_index)) {
+        // a field of study points to its occupation ("industrial engineering" -> "industrial engineer"), never a clear fit on its own
+        const hit = FIELD_TO_TITLE.find(([a]) => gram.endsWith(a));
+        const field = hit ? gram.slice(0, gram.length - hit[0].length) + hit[1] : null;
+        if (!field || !(field in lib.title_index) || size < 2) continue;
+        key = field; label = "field of study: "; factor = 0.5;
+      }
+      const codes = lib.title_index[key];
+      // shared among the occupations (NOC codes) the title names, not among their sub-profiles: "registered nurse" names one NOC with 6 profiles
+      const weight = (factor * w.title_found_on_cv * (size >= 2 ? 1 : 0.35)) / Math.sqrt(Math.max(1, nocsOf(codes).length));
+      for (const c of codes) add(c, weight, label + key);
+    }
+  }
+  for (const [code, p] of Object.entries(lib.profiles)) {
+    const hits = [...p.keywords.en, ...p.keywords.fr].filter((k) => cv.has(k));
+    if (hits.length) {
+      const pts = hits.reduce((a, h) => a + (h.includes(" ") ? 1 : 0.25), 0);
+      add(code, w.keyword_found * Math.min(pts, 4) * 0.5);
+      hits.slice(0, 5).forEach((h) => add(code, 0, "duty: " + h));
+    }
+    const parts = [...new Set(p.core_competencies.flatMap((c) => c.parts))].filter((c) => cv.has(c));
+    if (parts.length) add(code, w.core_competency_found * Math.min(parts.length, 4) * 0.5);
+  }
+  // clear: a job title of the occupation on the CV and enough points; partial: a title or a field of study, with fewer points
+  const partialMin = w.partial_fit_min_score ?? 1.5;
+  return [...score.entries()].sort((a, b) => b[1] - a[1]).slice(0, top).map(([code, s]) => {
+    const p = lib.profiles[code], ev = evidence.get(code) || [];
+    const clear = s >= w.clear_fit_min_score && ev.some((e) => e.startsWith("title:"));
+    const partial = !clear && s >= partialMin && ev.some((e) => e.startsWith("title:") || e.startsWith("field of study:"));
+    return { code, noc: p.noc, name: p.name, score: Math.round(s * 100) / 100,
+             clear_fit: clear, fit: clear ? "clear" : partial ? "partial" : null, evidence: ev.slice(0, 8) };
+  });
+}
+
+// ------------------------------------------------------------------ education, certifications, languages
+const EDU_CV = [
+  [/\bph\.? ?d\b|doctorat|doctorate|\bdoctor of\b/, 6],
+  [/\bmaster|\bm\.? ?(eng|sc|ba|a)\b|\bmba\b|maitrise/, 5],
+  [/\bbachelor|\bb\.? ?(comm|eng|sc|a|ba)\b|baccalaureat|\bbac\b|university degree|diplome universitaire/, 4],
+  [/\bdec\b|cegep|college|diploma|\bdiplome d etudes collegiales|\baec\b|\bdep\b|apprenticeship|apprentissage/, 3],
+  [/high school|secondary school|\bdes\b|secondaire/, 2],
+];
+const IN_PROGRESS = /in progress|expected|ongoing|current|present|en cours|prevu|a ce jour/;
+const CERT_CV = {
+  "Red Seal endorsement": /red seal|sceau rouge/,
+  "Professional Engineer licence (P.Eng.)": /p\.? ?eng|professional engineer|\bing\.? |ingenieur junior|\beit\b|engineer in training/,
+  "CPA designation": /\bcpa\b|chartered professional accountant/,
+  "Driver's licence": /driver s licen|drivers licen|permis de conduire|class [1-5a-g] /,
+  "Trade certification": /journeyman|journeyperson|certificate of qualification|certificat de qualification|compagnon/,
+  "Registration with a regulatory body": /registered with|registration (with|number|no)|licen[cs]e (number|no)|membre de l ordre|\bordre des\b|registered (nurse|psychiatric nurse|practical nurse|dietitian|massage|social worker)|infirmi\w* autoris|licensed practical nurse|\blpn\b|\brn\b|\brpn\b/,
+  "Licence": /licen[cs]e (number|no|holder)|licensed|permis (de|d) /,
+  "Certification": /certified|certification|certifie|certificat/,
+};
+const LANG_WORDS = { English: /\benglish\b|\banglais\b|bilingual|bilingue/, French: /\bfrench\b|\bfrancais\b|bilingual|bilingue/ };
+const FR_SCHOOLS = /universite (de montreal|laval|du quebec|de sherbrooke)|\buqam\b|\buqtr\b|\buqac\b|cegep|polytechnique montreal|hec montreal|\bets\b/;
+const FR_STOP = new Set("le la les des du de et pour avec dans sur une un est sont au aux".split(" "));
+const EN_STOP = new Set("the and of to with for in on a an is are at by from".split(" "));
+
+function cvLanguageGuess(cv) {
+  const ws = cv.norm.split(" ");
+  const fr = ws.filter((t) => FR_STOP.has(t)).length, en = ws.filter((t) => EN_STOP.has(t)).length;
+  return fr > en * 1.3 ? "French" : en > fr * 1.3 ? "English" : "";
+}
+
+function cvEducation(cv) {
+  let best = 0, progress = 0;
+  for (const line of cv.raw.split(/[\n;]|\s{2,}/)) {
+    const n = norm(line);
+    for (const [pat, lvl] of EDU_CV) {
+      if (pat.test(n)) {
+        if (IN_PROGRESS.test(n) || /20\d\d ?- ?(20\d\d )?\(?expected|20\d\d ?- ?present/.test(n)) progress = Math.max(progress, lvl);
+        else best = Math.max(best, lvl);
+        break;
+      }
+    }
+  }
+  return [best, progress];
+}
+
+const item = (part, en, fr, label, why) => ({ part, en, fr, label, why });
+const profileOf = (lib, code) => (code in lib.profiles ? code : lib.nocs[code.slice(0, 5)].profiles[0]);
+
+// ------------------------------------------------------------------ CV vs occupation
+export function compare(lib, cvText, code, { postingLanguage = null, fits = null, maxDuties = 12, maxSkills = 12 } = {}) {
+  const cv = asText(cvText);
+  code = profileOf(lib, code);
+  const p = lib.profiles[code];
+  fits = fits || findOccupations(lib, cv);
+  const clear = fits.filter((f) => f.clear_fit).map((f) => lib.profiles[f.code]);
+  const partial = fits.filter((f) => f.fit === "partial").map((f) => lib.profiles[f.code]);
+  const pairs = lib.translations.keywords_en_fr;
+  const out = [];
+
+  // 1) duties: each main duty sentence of the occupation
+  const clearCodes = new Set(clear.map((c) => c.code));
+  const near = new Set(clear.flatMap((c) => c.similar.filter((x) => x.level === "very similar").map((x) => x.code)));
+  const partialCodes = new Set(partial.map((c) => c.code));
+  for (const d of p.duties.slice(0, maxDuties)) {
+    const keys = [...d.keys, ...(d.keys_fr || [])];
+    const found = keys.filter((k) => cv.has(k));
+    const hit = d.keys.filter((k) => found.includes(k) || found.includes(pairs[k])).length;
+    if (d.keys.length && hit >= Math.max(1, Math.floor((d.keys.length + 1) / 2)))
+      out.push(item("duties", d.en, d.fr, "Matched", "on the CV: " + found.slice(0, 3).join(", ")));
+    else if (clearCodes.has(code) || near.has(code))
+      out.push(item("duties", d.en, d.fr, "Guess", "usual duty of an occupation your CV clearly fits"));
+    else if (partialCodes.has(code) && found.length)
+      out.push(item("duties", d.en, d.fr, "Guess", "partly on the CV (" + found.slice(0, 3).join(", ") + "), in an occupation your CV points to"));
+    else out.push(item("duties", d.en, d.fr, "Missing", "not on the CV"));
+  }
+
+  // 2) skills: core competencies + skills rated 4-5
+  let skills = [];
+  for (const cc of p.core_competencies) for (const part of cc.parts) if (!skills.includes(part)) skills.push(part);
+  for (const s of p.skills) if (s.rating >= 4 && !skills.includes(s.en)) skills.push(s.en);
+  skills = skills.slice(0, maxSkills);
+  const compFr = lib.translations.competencies_en_fr;
+  for (const s of skills) {
+    const fr = compFr[s.toLowerCase()] || "";
+    if (cv.has(s, { loose: true }) || (fr && cv.has(fr, { loose: true }))) { out.push(item("skills", s, fr, "Matched", "written on the CV")); continue; }
+    const core = (c) => c.core_competencies.some((cc) => cc.parts.includes(s)) || c.skills.some((x) => x.en === s && x.rating >= 4);
+    const src = clear.find(core), part = src ? null : partial.find(core);
+    out.push(src ? item("skills", s, fr, "Guess", "core skill of " + src.name.en + ", an occupation your CV fits")
+           : part ? item("skills", s, fr, "Guess", "core skill of " + part.name.en + ", an occupation your degree or titles point to")
+                 : item("skills", s, fr, "Missing", "not on the CV"));
+  }
+
+  // 3) education
+  const edu = p.requirements.education;
+  if (edu) {
+    const [have, progress] = cvEducation(cv);
+    if (have >= edu.level) out.push(item("education", edu.en, edu.fr, "Matched", "your CV shows this level or higher"));
+    else if (progress >= edu.level) out.push(item("education", edu.en, edu.fr, "Guess", "degree in progress on your CV"));
+    else out.push(item("education", edu.en, edu.fr, "Missing", "usually required for this occupation"));
+  }
+
+  // 4) certifications and licences (required ones only; never guessed)
+  for (const c of p.requirements.certifications) {
+    if (!c.required) continue;
+    const pat = CERT_CV[c.name];
+    const found = !!(pat && pat.test(cv.norm + " "));
+    out.push(item("certifications", c.name, c.fr, found ? "Matched" : "Missing", found ? "on your CV" : c.en));
+  }
+
+  // 5) languages (Job Bank "Official Language": English, French, English or French, Bilingual)
+  if (!postingLanguage) {
+    const mix = Object.fromEntries(Object.entries((lib.nocs[p.noc] || {}).languages_in_postings || {}).filter(([k]) => !k.toLowerCase().includes("no data")));
+    postingLanguage = Object.keys(mix).sort((a, b) => mix[b] - mix[a])[0] || "";
+  }
+  const pl = postingLanguage.toLowerCase();
+  let needed;
+  if (pl.includes("bilingual") || pl.includes("and") || pl.includes(" et ")) needed = [["English"], ["French"]];
+  else if (pl.includes(" or ") || pl.includes(" ou ")) needed = [["English", "French"]];
+  else needed = ["English", "French"].filter((l) => pl.includes(l.toLowerCase())).map((l) => [l]);
+  const writtenIn = cvLanguageGuess(cv);
+  const frName = { English: "Anglais", French: "Français" };
+  for (const options of needed) {
+    const en = options.join(" or "), fr = options.map((o) => frName[o]).join(" ou ");
+    if (options.some((o) => LANG_WORDS[o].test(cv.norm))) out.push(item("languages", en, fr, "Matched", "listed on the CV"));
+    else if (options.includes(writtenIn) || (options.includes("French") && FR_SCHOOLS.test(cv.norm)))
+      out.push(item("languages", en, fr, "Guess", "your CV is written in it or shows studies in it"));
+    else out.push(item("languages", en, fr, "Missing", "not on the CV"));
+  }
+
+  const summary = Object.fromEntries(["Matched", "Guess", "Missing"].map((l) => [l, out.filter((x) => x.label === l).length]));
+  return { code, noc: p.noc, name: p.name, summary, items: out };
+}
+
+// ------------------------------------------------------------------ job title -> one occupation
+// Job Bank titles are standard titles, often written backwards ("driver, truck") or with a field ("sales advisor - retail").
+// Returns { noc, code, name, how: "exact title" | "closest title", via } or { noc: null, how: "none" }.
+const TITLE_FILLER = new Set("general part full time level and of the for in de du des la le et ou a au senior junior assistant lead specialist specialiste temporary seasonal remote"
+  .split(" ").map(stem));
+const nocsOf = (codes) => [...new Set(codes.map((c) => c.slice(0, 5)))];
+function titleVariants(title) {
+  const t = String(title ?? "").replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+  const out = [];
+  const push = (x) => { const n = norm(x); if (n && !out.includes(n)) out.push(n); };
+  push(t);
+  const dash = t.split(/\s+[-–—]\s+|\s*\/\s*/);
+  for (const part of [t, ...dash]) { const c = part.split(/\s*,\s*/); if (c.length === 2) { push(c[1] + " " + c[0]); push(c[0]); } }
+  if (dash.length > 1) { push(dash[1] + " " + dash[0]); push(dash[0]); }
+  return out;
+}
+const TOKEN_INDEX = new WeakMap();
+function titleTokens(lib) {
+  if (!TOKEN_INDEX.has(lib)) {
+    const byToken = new Map(), sets = new Map();
+    for (const k of Object.keys(lib.title_index)) {
+      const ts = new Set(tokens(k));
+      sets.set(k, ts);
+      for (const x of ts) { if (!byToken.has(x)) byToken.set(x, []); byToken.get(x).push(k); }
+    }
+    TOKEN_INDEX.set(lib, { byToken, sets });
+  }
+  return TOKEN_INDEX.get(lib);
+}
+function matchTitle(lib, title, { minOverlap = 0.6, minLead = 0.1 } = {}) {
+  const v = titleVariants(title);
+  const found = (code, how, via) => ({ noc: code.slice(0, 5), code, name: lib.profiles[code].name, how, via });
+  // 1) the title itself (or the same words in the usual order) is a title of exactly one occupation
+  for (let i = 0; i < v.length; i++) {
+    const c = lib.title_index[v[i]];
+    if (c && nocsOf(c).length === 1) return found(c[0], i === 0 ? "exact title" : "closest title", v[i]);
+  }
+  // 2) the closest known title: the same main word (the last one: "coordinator", "engineer") and most of the other words
+  const { byToken, sets } = titleTokens(lib);
+  const best = new Map();
+  for (const s of v) {
+    const t = [...new Set(tokens(s))];
+    if (!t.length) continue;
+    const head = t[t.length - 1], core = t.filter((x) => !TITLE_FILLER.has(x));
+    for (const k of byToken.get(head) || []) {
+      const ks = sets.get(k);
+      if (core.filter((x) => ks.has(x)).length < Math.min(2, core.length)) continue;
+      const inter = t.filter((x) => ks.has(x)).length;
+      const overlap = Math.round((100 * inter) / (t.length + ks.size - inter)) / 100;
+      for (const n of nocsOf(lib.title_index[k])) {
+        const o = best.get(n);
+        if (!o || overlap > o[0] || (overlap === o[0] && k < o[1])) best.set(n, [overlap, k]);
+      }
+    }
+  }
+  const r = [...best.entries()].sort((a, b) => b[1][0] - a[1][0] || (a[0] < b[0] ? -1 : 1));
+  if (r.length && r[0][1][0] >= minOverlap && r[0][1][0] - (r[1] ? r[1][1][0] : 0) >= minLead - 1e-9) {
+    const [n, [, k]] = r[0];
+    const code = lib.title_index[k].find((c) => c.startsWith(n));
+    return found(code, "closest title", k);
+  }
+  return { noc: null, code: null, name: null, how: "none", via: null };
+}
+
+// Titles on employer sites are rarely standard titles: "Senior Technical Analyst, BORN Ontario – Permanent Full-Time (1.0)",
+// "Développeur·euse Guidewire", "Retail Store Associate Part Time Seasonal Winners_Bathurst and College". Before looking a title
+// up, nocForTitle cleans it into a few candidates, most specific first: the usual separators cut the employer, place, team and
+// contract out; level and contract words go; French inclusive forms are brought back to one form; common short forms are spelled
+// out; words no occupation title uses (brand and product names) are dropped. Measured on 100 titles checked by hand
+// (test/fixtures/noc_titles_100.json, tools/noc_accuracy.mjs).
+const ABBREV = [
+  [/\bUX\s*\/\s*UI\b|\bUI\s*\/\s*UX\b|\bUX\b|\bUI\b/g, "user experience"], [/\bHR\b/g, "human resources"], [/\bIT\b/g, "information technology"],
+  [/\bQA\b/g, "quality assurance"], [/\b(ECG|EKG)\b/g, "electrocardiography"], [/\b(EHS|HSE)\b/g, "health and safety"], [/\bVP\b/g, "vice president"],
+  [/\bAI\b|\bIA\b/g, "artificial intelligence"], [/\bML\b/g, "machine learning"], [/\bBI\b/g, "business intelligence"], [/\bhelp\s?desk\b/gi, "help desk"],
+];
+// level, contract and schedule words: they say how the job is offered, not which job it is
+const TITLE_NOISE = new RegExp("\\b(" + [
+  "senior", "sr", "junior", "jr", "lead", "principal", "staff", "chief", "intermediate", "entry level", "entry-level", "experienced", "developing",
+  "i{1,3}", "iv", "v", "[1-4]", "part[- ]?time", "full[- ]?time", "temps partiel", "temps plein", "permanent", "temporary", "temporaire", "temp",
+  "seasonal", "saisonnier", "saisonniere", "casual", "contract", "contractuel", "contractuelle", "fixed[- ]term", "on[- ]site", "onsite", "remote",
+  "hybrid", "hybride", "bilingual", "bilingue", "mobile", "co-?op", "online", "en ligne", "jour", "nuit", "soir", "day shift", "night shift",
+  "training program", "multiple locations", "100% commission", "commission", "\\d+(\\.\\d+)? fte", "fte", "ppt", "position", "poste", "role", "opportunity",
+].join("|") + ")\\b", "gi");
+// a title found here is looked up as the official title beside it (the official list has no entry for these modern titles)
+const TITLE_ALIAS = {
+  "artificial intelligence engineer": "machine learning engineer", "machine learning engineer": "machine learning engineer",
+  "forward deployed engineer": "software engineer", "investment advisor": "personal investment advisor", "investment adviser": "personal investment advisor",
+  "mortgage advisor": "mortgage broker", "mortgage specialist": "mortgage broker", "technical analyst": "information systems technical analyst",
+  "facilities supervisor": "facility operations manager", "facility supervisor": "facility operations manager", "facilities manager": "facilities manager",
+  "user experience designer": "user experience designer", "user experience user experience designer": "user experience designer",
+  "help desk support specialist": "help desk specialist", "help desk support": "help desk specialist",
+  "architecte technologique": "architecte d entreprise - technologies de l information ti",
+  "electrocardiogram technician": "electrocardiography technician", "ecg technician": "electrocardiography technician",
+  "associe de magasin de details": "retail store associate", "associe de magasin": "retail store associate",
+  "conseiller en salle de montre": "showroom sales assistant",
+};
+// a single one of these words names no occupation on its own
+const VAGUE = new Set("engineer architect manager director assistant associate specialist analyst consultant coordinator advisor adviser officer representative technician agent partner professional professionnel conseiller developpeur ingenieur".split(" "));
+// main words too general to name one occupation when the rest of the title is gone ("crate builder" is not a home builder)
+const GENERIC_HEAD = new Set("builder mechanic porter operator worker helper labourer laborer clerk attendant supervisor technologist installer repairer inspector maker assembler handler driver cleaner teacher instructor designer writer artist consultant".split(" "));
+function frenchOneForm(t) {
+  return t
+    .replace(/([A-Za-zÀ-ÿ])[·•.](e|ne|fe|euse|rice|trice|ice|ère|ere|ive|se)\b/g, "$1")              // Technicien.ne, Chef.fe, Développeur·euse
+    .replace(/([A-Za-zÀ-ÿ]{3,})\s*\/\s*(?:e|ne|ère|ere|euse|rice|trice)\b/gi, "$1")              // conseiller/ère
+    .replace(/\b([A-Za-zÀ-ÿ]{4,})(\s*\/\s*)([A-Za-zÀ-ÿ]+)\b/g, (m, a, sep, b) => (b.toLowerCase().startsWith(a.toLowerCase().slice(0, 4)) && b.length <= a.length + 3 ? a : m)); // Associé / Associée
+}
+let VOCAB = new WeakMap();
+function titleVocab(lib) {
+  if (!VOCAB.has(lib)) { const v = new Set(); for (const k of Object.keys(lib.title_index)) for (const w of norm(k).split(" ")) v.add(w); VOCAB.set(lib, v); }
+  return VOCAB.get(lib);
+}
+export function titleCandidates(lib, title) {
+  let t = String(title ?? "");
+  for (const [re, to] of ABBREV) t = t.replace(re, to);
+  t = frenchOneForm(t).replace(/\([^)]*\)|\[[^\]]*\]/g, " ").replace(/[_|:–—]/g, " - ").replace(/\s+-\s*-\s+/g, " - ");
+  const vocab = titleVocab(lib);
+  const out = [];
+  const push = (x) => { const c = TITLE_ALIAS[x] || x; if (c && !out.includes(c) && !(c.split(" ").length === 1 && VAGUE.has(c))) out.push(c); };
+  /* one piece of a title: level and contract words out, then (as a second try) the words no occupation title uses */
+  const clean = (x, main = true) => {
+    const w = norm(String(x).replace(TITLE_NOISE, " ")).replace(/\b(for|in|at|with) .*$/, "").split(" ").map((y) => y.replace(/^[-.]+|[-.]+$/g, "")).filter(Boolean);
+    const known = w.filter((y) => vocab.has(y));
+    const all = w.join(" ");
+    if (TITLE_ALIAS[all]) return [TITLE_ALIAS[all]];
+    const res = [all];
+    if (known.length && known.length < w.length) res.push(known.join(" "));                  // brand, product and place names
+    const k = known.length ? known : w;
+    if (main && k.length >= 2 && !VAGUE.has(k[k.length - 1]) && !GENERIC_HEAD.has(k[k.length - 1])) res.push(k[k.length - 1]);     // last try: the main word alone ("retail cashier" -> "cashier"), never for a qualifier such as "fast food"
+    return res;
+  };
+  push(norm(title));
+  const parts = t.split(/\s+-\s+|\s*\/\/+\s*|\s+\/\s+|\s*,\s*|\s+and\s+|\s+et\s+/i);
+  clean(t, parts.length === 1).forEach(push);
+  const segs = parts.map((x, i) => clean(x, i === 0)).filter((x) => x[0]);
+  segs.forEach((cs, i) => {
+    cs.forEach(push);
+    const s = cs[cs.length > 1 ? 1 : 0];
+    if (s.split(" ").length === 1 && VAGUE.has(s)) {                                          // "Engineer - Agentic AI", "Chief Architect - Data Engineering"
+      for (const o of [segs[i + 1], segs[i - 1]]) if (o) { push(o[0] + " " + s); push(s + " " + o[0]); }
+    }
+  });
+  return out;
+}
+// Returns { noc, code, name, how: "exact title" | "cleaned title" | "closest title", via } or { noc: null, how: "none" }.
+// The title as written comes first and its answer is kept whenever it has one, so every title found before keeps its occupation.
+// Only a title found nowhere is cleaned, and a cleaned title counts only when it is exactly an official title: a loose match on a
+// cleaned title was wrong too often ("general farm worker" -> an army "general").
+export function nocForTitle(lib, title, opts = {}) {
+  const first = matchTitle(lib, title, opts);
+  if (first.code) return first;
+  for (const c of titleCandidates(lib, title)) {
+    const code = lib.title_index[c];
+    if (code && nocsOf(code).length === 1) return { noc: code[0].slice(0, 5), code: code[0], name: lib.profiles[code[0]].name, how: "cleaned title", via: c };
+  }
+  return first;
+}
+
+// Wages and 3-year outlooks (docs/noc/market.json, built each month by noc_library/market.py from Job Bank open data), for Grow.
+// marketOf(market, "21232", "QC") -> { wage: {low, median, high, per}, outlook: "Good", where: "QC" }; falls back to Canada.
+export function marketOf(market, noc, prov = "CA") {
+  const m = market && market.nocs && market.nocs[String(noc).slice(0, 5)];
+  if (!m) return null;
+  const wage = (m.wage && (m.wage[prov] || m.wage.CA)) || null;
+  const outlook = (m.outlook && (m.outlook[prov] || m.outlook.CA)) || null;
+  return { wage, outlook, where: m.wage && m.wage[prov] ? prov : wage ? "CA" : prov };
+}
+
+// ------------------------------------------------------------------ small lookups
+export function translate(lib, term) {
+  const t = norm(term), tr = lib.translations, hits = [];
+  for (const table of ["keywords_en_fr", "keywords_fr_en"]) if (t in tr[table]) hits.push(tr[table][t]);
+  for (const [en, fr] of Object.entries(tr.competencies_en_fr)) { if (norm(en) === t) hits.push(fr); else if (norm(fr) === t) hits.push(en); }
+  for (const [en, fr] of Object.entries(tr.titles_en_fr)) {
+    if (norm(en) === t) hits.push(fr);
+    else if (norm(fr) === t || fr.split("/").map(norm).includes(t)) hits.push(en);
+  }
+  return [...new Set(hits)];
+}
+
+export function similar(lib, code) {
+  code = profileOf(lib, code);
+  return lib.profiles[code].similar.map((s) => ({ ...s, name: lib.profiles[s.code].name }));
+}
+
+export function occupationsForKeyword(lib, keyword) {
+  return (lib.keyword_index[norm(keyword)] || []).map((c) => ({ code: c, name: lib.profiles[c].name }));
+}
