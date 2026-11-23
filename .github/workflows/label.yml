@@ -15,6 +15,14 @@ on:
         description: "How many sentences to label this run"
         required: false
         default: "500"
+      out:
+        description: "Folder for the answers (labels = the main set; another folder for a second opinion)"
+        required: false
+        default: "labels"
+      model:
+        description: "Model to use first (empty = the cheapest available)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -53,17 +61,19 @@ jobs:
           GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
         run: >
           python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after
-          --pairs infer-after/skill_pairs.json --out labels --limit "${{ github.event.inputs.limit || '500' }}"
+          --pairs infer-after/skill_pairs.json --out "${{ github.event.inputs.out || 'labels' }}" --limit "${{ github.event.inputs.limit || '500' }}"
+          --model "${{ github.event.inputs.model }}"
 
       # saved even when the labelling step stopped on an error, so finished answers are never lost
       - name: Save the labels
         if: always()
         run: |
-          [ -f labels/progress.json ] || { echo "no labels yet"; exit 0; }
+          OUT="${{ github.event.inputs.out || 'labels' }}"
+          [ -f "$OUT/progress.json" ] || { echo "no labels yet"; exit 0; }
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
-          git add labels
+          git add "$OUT"
           if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
-          git commit -m "Teacher labels: $(python3 -c "import json;p=json.load(open('labels/progress.json'));print(p['sentences'],'sentences so far;',p['last_run']['stopped'])")"
+          git commit -m "Teacher labels: $(python3 -c "import json;p=json.load(open('$OUT/progress.json'));print(p['sentences'],'sentences so far;',p['last_run']['stopped'])" < /dev/null) ($OUT)"
           git pull --rebase -q origin main
           git push

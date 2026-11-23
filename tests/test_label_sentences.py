@@ -16,7 +16,8 @@ DICT = {"general": ["Communication"], "soft": [], "skills": [
     {"n": "Procurement", "a": ["purchasing", "sourcing"]},
     {"n": "Cost estimation", "a": ["estimating costs"]},
     {"n": "Communication", "a": []},
-    {"n": "Welding", "a": ["soudage"]}]}
+    {"n": "Welding", "a": ["soudage"]},
+    {"n": "General Learning Ability", "a": ["learning ability"], "s": "OaSIS abilities"}]}
 LOOK = ls.dictionary_lookup(DICT)
 X = {"id": "a1", "text": "Request supplier quotes to build project cost estimates.", "cands": ["Cost estimation", "Welding"]}
 
@@ -64,6 +65,14 @@ class Check(unittest.TestCase):
         self.assertEqual(kept["skills"], [])
         self.assertEqual(len(dropped), 2)
         self.assertEqual(cv, "")
+
+
+class Teachable(unittest.TestCase):
+    def test_government_ability_labels_are_never_offered_or_accepted(self):
+        self.assertNotIn("General Learning Ability", [s["n"] for s in ls.teachable(DICT)])
+        kept, dropped, _ = ls.check(X, {"skills": [{"n": "General Learning Ability", "quote": "Request"}]}, LOOK)
+        self.assertEqual(kept["skills"], [])
+        self.assertEqual(dropped[0][2], "not a dictionary skill")
 
 
 class DryRun(unittest.TestCase):

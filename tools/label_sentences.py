@@ -41,6 +41,15 @@ from pathlib import Path
 
 API = "https://generativelanguage.googleapis.com/v1beta"
 N_CANDIDATES = 30
+# Government labels that sit in the dictionary but are not skills a CV states: abilities ("General Learning
+# Ability"), work activities ("Establishing and Maintaining Interpersonal Relationships"), knowledge areas and
+# personal attributes. The trial showed the teacher picking them for vague sentences; they are never offered.
+NOT_TEACHABLE = {"OaSIS abilities", "OaSIS work_activities", "OaSIS knowledge", "OaSIS personal_attributes"}
+
+
+def teachable(dictionary):
+    never = set(dictionary.get("general", [])) | set(dictionary.get("soft", []))
+    return [s for s in dictionary["skills"] if s["n"] not in never and s.get("s") not in NOT_TEACHABLE]
 
 
 def fold(s):
@@ -57,8 +66,7 @@ class Shortlist:
 
     def __init__(self, dictionary, pairs=None):
         from sklearn.feature_extraction.text import TfidfVectorizer
-        never = set(dictionary.get("general", [])) | set(dictionary.get("soft", []))
-        self.skills = [s for s in dictionary["skills"] if s["n"] not in never]
+        self.skills = teachable(dictionary)
         self.names = [s["n"] for s in self.skills]
         docs = [s["n"] + " " + " ".join(s.get("a", [])[:40]) for s in self.skills]
         self.vec = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), min_df=1, sublinear_tf=True,
@@ -88,12 +96,19 @@ For each sentence, list what it says a worker does or must have, in three kinds:
   as listed. Include a skill when the sentence clearly shows it, even if its name is not written (for example
   "request supplier quotes" shows Procurement). If a skill the sentence clearly shows is missing from the list, you
   may give its usual name; it is kept only if our dictionary knows it. Do not include a skill that is only loosely
-  related, and do not include general traits (communication, teamwork, motivation).
+  related, and do not include general traits (communication, teamwork, motivation). Be strict:
+  * only a skill the worker USES or MUST HAVE in this job, not a word that merely appears;
+  * not a word used in another sense ("réseaux" of people is not computer networking; "infrastructures" of a
+    fraud scheme is not IT infrastructure);
+  * not a skill named only in a job title or team name ("Manager, Business Finance" alone is not financial analysis);
+  * not a product or platform name, unless that name is in the list.
+  When unsure, leave it out: a missing skill costs less than a wrong one.
 - "credentials": a certificate, licence, permit, card or professional designation the sentence names, as written.
 - "education": a degree, diploma or field of study the sentence names, as written.
 For EVERY item give "quote": the exact words from the sentence that prove it (copy them exactly, 1 to 8 words).
 Also give "cv": the same work rewritten as one CV bullet line, in the past tense, in the same language as the
-sentence, with no company name. If the sentence is not about work tasks or requirements (pay, benefits, how to
+sentence, with no company name. In French, start with a past participle and no subject
+("Identifié les…", not "A identifié les…"). If the sentence is not about work tasks or requirements (pay, benefits, how to
 apply, company description), give "cv": "" and empty lists.
 Answer with JSON only: {"items":[{"id":"...","skills":[{"n":"...","quote":"..."}],"credentials":[{"n":"...","quote":"..."}],
 "education":[{"n":"...","quote":"..."}],"cv":"..."}]} with one item per sentence, same ids."""
@@ -109,11 +124,8 @@ def build_prompt(batch):
 # ------------------------------------------------------------------ checking an answer
 def dictionary_lookup(dictionary):
     """Every name and spelling the dictionary knows -> the skill's name (to accept a skill named off the list)."""
-    never = set(dictionary.get("general", [])) | set(dictionary.get("soft", []))
     look = {}
-    for s in dictionary["skills"]:
-        if s["n"] in never:
-            continue
+    for s in teachable(dictionary):
         for a in [s["n"]] + list(s.get("a", [])):
             look.setdefault(fold(a), s["n"])
     return look
@@ -222,6 +234,7 @@ def main(argv=None):
     ap.add_argument("--pause", type=float, default=5.0, help="seconds between requests (free tier: a few per minute)")
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--model", default="", help="use this model first (a second opinion: label the same sentences with another model)")
     a = ap.parse_args(argv)
 
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
@@ -256,6 +269,8 @@ def main(argv=None):
     if not key:
         print("GEMINI_LABEL_KEY is not set"); return 2
     model_list = models(key)
+    if a.model:
+        model_list = [a.model] + [m for m in model_list if m != a.model]
     print("models, cheapest first:", ", ".join(model_list))
 
     prog = json.loads(progress_path.read_text()) if progress_path.exists() else {}
