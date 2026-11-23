@@ -14,8 +14,8 @@
   "not a dictionary skill": 4
  },
  "last_run": {
-  "date": "2026-11-23 06:12",
+  "date": "2026-11-23 20:23",
   "stopped": "stopped on an error: every model failed on this batch",
-  "minutes": 54.7
+  "minutes": 1.7
  }
 }

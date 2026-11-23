@@ -11,8 +11,8 @@
  "empty": 12,
  "dropped_why": {},
  "last_run": {
-  "date": "2026-11-23 06:13",
-  "stopped": "daily allowance used up: the next run carries on",
-  "minutes": 1.0
+  "date": "2026-11-23 20:25",
+  "stopped": "stopped on an error: every model failed on this batch",
+  "minutes": 1.8
  }
 }
