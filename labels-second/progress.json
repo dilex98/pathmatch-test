@@ -1,0 +1,20 @@
+{
+ "sentences": 499,
+ "requests": 25,
+ "tokens_in": 107232,
+ "tokens_out": 39477,
+ "skills_kept": 709,
+ "skills_dropped": 5,
+ "credentials": 10,
+ "education": 12,
+ "with_cv": 446,
+ "empty": 72,
+ "dropped_why": {
+  "quote not in the sentence": 5
+ },
+ "last_run": {
+  "date": "2026-11-23 04:00",
+  "stopped": "done",
+  "minutes": 4.0
+ }
+}
