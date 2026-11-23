@@ -75,6 +75,27 @@ class Teachable(unittest.TestCase):
         self.assertEqual(dropped[0][2], "not a dictionary skill")
 
 
+class Select(unittest.TestCase):
+    POOL = [{"id": f"s{i}"} for i in range(10)]
+
+    def test_total_caps_the_fixed_order_and_done_is_skipped(self):
+        got = ls.select_todo(self.POOL, {"s0", "s1"}, limit=100, total=5)
+        self.assertEqual([x["id"] for x in got], ["s2", "s3", "s4"])
+
+    def test_limit(self):
+        self.assertEqual(len(ls.select_todo(self.POOL, set(), limit=3)), 3)
+
+    def test_third_vote_only_where_the_two_disagree(self):
+        with tempfile.TemporaryDirectory() as d:
+            a, b = Path(d) / "a.jsonl", Path(d) / "b.jsonl"
+            rec = lambda i, sk: json.dumps({"id": i, "dict": ["Welding"], "skills": [{"n": n} for n in sk]})
+            a.write_text("\n".join([rec("s0", ["Welding", "Assembly"]), rec("s1", ["Assembly"]), rec("s2", ["Blueprints"])]))
+            b.write_text("\n".join([rec("s0", ["Assembly"]), rec("s1", ["Assembly", "Painting"]), rec("s3", ["X"])]))
+            got = ls.select_todo(self.POOL, set(), limit=100, disagree=(str(a), str(b)))
+            # s0: same new skills (Welding is the dictionary's) -> agreed; s1 differs -> vote; s2, s3: only one answer
+            self.assertEqual([x["id"] for x in got], ["s1"])
+
+
 class DryRun(unittest.TestCase):
     def test_dry_run_sends_nothing_and_needs_no_key(self):
         with tempfile.TemporaryDirectory() as d:

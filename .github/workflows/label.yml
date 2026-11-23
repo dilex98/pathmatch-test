@@ -9,8 +9,17 @@ name: Label posting sentences (teacher step)
 # Manual only for now; a nightly schedule is added after the 500-sentence trial is checked.
 
 on:
+  # Every day just after Google's free allowance resets (midnight Pacific = 08:00 UTC in winter):
+  # the three votes on the 20,000 sentences carry on until they are done, then the runs find nothing to do.
+  schedule:
+    - cron: "17 8 * * *"
   workflow_dispatch:
     inputs:
+      votes:
+        description: "Run the three votes on the 20,000 sentences (ignores the options below)"
+        type: boolean
+        required: false
+        default: false
       limit:
         description: "How many sentences to label this run"
         required: false
@@ -64,7 +73,34 @@ jobs:
         if: steps.pool.outputs.cache-hit != 'true'
         run: node tools/build_pool.cjs gaps-after pool.jsonl
 
+      # The 20,000-sentence set, in three votes. Each vote keeps to its own model (no fallback), so the votes
+      # are independent; a skill counts for training when 2 of the 3 agree. Vote 3 only reads the sentences
+      # where votes 1 and 2 disagree. Each stops cleanly at its model's daily allowance and resumes next day.
+      - name: "Vote 1: Gemini 3.5 Flash Lite"
+        if: github.event_name == 'schedule' || github.event.inputs.votes == 'true'
+        env:
+          GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
+        run: >
+          python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after --pairs infer-after/skill_pairs.json
+          --out labels --total 20000 --limit 10000 --model gemini-3.5-flash-lite --only-model
+      - name: "Vote 2: Gemini 3.1 Flash Lite"
+        if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
+        env:
+          GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
+        run: >
+          python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after --pairs infer-after/skill_pairs.json
+          --out labels-second --total 20000 --limit 10000 --model gemini-3.1-flash-lite --only-model
+      - name: "Vote 3: Gemini 3.5 Flash Lite again, only where votes 1 and 2 disagree"
+        if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
+        env:
+          GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
+        run: >
+          python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after --pairs infer-after/skill_pairs.json
+          --out labels-third --total 20000 --limit 10000 --model gemini-3.5-flash-lite --only-model --batch 25
+          --only-disagree labels/labels.jsonl labels-second/labels.jsonl
+
       - name: Label with Gemini
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.votes != 'true'
         env:
           GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
         run: >
@@ -77,12 +113,18 @@ jobs:
       - name: Save the labels
         if: always()
         run: |
-          OUT="${{ github.event.inputs.out || 'labels' }}"
-          [ -f "$OUT/progress.json" ] || { echo "no labels yet"; exit 0; }
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
-          git add "$OUT"
+          for d in labels labels-second labels-third labels-flash "${{ github.event.inputs.out }}"; do if [ -n "$d" ] && [ -d "$d" ]; then git add "$d"; fi; done
           if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
-          git commit -m "Teacher labels: $(python3 -c "import json;p=json.load(open('$OUT/progress.json'));print(p['sentences'],'sentences so far;',p['last_run']['stopped'])" < /dev/null) ($OUT)"
+          MSG=$(python3 -c "
+          import json,os
+          out=[]
+          for d in ['labels','labels-second','labels-third']:
+              p=d+'/progress.json'
+              if os.path.exists(p):
+                  j=json.load(open(p)); out.append(f\"{d} {j['sentences']} ({j['last_run']['stopped'][:40]})\")
+          print('; '.join(out))")
+          git commit -m "Teacher labels: $MSG"
           git pull --rebase -q origin main
           git push

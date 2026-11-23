@@ -227,6 +227,25 @@ def ask(key, model_list, prompt, log):
     raise RuntimeError("every model failed on this batch")
 
 
+# ------------------------------------------------------------------ which sentences this run labels
+def new_skills(rec):
+    return {s["n"] for s in rec.get("skills", [])} - set(rec.get("dict", []))
+
+
+def select_todo(pool, done, limit, total=0, disagree=None):
+    """The pool is in a fixed order, so every run and every model walks the same sentences.
+    total: only the first N sentences of that order. disagree: only the sentences two earlier label files
+    both answered but disagree on (the skills beyond the dictionary), for a deciding third vote."""
+    if total:
+        pool = pool[:total]
+    if disagree:
+        def load(p):
+            return {r["id"]: r for r in map(json.loads, open(p, encoding="utf-8"))} if Path(p).exists() else {}
+        A, B = load(disagree[0]), load(disagree[1])
+        pool = [x for x in pool if x["id"] in A and x["id"] in B and new_skills(A[x["id"]]) != new_skills(B[x["id"]])]
+    return [x for x in pool if x["id"] not in done][:limit]
+
+
 # ------------------------------------------------------------------ the run
 def main(argv=None):
     ap = argparse.ArgumentParser()
@@ -240,6 +259,10 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--model", default="", help="use this model first (a second opinion: label the same sentences with another model)")
+    ap.add_argument("--only-model", action="store_true", help="never fall back to another model (keeps each vote independent)")
+    ap.add_argument("--total", type=int, default=0, help="label only the first N sentences of the fixed order (0 = all)")
+    ap.add_argument("--only-disagree", nargs=2, metavar=("A", "B"),
+                    help="third vote: only sentences that labels files A and B both answered but disagree on")
     a = ap.parse_args(argv)
 
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
@@ -253,7 +276,7 @@ def main(argv=None):
     pool = [json.loads(l) for l in open(a.pool, encoding="utf-8") if l.strip()]
     # a fixed shuffle, so every run walks the pool in the same order and simply carries on
     pool.sort(key=lambda x: hashlib.sha1((str(a.seed) + x["id"]).encode()).hexdigest())
-    todo = [x for x in pool if x["id"] not in done][: a.limit]
+    todo = select_todo(pool, done, a.limit, a.total, a.only_disagree)
     print(f"pool {len(pool)} sentences; already labelled {len(done)}; this run: {len(todo)}")
     if not todo:
         return 0
@@ -275,7 +298,7 @@ def main(argv=None):
         print("GEMINI_LABEL_KEY is not set"); return 2
     model_list = models(key)
     if a.model:
-        model_list = [a.model] + [m for m in model_list if m != a.model]
+        model_list = [a.model] if a.only_model else [a.model] + [m for m in model_list if m != a.model]
     print("models, cheapest first:", ", ".join(model_list))
 
     prog = json.loads(progress_path.read_text()) if progress_path.exists() else {}
