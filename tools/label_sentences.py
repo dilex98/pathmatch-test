@@ -107,8 +107,9 @@ For each sentence, list what it says a worker does or must have, in three kinds:
 - "education": a degree, diploma or field of study the sentence names, as written.
 For EVERY item give "quote": the exact words from the sentence that prove it (copy them exactly, 1 to 8 words).
 Also give "cv": the same work rewritten as one CV bullet line, in the past tense, in the same language as the
-sentence, with no company name. In French, start with a past participle and no subject
-("Identifié les…", not "A identifié les…"). If the sentence is not about work tasks or requirements (pay, benefits, how to
+sentence (an English sentence gets an English line, a French sentence a French line), with no company name.
+Only when the sentence is in French: start with a past participle and no subject ("Identifié les…", not
+"A identifié les…"). If the sentence is not about work tasks or requirements (pay, benefits, how to
 apply, company description), give "cv": "" and empty lists.
 Answer with JSON only: {"items":[{"id":"...","skills":[{"n":"...","quote":"..."}],"credentials":[{"n":"...","quote":"..."}],
 "education":[{"n":"...","quote":"..."}],"cv":"..."}]} with one item per sentence, same ids."""
