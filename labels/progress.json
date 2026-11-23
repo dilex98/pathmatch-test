@@ -1,0 +1,21 @@
+{
+ "sentences": 500,
+ "requests": 25,
+ "tokens_in": 107232,
+ "tokens_out": 48011,
+ "skills_kept": 691,
+ "skills_dropped": 2,
+ "credentials": 6,
+ "education": 15,
+ "with_cv": 449,
+ "empty": 64,
+ "dropped_why": {
+  "quote not in the sentence": 1,
+  "not a dictionary skill": 1
+ },
+ "last_run": {
+  "date": "2026-11-23 03:54",
+  "stopped": "done",
+  "minutes": 4.1
+ }
+}
