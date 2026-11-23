@@ -1,0 +1,18 @@
+{
+ "sentences": 0,
+ "requests": 0,
+ "tokens_in": 0,
+ "tokens_out": 0,
+ "skills_kept": 0,
+ "skills_dropped": 0,
+ "credentials": 0,
+ "education": 0,
+ "with_cv": 0,
+ "empty": 0,
+ "dropped_why": {},
+ "last_run": {
+  "date": "2026-11-23 03:55",
+  "stopped": "stopped on an error: gemini-2.5-flash-lite: HTTP 404 {\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.5-flash-lite is no longer available to new users. Please update your code to use models/gemini-3.5-flash-lite for the latest features and improvements. We recommend you to use the Interactions API (https://aistudio.google.com/docs/get-started).\",\n    \"status\": \"NOT_FOUND\"\n  }\n}\n",
+  "minutes": 0.0
+ }
+}
