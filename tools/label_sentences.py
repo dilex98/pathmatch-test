@@ -262,8 +262,21 @@ def main(argv=None):
     stats = {k: prog.get(k, 0) for k in ("sentences", "requests", "tokens_in", "tokens_out", "skills_kept",
                                           "skills_dropped", "credentials", "education", "with_cv", "empty")}
     reasons = prog.get("dropped_why", {})
-    stop = "done"
+    stop = None
     t0 = time.time()
+    try:
+        stop = run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons)
+    finally:
+        stats["dropped_why"] = reasons
+        stats["last_run"] = {"date": time.strftime("%Y-%m-%d %H:%M"), "stopped": stop if isinstance(stop, str) else "crashed",
+                             "minutes": round((time.time() - t0) / 60, 1)}
+        progress_path.write_text(json.dumps(stats, indent=1, ensure_ascii=False))
+        print(json.dumps(stats, indent=1, ensure_ascii=False))
+    return 0
+
+
+def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
+    stop = "done"
     with labels_path.open("a", encoding="utf-8") as fo:
         for i in range(0, len(todo), a.batch):
             batch = todo[i:i + a.batch]
@@ -275,10 +288,14 @@ def main(argv=None):
             except RuntimeError as e:
                 stop = f"stopped on an error: {e}"
                 print("  " + stop); break
+            except Exception as e:             # anything unexpected in one batch: skip it, its sentences stay to do
+                print(f"  batch skipped ({e.__class__.__name__}: {str(e)[:200]})"); continue
             stats["requests"] += 1
             stats["tokens_in"] += usage.get("promptTokenCount", 0)
             stats["tokens_out"] += usage.get("candidatesTokenCount", 0)
-            by_id = {str(it.get("id")): it for it in (ans.get("items") or []) if isinstance(it, dict)}
+            # the agreed shape is {"items": [...]}; Gemini sometimes answers the bare list, which is fine too
+            items = ans.get("items") if isinstance(ans, dict) else ans if isinstance(ans, list) else []
+            by_id = {str(it.get("id")): it for it in (items or []) if isinstance(it, dict)}
             for x in batch:
                 it = by_id.get(x["id"])
                 if it is None:
@@ -300,11 +317,7 @@ def main(argv=None):
             fo.flush()
             print(f"  {min(i + a.batch, len(todo))}/{len(todo)} sentences ({model})")
             time.sleep(a.pause)
-    stats["dropped_why"] = reasons
-    stats["last_run"] = {"date": time.strftime("%Y-%m-%d %H:%M"), "stopped": stop, "minutes": round((time.time() - t0) / 60, 1)}
-    progress_path.write_text(json.dumps(stats, indent=1, ensure_ascii=False))
-    print(json.dumps(stats, indent=1, ensure_ascii=False))
-    return 0
+    return stop
 
 
 if __name__ == "__main__":
