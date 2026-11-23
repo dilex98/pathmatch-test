@@ -1,0 +1,66 @@
+name: Label posting sentences (teacher step)
+
+# The inference engine's teacher step. Gemini labels sentences from PUBLIC job postings with the
+# skills they show (plus certificates and degrees, and a CV-style rewrite). Our own model learns
+# from these labels later. No CV text is ever sent: see tools/build_pool.cjs and tools/label_sentences.py.
+#
+# Uses its own key, GEMINI_LABEL_KEY, in its own Google project, so it never uses up the weekly
+# agent's free allowance. Resumable: each run carries on where the last one stopped.
+# Manual only for now; a nightly schedule is added after the 500-sentence trial is checked.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "How many sentences to label this run"
+        required: false
+        default: "500"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: label
+  cancel-in-progress: false
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install scikit-learn==1.5.2
+
+      # The sentence pool takes a while to build and only changes with the frozen site copy: keep it.
+      - name: Sentence pool (cached)
+        id: pool
+        uses: actions/cache@v4
+        with:
+          path: pool.jsonl
+          key: pool-${{ hashFiles('gaps-after/jobs.json', 'gaps-after/skills.json', 'tools/build_pool.cjs') }}
+      - name: Build the sentence pool
+        if: steps.pool.outputs.cache-hit != 'true'
+        run: node tools/build_pool.cjs gaps-after pool.jsonl
+
+      - name: Label with Gemini
+        env:
+          GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
+        run: >
+          python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after
+          --pairs infer-after/skill_pairs.json --out labels --limit "${{ github.event.inputs.limit || '500' }}"
+
+      - name: Save the labels
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add labels
+          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
+          git commit -m "Teacher labels: $(python3 -c "import json;p=json.load(open('labels/progress.json'));print(p['sentences'],'sentences so far;',p['last_run']['stopped'])")"
+          git pull --rebase -q origin main
+          git push
