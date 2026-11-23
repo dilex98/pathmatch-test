@@ -1,21 +1,22 @@
 {
- "sentences": 500,
- "requests": 25,
- "tokens_in": 107232,
- "tokens_out": 48011,
- "skills_kept": 691,
- "skills_dropped": 2,
- "credentials": 6,
- "education": 15,
- "with_cv": 449,
- "empty": 64,
+ "sentences": 8580,
+ "requests": 429,
+ "tokens_in": 1844646,
+ "tokens_out": 865711,
+ "skills_kept": 12234,
+ "skills_dropped": 44,
+ "credentials": 145,
+ "education": 267,
+ "with_cv": 7451,
+ "empty": 1417,
  "dropped_why": {
-  "quote not in the sentence": 1,
-  "not a dictionary skill": 1
+  "quote not in the sentence": 32,
+  "not a dictionary skill": 11,
+  "no name or no quote": 1
  },
  "last_run": {
-  "date": "2026-11-23 03:54",
-  "stopped": "done",
-  "minutes": 4.1
+  "date": "2026-11-23 05:17",
+  "stopped": "daily allowance used up: the next run carries on",
+  "minutes": 63.4
  }
 }
