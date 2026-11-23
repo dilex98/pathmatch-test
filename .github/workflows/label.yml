@@ -23,6 +23,14 @@ on:
         description: "Model to use first (empty = the cheapest available)"
         required: false
         default: ""
+      batch:
+        description: "Sentences per request"
+        required: false
+        default: "20"
+      pause:
+        description: "Seconds between requests (keep under the model's per-minute limit)"
+        required: false
+        default: "5"
 
 permissions:
   contents: write
@@ -62,7 +70,8 @@ jobs:
         run: >
           python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after
           --pairs infer-after/skill_pairs.json --out "${{ github.event.inputs.out || 'labels' }}" --limit "${{ github.event.inputs.limit || '500' }}"
-          --model "${{ github.event.inputs.model }}"
+          --model "${{ github.event.inputs.model }}" --batch "${{ github.event.inputs.batch || '20' }}"
+          --pause "${{ github.event.inputs.pause || '5' }}"
 
       # saved even when the labelling step stopped on an error, so finished answers are never lost
       - name: Save the labels
