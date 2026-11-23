@@ -207,6 +207,10 @@ def ask(key, model_list, prompt, log):
                     log(f"  per-minute limit on {model}, waiting 65 s")
                     time.sleep(65)
                     continue
+                if e.code == 404:                    # retired or not open to this project: the next model takes over
+                    log(f"  {model} not available ({msg[:120]}), using the next model")
+                    model_list.remove(model)
+                    break
                 if e.code in (500, 503):
                     log(f"  {model} busy ({e.code}), waiting {10 * (attempt + 1)} s")
                     time.sleep(10 * (attempt + 1))
