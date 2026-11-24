@@ -96,6 +96,42 @@ class Select(unittest.TestCase):
             self.assertEqual([x["id"] for x in got], ["s1"])
 
 
+class SplitsUnreadableBatches(unittest.TestCase):
+    """Nov 24: one batch of 20 came back unreadable fifteen times and stopped vote 2 for the day."""
+
+    def test_one_poison_sentence_is_set_aside_and_the_rest_labelled(self):
+        import types
+        todo = [{"id": f"s{i}", "text": f"Weld steel frames number {i}.", "lang": "en", "tag": "", "emp": "e",
+                 "dict": [], "cands": ["Welding"]} for i in range(20)]
+        calls = []
+
+        def fake_ask(key, models, prompt, log):
+            ids = [x["id"] for x in todo if f'"id": "{x["id"]}"' in prompt]
+            calls.append(len(ids))
+            if "s13" in ids:
+                raise ls.Unreadable("broken")
+            return "fake-model", {"items": [{"id": i, "skills": [{"n": "Welding", "quote": "Weld"}], "cv": "Welded frames."} for i in ids]}, {}
+
+        saved_ask, saved_sleep = ls.ask, ls.time.sleep
+        ls.ask, ls.time.sleep = fake_ask, lambda s: None
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                path = Path(d) / "labels.jsonl"
+                stats = {k: 0 for k in ("sentences", "requests", "tokens_in", "tokens_out", "skills_kept",
+                                        "skills_dropped", "credentials", "education", "with_cv", "empty")}
+                a = types.SimpleNamespace(batch=20, pause=0)
+                stop = ls.run_batches(a, todo, "k", ["fake-model"], path, LOOK, stats, {})
+                labelled = [json.loads(l)["id"] for l in path.open()]
+                skipped = [json.loads(l)["id"] for l in (Path(d) / "skipped.jsonl").open()]
+        finally:
+            ls.ask, ls.time.sleep = saved_ask, saved_sleep
+        self.assertEqual(stop, "done")
+        self.assertEqual(skipped, ["s13"])
+        self.assertEqual(sorted(labelled), sorted(x["id"] for x in todo if x["id"] != "s13"))
+        self.assertEqual(stats["sentences"], 19)
+        self.assertLess(len(calls), 15)          # 20 -> 10+10 -> 5+5 -> 2+3 -> 1+2 -> 1+1: a handful of calls
+
+
 class DryRun(unittest.TestCase):
     def test_dry_run_sends_nothing_and_needs_no_key(self):
         with tempfile.TemporaryDirectory() as d:

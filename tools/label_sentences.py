@@ -167,7 +167,8 @@ class Quota(Exception):
 
 def call(key, model, prompt):
     body = json.dumps({"contents": [{"role": "user", "parts": [{"text": prompt}]}],
-                       "generationConfig": {"temperature": 0, "responseMimeType": "application/json"}}).encode()
+                       "generationConfig": {"temperature": 0, "responseMimeType": "application/json",
+                                            "maxOutputTokens": 8192}}).encode()
     req = urllib.request.Request(f"{API}/models/{model}:generateContent", data=body, method="POST",
                                  headers={"Content-Type": "application/json", "x-goog-api-key": key})
     with urllib.request.urlopen(req, timeout=120) as r:
@@ -190,15 +191,21 @@ def models(key):
     return ranked[:4] or names[:1]
 
 
+class Unreadable(RuntimeError):
+    """Every attempt came back, but not as readable JSON: the batch itself is the trouble, not Google."""
+
+
 def ask(key, model_list, prompt, log):
     """One batch. Busy (503/500) -> wait and retry, then the next model. Per-minute limit (429) -> wait a
     minute, up to 3 times. A model's daily allowance used up -> that model is set aside for this run and
     the next one takes over (each model has its own allowance); all used up -> Quota, which ends the run cleanly."""
+    only_unreadable = True                     # did every failure come back as an unreadable answer?
     for model in list(model_list):
         for attempt in range(4):
             try:
                 return model, *call(key, model, prompt)
             except urllib.error.HTTPError as e:
+                only_unreadable = False
                 msg = e.read().decode(errors="replace")[:600]
                 if e.code == 429:
                     if re.search(r"per ?day|PerDay|daily", msg, re.I):
@@ -225,6 +232,8 @@ def ask(key, model_list, prompt, log):
             log(f"  giving up on {model}, trying the next model")
     if not model_list:
         raise Quota("every model's daily allowance is used up")
+    if only_unreadable:
+        raise Unreadable("the answers to this batch could not be read")
     raise RuntimeError("every model failed on this batch")
 
 
@@ -271,6 +280,11 @@ def main(argv=None):
     done = set()
     if labels_path.exists():
         for line in labels_path.open(encoding="utf-8"):
+            if line.strip():
+                done.add(json.loads(line)["id"])
+    skipped_path = out / "skipped.jsonl"            # single sentences whose answer could never be read
+    if skipped_path.exists():
+        for line in skipped_path.open(encoding="utf-8"):
             if line.strip():
                 done.add(json.loads(line)["id"])
 
@@ -321,9 +335,15 @@ def main(argv=None):
 
 def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
     stop = "done"
+    # A batch whose answer cannot be read (Nov 24: one batch of 20 broke vote 2 fifteen times) is split in two
+    # and each half asked again, down to single sentences; a single sentence that still fails is set aside in
+    # skipped.jsonl, so it is never asked again and never stops the run.
+    queue = [todo[i:i + a.batch] for i in range(0, len(todo), a.batch)]
+    handled = 0
+    skipped_path = labels_path.parent / "skipped.jsonl"
     with labels_path.open("a", encoding="utf-8") as fo:
-        for i in range(0, len(todo), a.batch):
-            batch = todo[i:i + a.batch]
+        while queue:
+            batch = queue.pop(0)
             # Google's servers are sometimes overloaded (503) for a while. One busy spell must not end the day's run
             # (on Nov 23 it did, after two minutes, with the whole daily allowance unused): rest 5 minutes and try
             # the same batch again, up to 3 times, before stopping until the next run.
@@ -334,6 +354,8 @@ def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
                     break
                 except Quota:
                     err = "quota"; break
+                except Unreadable:
+                    err = "unreadable"; break
                 except RuntimeError as e:
                     err = e
                     if rest < 3:
@@ -346,6 +368,19 @@ def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
                 stop = "daily allowance used up: the next run carries on"
                 print("  " + stop); break
             if err == "skip":
+                continue
+            if err == "unreadable":
+                if len(batch) > 1:
+                    half = len(batch) // 2
+                    print(f"  unreadable answers for {len(batch)} sentences: asking in two halves")
+                    queue[:0] = [batch[:half], batch[half:]]
+                else:
+                    with skipped_path.open("a", encoding="utf-8") as fs:
+                        fs.write(json.dumps({"id": batch[0]["id"], "text": batch[0]["text"], "why": "answer never readable",
+                                             "at": time.strftime("%Y-%m-%d")}, ensure_ascii=False) + "\n")
+                    stats["skipped"] = stats.get("skipped", 0) + 1
+                    handled += 1
+                    print("  one sentence set aside: its answer could never be read")
                 continue
             if answer is None:
                 stop = f"stopped on an error: {err}"
@@ -376,7 +411,8 @@ def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
                     stats["skills_dropped"] += d[0] == "skills"
                     reasons[d[2]] = reasons.get(d[2], 0) + 1
             fo.flush()
-            print(f"  {min(i + a.batch, len(todo))}/{len(todo)} sentences ({model})")
+            handled += len(batch)
+            print(f"  {handled}/{len(todo)} sentences ({model})")
             time.sleep(a.pause)
     return stop
 
