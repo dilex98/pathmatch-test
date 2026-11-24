@@ -1,21 +1,21 @@
 {
- "sentences": 7627,
- "requests": 384,
- "tokens_in": 1651023,
- "tokens_out": 623357,
- "skills_kept": 10466,
+ "sentences": 7727,
+ "requests": 389,
+ "tokens_in": 1672777,
+ "tokens_out": 633102,
+ "skills_kept": 10622,
  "skills_dropped": 61,
- "credentials": 157,
- "education": 226,
- "with_cv": 6581,
- "empty": 1348,
+ "credentials": 159,
+ "education": 229,
+ "with_cv": 6672,
+ "empty": 1365,
  "dropped_why": {
   "quote not in the sentence": 58,
   "not a dictionary skill": 4
  },
  "last_run": {
-  "date": "2026-11-24 04:20",
-  "stopped": "stopped on an error: every model failed on this batch",
-  "minutes": 50.2
+  "date": "2026-11-24 20:53",
+  "stopped": "daily allowance used up: the next run carries on",
+  "minutes": 1.1
  }
 }
