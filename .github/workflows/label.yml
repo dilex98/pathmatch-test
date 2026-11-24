@@ -17,6 +17,9 @@ on:
     - cron: "17 8 * * *"
     - cron: "17 14 * * *"
     - cron: "17 20 * * *"
+    # and one at night in North America, when Google's servers are least busy (Nov 24: 3.5 Flash Lite answered
+    # "busy" all afternoon; the night run of Nov 23-24 labelled 6,500 sentences)
+    - cron: "17 2 * * *"
   workflow_dispatch:
     inputs:
       votes:
