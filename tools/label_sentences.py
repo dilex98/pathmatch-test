@@ -213,8 +213,9 @@ def ask(key, model_list, prompt, log):
                     model_list.remove(model)
                     break
                 if e.code in (500, 503):
-                    log(f"  {model} busy ({e.code}), waiting {10 * (attempt + 1)} s")
-                    time.sleep(10 * (attempt + 1))
+                    wait = 15 * 2 ** attempt               # 15, 30, 60, 120 s: Google's busy spells last minutes
+                    log(f"  {model} busy ({e.code}), waiting {wait} s")
+                    time.sleep(wait)
                     continue
                 raise RuntimeError(f"{model}: HTTP {e.code} {msg}")
             except (json.JSONDecodeError, KeyError, IndexError) as e:
@@ -323,16 +324,33 @@ def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
     with labels_path.open("a", encoding="utf-8") as fo:
         for i in range(0, len(todo), a.batch):
             batch = todo[i:i + a.batch]
-            try:
-                model, ans, usage = ask(key, model_list, build_prompt(batch), print)
-            except Quota as e:
+            # Google's servers are sometimes overloaded (503) for a while. One busy spell must not end the day's run
+            # (on Nov 23 it did, after two minutes, with the whole daily allowance unused): rest 5 minutes and try
+            # the same batch again, up to 3 times, before stopping until the next run.
+            answer, err = None, None
+            for rest in range(4):
+                try:
+                    answer = ask(key, model_list, build_prompt(batch), print)
+                    break
+                except Quota:
+                    err = "quota"; break
+                except RuntimeError as e:
+                    err = e
+                    if rest < 3:
+                        print(f"  still busy; resting 5 minutes before trying this batch again ({rest + 1}/3)")
+                        time.sleep(300)
+                except Exception as e:         # anything unexpected in one batch: skip it, its sentences stay to do
+                    err = "skip"
+                    print(f"  batch skipped ({e.__class__.__name__}: {str(e)[:200]})"); break
+            if err == "quota":
                 stop = "daily allowance used up: the next run carries on"
                 print("  " + stop); break
-            except RuntimeError as e:
-                stop = f"stopped on an error: {e}"
+            if err == "skip":
+                continue
+            if answer is None:
+                stop = f"stopped on an error: {err}"
                 print("  " + stop); break
-            except Exception as e:             # anything unexpected in one batch: skip it, its sentences stay to do
-                print(f"  batch skipped ({e.__class__.__name__}: {str(e)[:200]})"); continue
+            model, ans, usage = answer
             stats["requests"] += 1
             stats["tokens_in"] += usage.get("promptTokenCount", 0)
             stats["tokens_out"] += usage.get("candidatesTokenCount", 0)

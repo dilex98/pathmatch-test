@@ -11,8 +11,12 @@ name: Label posting sentences (teacher step)
 on:
   # Every day just after Google's free allowance resets (midnight Pacific = 08:00 UTC in winter):
   # the three votes on the 20,000 sentences carry on until they are done, then the runs find nothing to do.
+  # Three tries a day: GitHub sometimes starts scheduled runs hours late (Nov 23: 12 hours), and Google is
+  # sometimes busy. A try that finds the allowance used up, or nothing left to do, ends within minutes.
   schedule:
     - cron: "17 8 * * *"
+    - cron: "17 14 * * *"
+    - cron: "17 20 * * *"
   workflow_dispatch:
     inputs:
       votes:
@@ -51,7 +55,7 @@ concurrency:
 jobs:
   label:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 345
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
