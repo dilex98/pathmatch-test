@@ -15,8 +15,8 @@
   "no name or no quote": 1
  },
  "last_run": {
-  "date": "2026-11-24 03:29",
-  "stopped": "daily allowance used up: the next run carries on",
-  "minutes": 126.9
+  "date": "2026-11-24 20:51",
+  "stopped": "stopped on an error: every model failed on this batch",
+  "minutes": 30.6
  }
 }
