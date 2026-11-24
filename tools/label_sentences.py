@@ -270,6 +270,7 @@ def main(argv=None):
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--model", default="", help="use this model first (a second opinion: label the same sentences with another model)")
     ap.add_argument("--only-model", action="store_true", help="never fall back to another model (keeps each vote independent)")
+    ap.add_argument("--max-minutes", type=float, default=0, help="stop cleanly after this long (0 = no limit), so the run saves its labels")
     ap.add_argument("--total", type=int, default=0, help="label only the first N sentences of the fixed order (0 = all)")
     ap.add_argument("--only-disagree", nargs=2, metavar=("A", "B"),
                     help="third vote: only sentences that labels files A and B both answered but disagree on")
@@ -342,7 +343,14 @@ def run_batches(a, todo, key, model_list, labels_path, lookup, stats, reasons):
     handled = 0
     skipped_path = labels_path.parent / "skipped.jsonl"
     with labels_path.open("a", encoding="utf-8") as fo:
+        t_start = time.time()
         while queue:
+            # Nov 24: vote 2 crawled through busy spells for 5.5 hours until GitHub cut the whole job off, before
+            # its save step: that run's labels were lost. A time budget ends the vote cleanly, so it is saved.
+            budget = getattr(a, "max_minutes", 0)
+            if budget and time.time() - t_start > budget * 60:
+                stop = "time budget used: the next run carries on"
+                print("  " + stop); break
             batch = queue.pop(0)
             # Google's servers are sometimes overloaded (503) for a while. One busy spell must not end the day's run
             # (on Nov 23 it did, after two minutes, with the whole daily allowance unused): rest 5 minutes and try

@@ -86,22 +86,34 @@ jobs:
           GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
         run: >
           python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after --pairs infer-after/skill_pairs.json
-          --out labels --total 20000 --limit 10000 --model gemini-3.5-flash-lite --only-model
+          --out labels --total 20000 --limit 10000 --model gemini-3.5-flash-lite --only-model --max-minutes 90
+      - name: "Save after vote 1"
+        if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
+        run: bash tools/save_labels.sh
+
       - name: "Vote 2: Gemini 3.1 Flash Lite"
         if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
         env:
           GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
         run: >
           python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after --pairs infer-after/skill_pairs.json
-          --out labels-second --total 20000 --limit 10000 --model gemini-3.1-flash-lite --only-model
+          --out labels-second --total 20000 --limit 10000 --model gemini-3.1-flash-lite --only-model --max-minutes 90
+      - name: "Save after vote 2"
+        if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
+        run: bash tools/save_labels.sh
+
       - name: "Vote 3: Gemini 3.5 Flash Lite again, only where votes 1 and 2 disagree"
         if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
         env:
           GEMINI_LABEL_KEY: ${{ secrets.GEMINI_LABEL_KEY }}
         run: >
           python3 tools/label_sentences.py --pool pool.jsonl --site gaps-after --pairs infer-after/skill_pairs.json
-          --out labels-third --total 20000 --limit 10000 --model gemini-3.5-flash-lite --only-model --batch 25
+          --out labels-third --total 20000 --limit 10000 --model gemini-3.5-flash-lite --only-model --batch 25 --max-minutes 90
           --only-disagree labels/labels.jsonl labels-second/labels.jsonl
+
+      - name: "Save after vote 3"
+        if: always() && (github.event_name == 'schedule' || github.event.inputs.votes == 'true')
+        run: bash tools/save_labels.sh
 
       - name: Label with Gemini
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.votes != 'true'
@@ -116,19 +128,4 @@ jobs:
       # saved even when the labelling step stopped on an error, so finished answers are never lost
       - name: Save the labels
         if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
-          for d in labels labels-second labels-third labels-flash "${{ github.event.inputs.out }}"; do if [ -n "$d" ] && [ -d "$d" ]; then git add "$d"; fi; done
-          if git diff --cached --quiet; then echo "nothing new"; exit 0; fi
-          MSG=$(python3 -c "
-          import json,os
-          out=[]
-          for d in ['labels','labels-second','labels-third']:
-              p=d+'/progress.json'
-              if os.path.exists(p):
-                  j=json.load(open(p)); out.append(f\"{d} {j['sentences']} ({j['last_run']['stopped'][:40]})\")
-          print('; '.join(out))")
-          git commit -m "Teacher labels: $MSG"
-          git pull --rebase -q origin main
-          git push
+        run: bash tools/save_labels.sh

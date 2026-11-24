@@ -132,6 +132,35 @@ class SplitsUnreadableBatches(unittest.TestCase):
         self.assertLess(len(calls), 15)          # 20 -> 10+10 -> 5+5 -> 2+3 -> 1+2 -> 1+1: a handful of calls
 
 
+class TimeBudget(unittest.TestCase):
+    """Nov 24: a vote crawled for 5.5 hours and GitHub cut the job off before saving. A budget ends it cleanly."""
+
+    def test_the_vote_stops_cleanly_when_its_time_is_up(self):
+        import types
+        todo = [{"id": f"s{i}", "text": f"Weld steel frames number {i}.", "lang": "en", "tag": "", "emp": "e",
+                 "dict": [], "cands": ["Welding"]} for i in range(100)]
+        clock = [0.0]
+
+        def fake_ask(key, models, prompt, log):
+            clock[0] += 600                   # every request "takes" 10 minutes
+            ids = [x["id"] for x in todo if f'"id": "{x["id"]}"' in prompt]
+            return "m", {"items": [{"id": i, "skills": [], "cv": ""} for i in ids]}, {}
+
+        saved = ls.ask, ls.time.sleep, ls.time.time
+        ls.ask, ls.time.sleep, ls.time.time = fake_ask, (lambda s: None), (lambda: clock[0])
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                path = Path(d) / "labels.jsonl"
+                stats = {k: 0 for k in ("sentences", "requests", "tokens_in", "tokens_out", "skills_kept",
+                                        "skills_dropped", "credentials", "education", "with_cv", "empty")}
+                stop = ls.run_batches(types.SimpleNamespace(batch=10, pause=0, max_minutes=25), todo, "k", ["m"], path, LOOK, stats, {})
+                n = sum(1 for _ in path.open())
+        finally:
+            ls.ask, ls.time.sleep, ls.time.time = saved
+        self.assertEqual(stop, "time budget used: the next run carries on")
+        self.assertEqual(n, 30)               # 3 requests of 10 minutes fit before the 25-minute budget is passed
+
+
 class DryRun(unittest.TestCase):
     def test_dry_run_sends_nothing_and_needs_no_key(self):
         with tempfile.TemporaryDirectory() as d:
