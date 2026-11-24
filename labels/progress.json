@@ -1,22 +1,22 @@
 {
- "sentences": 8580,
- "requests": 429,
- "tokens_in": 1844646,
- "tokens_out": 865711,
- "skills_kept": 12234,
- "skills_dropped": 44,
- "credentials": 145,
- "education": 267,
- "with_cv": 7451,
- "empty": 1417,
+ "sentences": 15120,
+ "requests": 756,
+ "tokens_in": 3251599,
+ "tokens_out": 1523337,
+ "skills_kept": 21358,
+ "skills_dropped": 80,
+ "credentials": 286,
+ "education": 444,
+ "with_cv": 13051,
+ "empty": 2555,
  "dropped_why": {
-  "quote not in the sentence": 32,
-  "not a dictionary skill": 11,
+  "quote not in the sentence": 62,
+  "not a dictionary skill": 17,
   "no name or no quote": 1
  },
  "last_run": {
-  "date": "2026-11-23 20:20",
-  "stopped": "stopped on an error: every model failed on this batch",
-  "minutes": 1.9
+  "date": "2026-11-24 03:29",
+  "stopped": "daily allowance used up: the next run carries on",
+  "minutes": 126.9
  }
 }
