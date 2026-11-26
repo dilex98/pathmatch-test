@@ -1,21 +1,21 @@
 {
- "sentences": 9162,
- "requests": 369,
- "tokens_in": 1934996,
- "tokens_out": 1024173,
- "skills_kept": 16108,
- "skills_dropped": 68,
+ "sentences": 9201,
+ "requests": 371,
+ "tokens_in": 1943441,
+ "tokens_out": 1028763,
+ "skills_kept": 16179,
+ "skills_dropped": 69,
  "credentials": 123,
  "education": 96,
- "with_cv": 8863,
- "empty": 547,
+ "with_cv": 8902,
+ "empty": 549,
  "dropped_why": {
   "quote not in the sentence": 55,
-  "not a dictionary skill": 14
+  "not a dictionary skill": 15
  },
  "last_run": {
-  "date": "2026-11-26 12:42",
+  "date": "2026-11-26 18:30",
   "stopped": "done",
-  "minutes": 25.2
+  "minutes": 0.4
  }
 }
