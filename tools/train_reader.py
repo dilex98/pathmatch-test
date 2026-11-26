@@ -120,6 +120,8 @@ def main():
     ap.add_argument("--min-df", type=int, default=3)
     ap.add_argument("--keep", type=int, default=150, help="strongest clues kept per skill")
     ap.add_argument("--target", type=float, default=0.85, help="precision the cut-off aims for on the validation 10%")
+    ap.add_argument("--C", type=float, default=4.0, help="how closely each skill's model follows its examples")
+    ap.add_argument("--balanced", action="store_true", help="give a skill's few yes-examples as much weight as its many no's")
     a = ap.parse_args()
     root, out = Path(a.root), Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -155,7 +157,8 @@ def main():
         bias = np.zeros(len(skills), dtype=np.float32)
         for k, s in enumerate(skills):
             y = np.array([s in L for L in labels], dtype=int)
-            m = LogisticRegression(C=4.0, solver="liblinear", max_iter=200)
+            m = LogisticRegression(C=a.C, solver="liblinear", max_iter=300,
+                                   class_weight="balanced" if a.balanced else None)
             m.fit(X, y)
             w = m.coef_.ravel()
             top = np.argsort(-np.abs(w))[: a.keep]
@@ -189,6 +192,11 @@ def main():
             cut, best = float(round(c, 3)), m
             break
     print(f"cut-off {cut} (validation: {best})")
+    curve = []
+    for c in np.arange(0.30, 0.96, 0.05):
+        pred = [{skills[j] for j in np.where(Sv[r] >= c)[0]} for r in range(len(valid))]
+        m = prf(pred, gold_v)
+        curve.append({"cut": round(float(c), 2), "precision": m["precision"], "recall": m["recall"], "said": m["said"]})
 
     # final test on employers it never saw: the sentences, and their CV-style rewrites
     def evaluate(rows, texts_of):
@@ -240,7 +248,8 @@ def main():
     report = {"built": reader["built"], "minutes": round((time.time() - t0) / 60, 1),
               "sentences": {"train": len(train), "validation": len(valid), "test": len(test)},
               "training_documents": N, "skills_learned": len(skills), "skills_in_labels": len(pos),
-              "clues": len(vocab), "kept_per_skill": a.keep, "cut": cut, "validation": best,
+              "clues": len(vocab), "kept_per_skill": a.keep, "C": a.C, "balanced": a.balanced, "min_examples": a.min_examples,
+              "cut": cut, "validation": best, "validation_curve": curve,
               "test_posting_sentences": test_sent, "test_cv_style_lines": test_cv,
               "file_kb": path.stat().st_size // 1024}
     (out / "report.json").write_text(json.dumps(report, indent=1, ensure_ascii=False))
