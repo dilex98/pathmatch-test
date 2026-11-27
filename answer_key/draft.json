@@ -1,0 +1,4786 @@
+[
+ {
+  "line": "Demonstrated proficiency in Python, R and SQL.",
+  "lang": "en",
+  "strict": [
+   "Python",
+   "SQL"
+  ],
+  "bold": [],
+  "teacher": [
+   "Python",
+   "SQL"
+  ],
+  "id": "f3c95844ad5a",
+  "n": 1,
+  "skills": [
+   {
+    "tag": "1a",
+    "n": "Python",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "1b",
+    "n": "SQL",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Collaborated to build media plans, evaluate vendor proposals, coordinate activations, and monitor performance across quarterly programs.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Monitoring"
+  ],
+  "teacher": [
+   "Logistics coordination",
+   "Monitoring"
+  ],
+  "id": "9fa0390566e7",
+  "n": 2,
+  "skills": [
+   {
+    "tag": "2a",
+    "n": "Monitoring",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Fourni un service à la clientèle supérieur et identifié et résolu rapidement les problèmes.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Retail customer service"
+  ],
+  "teacher": [
+   "Retail customer service",
+   "Root cause analysis"
+  ],
+  "id": "96d2268ca30a",
+  "n": 3,
+  "skills": [
+   {
+    "tag": "3a",
+    "n": "Retail customer service",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Built, maintained, and improved production dashboards and data models for stakeholders.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Dashboards"
+  ],
+  "teacher": [
+   "Dashboards"
+  ],
+  "id": "ea03ce00d26a",
+  "n": 4,
+  "skills": [
+   {
+    "tag": "4a",
+    "n": "Dashboards",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Improved engineering delivery predictability across the Core UT platform.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Platform engineering"
+  ],
+  "teacher": [
+   "Platform engineering"
+  ],
+  "id": "519632870799",
+  "n": 5,
+  "skills": [
+   {
+    "tag": "5a",
+    "n": "Platform engineering",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Communicated in English to interact with stakeholders outside Quebec and Canada.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "English"
+  ],
+  "teacher": [
+   "English"
+  ],
+  "id": "3e8138afee03",
+  "n": 6,
+  "skills": [
+   {
+    "tag": "6a",
+    "n": "English",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Soutenu la clôture de fin de mois.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Month-end close"
+  ],
+  "teacher": [
+   "Month-end close"
+  ],
+  "id": "016ce361cd20",
+  "n": 7,
+  "skills": [
+   {
+    "tag": "7a",
+    "n": "Month-end close",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Monitored and oversaw cluster health, proactively identifying and resolving potential issues.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Monitoring"
+  ],
+  "teacher": [
+   "Monitoring",
+   "Proactivity"
+  ],
+  "id": "a5c869f4c9bd",
+  "n": 8,
+  "skills": [
+   {
+    "tag": "8a",
+    "n": "Monitoring",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Evaluated B2B software and SaaS businesses",
+  "lang": "en",
+  "strict": [
+   "Evaluation",
+   "B2B sales"
+  ],
+  "bold": [],
+  "teacher": [
+   "Evaluation"
+  ],
+  "id": "0a1096ca485b",
+  "n": 9,
+  "skills": [
+   {
+    "tag": "9a",
+    "n": "Evaluation",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "9b",
+    "n": "B2B sales",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Delivered exceptional customer service and built trust through responsive service and expertise.",
+  "lang": "en",
+  "strict": [
+   "Retail customer service"
+  ],
+  "bold": [],
+  "teacher": [
+   "Retail customer service"
+  ],
+  "id": "aec6c0007d99",
+  "n": 10,
+  "skills": [
+   {
+    "tag": "10a",
+    "n": "Retail customer service",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Monitored active work-in-progress files and supported timely billing of services.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Monitoring"
+  ],
+  "teacher": [
+   "Accounts payable and receivable",
+   "Monitoring"
+  ],
+  "id": "8ec7e99a8b43",
+  "n": 11,
+  "skills": [
+   {
+    "tag": "11a",
+    "n": "Monitoring",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained and updated administrative policies and processes.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Database updates"
+  ],
+  "teacher": [
+   "Administrative procedures"
+  ],
+  "id": "068f7ff7b48b",
+  "n": 12,
+  "skills": [
+   {
+    "tag": "12a",
+    "n": "Database updates",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Drove tax modernization initiatives as a Transformation Relationship Manager.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Organizational transformation"
+  ],
+  "teacher": [
+   "Organizational transformation",
+   "Tax"
+  ],
+  "id": "d52fabc765f0",
+  "n": 13,
+  "skills": [
+   {
+    "tag": "13a",
+    "n": "Organizational transformation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained contract, pricing, compliance, and reporting databases to support business decision-making and audit requirements.",
+  "lang": "en",
+  "strict": [
+   "Auditing"
+  ],
+  "bold": [
+   "Compliance"
+  ],
+  "teacher": [
+   "Auditing",
+   "Compliance",
+   "Database management"
+  ],
+  "id": "b6078539a2cb",
+  "n": 14,
+  "skills": [
+   {
+    "tag": "14a",
+    "n": "Auditing",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "14b",
+    "n": "Compliance",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Used PostgreSQL, clean architecture, CI/CD pipelines, and AWS.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "DevOps and cloud",
+   "Architecture"
+  ],
+  "teacher": [
+   "Architecture",
+   "Cloud architecture",
+   "Databases",
+   "Pipeline operations"
+  ],
+  "id": "0134bcf93648",
+  "n": 15,
+  "skills": [
+   {
+    "tag": "15a",
+    "n": "DevOps and cloud",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "15b",
+    "n": "Architecture",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Improved data quality, observability, and operational metrics across our platform and customer-facing products",
+  "lang": "en",
+  "strict": [
+   "Monitoring and observability"
+  ],
+  "bold": [],
+  "teacher": [
+   "Data quality and integrity",
+   "KPIs",
+   "Monitoring and observability"
+  ],
+  "id": "383bc48e3fa5",
+  "n": 16,
+  "skills": [
+   {
+    "tag": "16a",
+    "n": "Monitoring and observability",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maîtrisé les logiciels de la suite MS Office, notamment PowerPoint, Word et Excel.",
+  "lang": "fr",
+  "strict": [
+   "Microsoft Office",
+   "Excel"
+  ],
+  "bold": [
+   "PowerPoint"
+  ],
+  "teacher": [
+   "Excel",
+   "Microsoft Office",
+   "PowerPoint"
+  ],
+  "id": "ff1b2fc641c0",
+  "n": 17,
+  "skills": [
+   {
+    "tag": "17a",
+    "n": "Microsoft Office",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "17b",
+    "n": "Excel",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "17c",
+    "n": "PowerPoint",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Developed automation scripts using Python, Bash, or Shell scripting to reduce repetitive operational tasks.",
+  "lang": "en",
+  "strict": [
+   "Automation",
+   "Python"
+  ],
+  "bold": [],
+  "teacher": [
+   "Python"
+  ],
+  "id": "9d3857fc44fd",
+  "n": 18,
+  "skills": [
+   {
+    "tag": "18a",
+    "n": "Automation",
+    "level": "auto",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "18b",
+    "n": "Python",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Achieved high productivity and delivered excellent customer service.",
+  "lang": "en",
+  "strict": [
+   "Retail customer service"
+  ],
+  "bold": [],
+  "teacher": [
+   "Retail customer service"
+  ],
+  "id": "b28cbdec298d",
+  "n": 19,
+  "skills": [
+   {
+    "tag": "19a",
+    "n": "Retail customer service",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Integrated quality, privacy, security, regulatory compliance, model risk, accessibility, and responsible AI requirements into delivery from inception.",
+  "lang": "en",
+  "strict": [
+   "Compliance"
+  ],
+  "bold": [
+   "Privacy and data protection"
+  ],
+  "teacher": [
+   "Compliance",
+   "Cybersecurity",
+   "Privacy and data protection",
+   "Responsible AI"
+  ],
+  "id": "e3b9b995168d",
+  "n": 20,
+  "skills": [
+   {
+    "tag": "20a",
+    "n": "Compliance",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "20b",
+    "n": "Privacy and data protection",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Developed and delivered security software changes for cloud and endpoint systems.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Endpoint security"
+  ],
+  "teacher": [
+   "Cloud security",
+   "Endpoint security"
+  ],
+  "id": "02f2615ae213",
+  "n": 21,
+  "skills": [
+   {
+    "tag": "21a",
+    "n": "Endpoint security",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed CLO and structured credit portfolios.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Credit analysis and lending",
+   "Project portfolio management"
+  ],
+  "teacher": [
+   "Credit analysis and lending"
+  ],
+  "id": "eefb896833bf",
+  "n": 22,
+  "skills": [
+   {
+    "tag": "22a",
+    "n": "Credit analysis and lending",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "22b",
+    "n": "Project portfolio management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Analyzed user and business needs and transformed them into a digital experience.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Customer needs analysis"
+  ],
+  "teacher": [
+   "Customer needs analysis"
+  ],
+  "id": "a97f2a8e938c",
+  "n": 23,
+  "skills": [
+   {
+    "tag": "23a",
+    "n": "Customer needs analysis",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained awareness of surroundings and commitment to workplace safety.",
+  "lang": "en",
+  "strict": [
+   "Health and safety"
+  ],
+  "bold": [],
+  "teacher": [
+   "Health and safety"
+  ],
+  "id": "98d3ec03a6c5",
+  "n": 24,
+  "skills": [
+   {
+    "tag": "24a",
+    "n": "Health and safety",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Assisted in preparing financial statements for compilation engagements.",
+  "lang": "en",
+  "strict": [
+   "Financial statements analysis"
+  ],
+  "bold": [],
+  "teacher": [
+   "Accounting"
+  ],
+  "id": "35aa45f6cd2f",
+  "n": 25,
+  "skills": [
+   {
+    "tag": "25a",
+    "n": "Financial statements analysis",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Applied experience in AI, automation, workflow optimization, and innovation initiatives.",
+  "lang": "en",
+  "strict": [
+   "Workflow automation",
+   "Automation"
+  ],
+  "bold": [],
+  "teacher": [
+   "Automation",
+   "Process optimization"
+  ],
+  "id": "03fb7759a80f",
+  "n": 26,
+  "skills": [
+   {
+    "tag": "26a",
+    "n": "Workflow automation",
+    "level": "auto",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "26b",
+    "n": "Automation",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied financial acumen and understanding of business and performance metrics.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "KPIs"
+  ],
+  "teacher": [
+   "Financial analysis",
+   "KPIs"
+  ],
+  "id": "2e1c5f59f976",
+  "n": 27,
+  "skills": [
+   {
+    "tag": "27a",
+    "n": "KPIs",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Identified opportunities to optimize client workflows and integrations and drove feature adoption.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Process optimization"
+  ],
+  "teacher": [
+   "Process optimization"
+  ],
+  "id": "db3194104d20",
+  "n": 28,
+  "skills": [
+   {
+    "tag": "28a",
+    "n": "Process optimization",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Worked cross-functionally to drive change.",
+  "lang": "en",
+  "strict": [
+   "Cross-functional work",
+   "Change management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Change management",
+   "Cross-functional work"
+  ],
+  "id": "93771a295cc8",
+  "n": 29,
+  "skills": [
+   {
+    "tag": "29a",
+    "n": "Cross-functional work",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "29b",
+    "n": "Change management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Acquis de l’expérience professionnelle en développement logiciel ou sur des projets à fort impact.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Software development"
+  ],
+  "teacher": [
+   "Software development"
+  ],
+  "id": "9c7000625c30",
+  "n": 30,
+  "skills": [
+   {
+    "tag": "30a",
+    "n": "Software development",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied advanced working knowledge of PowerPoint and Excel.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "PowerPoint",
+   "Advanced Excel",
+   "Excel"
+  ],
+  "teacher": [
+   "Excel",
+   "PowerPoint"
+  ],
+  "id": "374b243153bf",
+  "n": 31,
+  "skills": [
+   {
+    "tag": "31a",
+    "n": "PowerPoint",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "31b",
+    "n": "Advanced Excel",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "31c",
+    "n": "Excel",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied analytical and problem-solving skills to handle multiple tasks with attention to detail.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Problem-solving methodologies"
+  ],
+  "teacher": [
+   "Data analysis",
+   "Problem-solving methodologies"
+  ],
+  "id": "5dbb70c724ef",
+  "n": 32,
+  "skills": [
+   {
+    "tag": "32a",
+    "n": "Problem-solving methodologies",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed platform budget and vendor relations, including forecasting, renewals, licensing, and tool costs.",
+  "lang": "en",
+  "strict": [
+   "Budgeting"
+  ],
+  "bold": [
+   "Demand forecasting"
+  ],
+  "teacher": [
+   "Budgeting",
+   "IT vendor management",
+   "Software licensing"
+  ],
+  "id": "9eb5f63aad64",
+  "n": 33,
+  "skills": [
+   {
+    "tag": "33a",
+    "n": "Budgeting",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "33b",
+    "n": "Demand forecasting",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Worked one-on-one with students, offering personalized support and guidance in their academic pursuits.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Student support"
+  ],
+  "teacher": [
+   "Student support"
+  ],
+  "id": "f9f5016742f7",
+  "n": 34,
+  "skills": [
+   {
+    "tag": "34a",
+    "n": "Student support",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied advanced Agile, product operating models, value-stream management, Lean flow, Scrum or Kanban, portfolio planning, CI/CD, test automation, and evidence-based delivery metrics.",
+  "lang": "en",
+  "strict": [
+   "Agile and Scrum"
+  ],
+  "bold": [
+   "Automation"
+  ],
+  "teacher": [
+   "Agile and Scrum",
+   "Agile lean management",
+   "Automation",
+   "DevOps and cloud",
+   "KPIs"
+  ],
+  "id": "e79912fa473b",
+  "n": 35,
+  "skills": [
+   {
+    "tag": "35a",
+    "n": "Agile and Scrum",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "35b",
+    "n": "Automation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Presented data and insights to customer stakeholders.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Data storytelling and reporting",
+   "Data analysis"
+  ],
+  "teacher": [
+   "Data storytelling and reporting"
+  ],
+  "id": "1d1c639fba98",
+  "n": 36,
+  "skills": [
+   {
+    "tag": "36a",
+    "n": "Data storytelling and reporting",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "36b",
+    "n": "Data analysis",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Analysé les flux financiers pour comprendre la génération et la dépense des revenus.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Financial analysis"
+  ],
+  "teacher": [
+   "Spend analysis"
+  ],
+  "id": "818d1e3e730c",
+  "n": 37,
+  "skills": [
+   {
+    "tag": "37a",
+    "n": "Financial analysis",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Maintained accurate records, prepared reports, and tracked key milestones to keep stakeholders informed",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Records management"
+  ],
+  "teacher": [
+   "Project execution and monitoring",
+   "Project reporting",
+   "Records management"
+  ],
+  "id": "58d059bc2ba4",
+  "n": 38,
+  "skills": [
+   {
+    "tag": "38a",
+    "n": "Records management",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Prepared engineering design packages for non-power system projects.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Electrical engineering"
+  ],
+  "teacher": [],
+  "id": "83b155250f01",
+  "n": 39,
+  "skills": [
+   {
+    "tag": "39a",
+    "n": "Electrical engineering",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Assisted with legal aspects of Requests for Proposals and Requests for Information",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Project proposals"
+  ],
+  "teacher": [
+   "Contract negotiation (legal)",
+   "Tendering"
+  ],
+  "id": "1a4648ff4b06",
+  "n": 40,
+  "skills": [
+   {
+    "tag": "40a",
+    "n": "Project proposals",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Held a licensed CIRO Portfolio Manager designation.",
+  "lang": "en",
+  "strict": [
+   "Project portfolio management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Investment management"
+  ],
+  "id": "e39c155dfb92",
+  "n": 41,
+  "skills": [
+   {
+    "tag": "41a",
+    "n": "Project portfolio management",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Analyzed, troubleshot, and debugged technical issues while collaborating within a team.",
+  "lang": "en",
+  "strict": [
+   "Troubleshooting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Data analysis",
+   "Troubleshooting"
+  ],
+  "id": "fa8d2177319c",
+  "n": 42,
+  "skills": [
+   {
+    "tag": "42a",
+    "n": "Troubleshooting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported Deviation Report investigations and completed assigned CAPAs via TrackWise",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Loss prevention and investigations"
+  ],
+  "teacher": [
+   "Deviation management"
+  ],
+  "id": "aab111633cc5",
+  "n": 43,
+  "skills": [
+   {
+    "tag": "43a",
+    "n": "Loss prevention and investigations",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Utilisé des outils informatiques.",
+  "lang": "fr",
+  "strict": [
+   "Digital Literacy"
+  ],
+  "bold": [],
+  "teacher": [
+   "Digital Literacy"
+  ],
+  "id": "2651294a6b97",
+  "n": 44,
+  "skills": [
+   {
+    "tag": "44a",
+    "n": "Digital Literacy",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Adjusted schedule, jumped into the queue during spikes, and supported evenings or weekends on occasion.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Scheduling"
+  ],
+  "teacher": [
+   "Omnichannel support",
+   "Scheduling"
+  ],
+  "id": "a738c4702527",
+  "n": 45,
+  "skills": [
+   {
+    "tag": "45a",
+    "n": "Scheduling",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported air-gapped satellite operations control systems while ensuring data integrity and automation.",
+  "lang": "en",
+  "strict": [
+   "Automation"
+  ],
+  "bold": [],
+  "teacher": [
+   "Automation",
+   "Data quality and integrity",
+   "Operation and Control"
+  ],
+  "id": "ba2c6e47fa25",
+  "n": 46,
+  "skills": [
+   {
+    "tag": "46a",
+    "n": "Automation",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Coordinated new hire administration including employment agreements, onboarding documentation, and required forms.",
+  "lang": "en",
+  "strict": [
+   "Onboarding"
+  ],
+  "bold": [],
+  "teacher": [
+   "Onboarding"
+  ],
+  "id": "e3861fe41b52",
+  "n": 47,
+  "skills": [
+   {
+    "tag": "47a",
+    "n": "Onboarding",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Provided infrastructure and tools for engineers to develop, build, test, and deliver software.",
+  "lang": "en",
+  "strict": [
+   "Infrastructure"
+  ],
+  "bold": [
+   "Software development"
+  ],
+  "teacher": [
+   "Infrastructure",
+   "Software development"
+  ],
+  "id": "0fc01229dd27",
+  "n": 48,
+  "skills": [
+   {
+    "tag": "48a",
+    "n": "Infrastructure",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "48b",
+    "n": "Software development",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated verbal and written communication skills, including explaining complex privacy concepts to technical and non-technical audiences.",
+  "lang": "en",
+  "strict": [
+   "Explaining complex ideas"
+  ],
+  "bold": [],
+  "teacher": [
+   "Explaining complex ideas",
+   "Privacy and data protection"
+  ],
+  "id": "20e23b7e6db2",
+  "n": 49,
+  "skills": [
+   {
+    "tag": "49a",
+    "n": "Explaining complex ideas",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Represented product marketing in cross-functional planning and translated business priorities into a roadmap.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Cross-functional work",
+   "Marketing"
+  ],
+  "teacher": [
+   "Cross-functional work",
+   "Customer success",
+   "Marketing",
+   "Sales"
+  ],
+  "id": "c5d893c0ebcd",
+  "n": 50,
+  "skills": [
+   {
+    "tag": "50a",
+    "n": "Cross-functional work",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "50b",
+    "n": "Marketing",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Performed financial planning and analysis (FP&A).",
+  "lang": "en",
+  "strict": [
+   "Financial analysis"
+  ],
+  "bold": [],
+  "teacher": [
+   "Financial analysis"
+  ],
+  "id": "ad5eb56dd240",
+  "n": 51,
+  "skills": [
+   {
+    "tag": "51a",
+    "n": "Financial analysis",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Completed maintenance and repair reports.",
+  "lang": "en",
+  "strict": [
+   "Repairing",
+   "Maintenance and reliability"
+  ],
+  "bold": [
+   "Project reporting",
+   "Maintenance management"
+  ],
+  "teacher": [
+   "Administrative reporting"
+  ],
+  "id": "a8301b4a2198",
+  "n": 52,
+  "skills": [
+   {
+    "tag": "52a",
+    "n": "Repairing",
+    "level": "auto",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "52b",
+    "n": "Maintenance and reliability",
+    "level": "auto",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "52c",
+    "n": "Project reporting",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "52d",
+    "n": "Maintenance management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Held Supply Chain Management Professional (SCMP) designation.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Supply chain"
+  ],
+  "teacher": [],
+  "id": "0c396a319be1",
+  "n": 53,
+  "skills": [
+   {
+    "tag": "53a",
+    "n": "Supply chain",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Drove regional performance by improving commercial metrics for customer acquisition and revenue.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Customer acquisition strategy",
+   "KPIs"
+  ],
+  "teacher": [
+   "KPIs",
+   "Sales"
+  ],
+  "id": "3044887f6af7",
+  "n": 54,
+  "skills": [
+   {
+    "tag": "54a",
+    "n": "Customer acquisition strategy",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "54b",
+    "n": "KPIs",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Integrated AI into development workflows.",
+  "lang": "en",
+  "strict": [
+   "Workflow automation"
+  ],
+  "bold": [],
+  "teacher": [
+   "Software development"
+  ],
+  "id": "6f6f49a12110",
+  "n": 55,
+  "skills": [
+   {
+    "tag": "55a",
+    "n": "Workflow automation",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Communiqué couramment en français et en anglais avec les partenaires, les clients et les collègues.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Bilingual (EN/FR)",
+   "English"
+  ],
+  "teacher": [],
+  "id": "e8b486032654",
+  "n": 56,
+  "skills": [
+   {
+    "tag": "56a",
+    "n": "Bilingual (EN/FR)",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "56b",
+    "n": "English",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Handled high-visibility escalations and executive-level customer conversations.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Executive presentations"
+  ],
+  "teacher": [
+   "Customer complaints"
+  ],
+  "id": "4d57093c2ff7",
+  "n": 57,
+  "skills": [
+   {
+    "tag": "57a",
+    "n": "Executive presentations",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Independently identified and executed new growth opportunities.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Growth strategy"
+  ],
+  "teacher": [
+   "Growth strategy",
+   "Project execution and monitoring"
+  ],
+  "id": "43e35f0ec38a",
+  "n": 58,
+  "skills": [
+   {
+    "tag": "58a",
+    "n": "Growth strategy",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed geomatics projects as a Senior Project Manager.",
+  "lang": "en",
+  "strict": [
+   "Project management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Project management"
+  ],
+  "id": "3179e3e42ad1",
+  "n": 59,
+  "skills": [
+   {
+    "tag": "59a",
+    "n": "Project management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Collaborated closely with Finance, Supply Chain, Asset Management, and Sales consultants to ensure integrated project-based solutions.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Supply chain"
+  ],
+  "teacher": [
+   "Financial analysis",
+   "Sales",
+   "Supply chain"
+  ],
+  "id": "791547943b8b",
+  "n": 60,
+  "skills": [
+   {
+    "tag": "60a",
+    "n": "Supply chain",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maîtrisé MATLAB, Python ou un outil similaire.",
+  "lang": "en",
+  "strict": [
+   "Python"
+  ],
+  "bold": [],
+  "teacher": [
+   "Python",
+   "R and MATLAB"
+  ],
+  "id": "cbaade66555c",
+  "n": 61,
+  "skills": [
+   {
+    "tag": "61a",
+    "n": "Python",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Coordinated responses to addenda and RFIs during the tender process in collaboration with procurement and project management.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Procurement"
+  ],
+  "teacher": [
+   "Procurement",
+   "Tendering"
+  ],
+  "id": "9d410c43a332",
+  "n": 62,
+  "skills": [
+   {
+    "tag": "62a",
+    "n": "Procurement",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Communicated clearly in writing, presentations and discussion.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Executive presentations"
+  ],
+  "teacher": [
+   "Creative writing"
+  ],
+  "id": "b5ed5cd6acc5",
+  "n": 63,
+  "skills": [
+   {
+    "tag": "63a",
+    "n": "Executive presentations",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Guided complex change initiatives by applying change management discipline.",
+  "lang": "en",
+  "strict": [
+   "Change management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Change management"
+  ],
+  "id": "839408a1f2d9",
+  "n": 64,
+  "skills": [
+   {
+    "tag": "64a",
+    "n": "Change management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Contributed to the team's transition from monolith to service-oriented architecture.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Architecture"
+  ],
+  "teacher": [
+   "Architecture"
+  ],
+  "id": "40ef31d7e5df",
+  "n": 65,
+  "skills": [
+   {
+    "tag": "65a",
+    "n": "Architecture",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported the Clutch detailing and onboarding team as needed.",
+  "lang": "en",
+  "strict": [
+   "Onboarding"
+  ],
+  "bold": [],
+  "teacher": [
+   "Onboarding"
+  ],
+  "id": "2c242faa4f4f",
+  "n": 66,
+  "skills": [
+   {
+    "tag": "66a",
+    "n": "Onboarding",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed internal and external human resources.",
+  "lang": "en",
+  "strict": [
+   "Human resources"
+  ],
+  "bold": [],
+  "teacher": [
+   "Human resources"
+  ],
+  "id": "994b26304dfb",
+  "n": 67,
+  "skills": [
+   {
+    "tag": "67a",
+    "n": "Human resources",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied attention to detail and strong project management capabilities.",
+  "lang": "en",
+  "strict": [
+   "Project management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Project management"
+  ],
+  "id": "12555f6ef243",
+  "n": 68,
+  "skills": [
+   {
+    "tag": "68a",
+    "n": "Project management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied understanding of financial statements, business models, and commercial financial solutions.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Financial statements analysis",
+   "Financial analysis"
+  ],
+  "teacher": [
+   "Corporate finance",
+   "Financial statements analysis"
+  ],
+  "id": "f6444ef2ce79",
+  "n": 69,
+  "skills": [
+   {
+    "tag": "69a",
+    "n": "Financial statements analysis",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "69b",
+    "n": "Financial analysis",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Influenced decision-making through evidence-based recommendations.",
+  "lang": "en",
+  "strict": [
+   "Persuasion and influence"
+  ],
+  "bold": [],
+  "teacher": [
+   "Decision analysis",
+   "Persuasion and influence"
+  ],
+  "id": "76e225c4b27c",
+  "n": 70,
+  "skills": [
+   {
+    "tag": "70a",
+    "n": "Persuasion and influence",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Designed and implemented procedures to improve effectiveness and efficiency",
+  "lang": "en",
+  "strict": [
+   "Process improvement"
+  ],
+  "bold": [],
+  "teacher": [
+   "Process improvement"
+  ],
+  "id": "63c83f13ac1f",
+  "n": 71,
+  "skills": [
+   {
+    "tag": "71a",
+    "n": "Process improvement",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Identifié, défini et exécuté des stratégies pour atteindre les plans de croissance et les objectifs opérationnels, en mettant l'accent sur l'amélioration continue.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Continuous improvement"
+  ],
+  "teacher": [
+   "Continuous improvement",
+   "Growth strategy",
+   "Operational strategy"
+  ],
+  "id": "1ff793a86e1d",
+  "n": 72,
+  "skills": [
+   {
+    "tag": "72a",
+    "n": "Continuous improvement",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Monitored network services and fixed satellite service customers, managed troubleshooting and investigation of reported faults.",
+  "lang": "en",
+  "strict": [
+   "Troubleshooting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Network monitoring",
+   "Troubleshooting"
+  ],
+  "id": "d2276ab4ee95",
+  "n": 73,
+  "skills": [
+   {
+    "tag": "73a",
+    "n": "Troubleshooting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Oversaw rapid prototypes and proofs of concept to test feasibility, desirability, viability, and business value, and supported evidence-based decisions on initiatives.",
+  "lang": "en",
+  "strict": [
+   "Prototyping"
+  ],
+  "bold": [],
+  "teacher": [
+   "Business case and feasibility",
+   "Prototyping"
+  ],
+  "id": "c0e04d33c316",
+  "n": 74,
+  "skills": [
+   {
+    "tag": "74a",
+    "n": "Prototyping",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained high-availability infrastructure and applied hands-on problem-solving.",
+  "lang": "en",
+  "strict": [
+   "Infrastructure"
+  ],
+  "bold": [
+   "Problem-solving methodologies"
+  ],
+  "teacher": [
+   "Infrastructure",
+   "Problem-solving methodologies"
+  ],
+  "id": "86cdb894c6b0",
+  "n": 75,
+  "skills": [
+   {
+    "tag": "75a",
+    "n": "Infrastructure",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "75b",
+    "n": "Problem-solving methodologies",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Utilized front-end and back-end coding languages, development frameworks, and third-party libraries as a React Native Developer.",
+  "lang": "en",
+  "strict": [
+   "React"
+  ],
+  "bold": [],
+  "teacher": [
+   "React Native"
+  ],
+  "id": "8fca63726f8d",
+  "n": 76,
+  "skills": [
+   {
+    "tag": "76a",
+    "n": "React",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Developed networks in the business community",
+  "lang": "en",
+  "strict": [
+   "Networking"
+  ],
+  "bold": [
+   "Community building"
+  ],
+  "teacher": [
+   "Networking"
+  ],
+  "id": "1698bb1a5b19",
+  "n": 77,
+  "skills": [
+   {
+    "tag": "77a",
+    "n": "Networking",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "77b",
+    "n": "Community building",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Built foundational infrastructure for AI work, including customer-facing and internal automation.",
+  "lang": "en",
+  "strict": [
+   "Automation",
+   "Infrastructure"
+  ],
+  "bold": [],
+  "teacher": [
+   "Automation",
+   "Infrastructure",
+   "Platform engineering"
+  ],
+  "id": "340c3b923914",
+  "n": 78,
+  "skills": [
+   {
+    "tag": "78a",
+    "n": "Automation",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "78b",
+    "n": "Infrastructure",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Acquis de l'expérience avec les modèles et les agents d’IA.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "AI agents",
+   "Machine learning and AI"
+  ],
+  "teacher": [
+   "Machine learning and AI"
+  ],
+  "id": "f989ee39d7fe",
+  "n": 79,
+  "skills": [
+   {
+    "tag": "79a",
+    "n": "AI agents",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "79b",
+    "n": "Machine learning and AI",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Collaborated effectively across Treasury, Finance, Risk, Technology and Lines of Business.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Finance"
+  ],
+  "teacher": [
+   "Financial risk management"
+  ],
+  "id": "2ac57afebcf9",
+  "n": 80,
+  "skills": [
+   {
+    "tag": "80a",
+    "n": "Finance",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Investigated inventory errors and missing material and escalated as required.",
+  "lang": "en",
+  "strict": [
+   "Inventory control"
+  ],
+  "bold": [
+   "Loss prevention and investigations"
+  ],
+  "teacher": [
+   "Inventory accuracy",
+   "Inventory control",
+   "Loss prevention and investigations"
+  ],
+  "id": "79b5d98ebf0e",
+  "n": 81,
+  "skills": [
+   {
+    "tag": "81a",
+    "n": "Inventory control",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "81b",
+    "n": "Loss prevention and investigations",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained confidentiality and handled sensitive information according to data privacy and compliance standards.",
+  "lang": "en",
+  "strict": [
+   "Discretion and confidentiality",
+   "Privacy and data protection"
+  ],
+  "bold": [
+   "Compliance"
+  ],
+  "teacher": [
+   "Compliance",
+   "Discretion and confidentiality",
+   "Privacy and data protection"
+  ],
+  "id": "5181ff6fe51a",
+  "n": 82,
+  "skills": [
+   {
+    "tag": "82a",
+    "n": "Discretion and confidentiality",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "82b",
+    "n": "Privacy and data protection",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "82c",
+    "n": "Compliance",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied knowledge of relational and NoSQL databases including PostgreSQL, SQL Server, Redis, and MongoDB.",
+  "lang": "en",
+  "strict": [
+   "Databases",
+   "SQL"
+  ],
+  "bold": [],
+  "teacher": [
+   "Databases",
+   "SQL"
+  ],
+  "id": "47814fa84cf1",
+  "n": 83,
+  "skills": [
+   {
+    "tag": "83a",
+    "n": "Databases",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "83b",
+    "n": "SQL",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Tracked key metrics and implemented improvements to availability and reliability",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "KPIs"
+  ],
+  "teacher": [
+   "Continuous improvement",
+   "KPIs"
+  ],
+  "id": "804000365345",
+  "n": 84,
+  "skills": [
+   {
+    "tag": "84a",
+    "n": "KPIs",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Provided guidance to staff and participated in the recruitment process for junior staff.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Recruitment"
+  ],
+  "teacher": [
+   "Recruitment"
+  ],
+  "id": "c63416196a54",
+  "n": 85,
+  "skills": [
+   {
+    "tag": "85a",
+    "n": "Recruitment",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Selected, developed, and evaluated staff to ensure efficient functional operations.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Evaluation"
+  ],
+  "teacher": [
+   "Evaluation",
+   "Operations management"
+  ],
+  "id": "3b1b87f78a97",
+  "n": 86,
+  "skills": [
+   {
+    "tag": "86a",
+    "n": "Evaluation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Built multiple brands.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Branding"
+  ],
+  "teacher": [
+   "Branding"
+  ],
+  "id": "91df2bca5bb6",
+  "n": 87,
+  "skills": [
+   {
+    "tag": "87a",
+    "n": "Branding",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Used Monorepo tooling.",
+  "lang": "en",
+  "strict": [
+   "Tooling"
+  ],
+  "bold": [],
+  "teacher": [],
+  "id": "10d893bc535c",
+  "n": 88,
+  "skills": [
+   {
+    "tag": "88a",
+    "n": "Tooling",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Led research, consulting, and report preparation on special events industry best practices as a Project Manager.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Benchmark and best practices"
+  ],
+  "teacher": [
+   "Benchmark and best practices"
+  ],
+  "id": "9e1c2e88016b",
+  "n": 89,
+  "skills": [
+   {
+    "tag": "89a",
+    "n": "Benchmark and best practices",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed content and campaigns.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Social media and content",
+   "Marketing"
+  ],
+  "teacher": [
+   "Marketing",
+   "Social media and content"
+  ],
+  "id": "46f69efbbcd5",
+  "n": 90,
+  "skills": [
+   {
+    "tag": "90a",
+    "n": "Social media and content",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "90b",
+    "n": "Marketing",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Led, coached, and developed team members while building a culture of ownership, accountability, and continuous improvement.",
+  "lang": "en",
+  "strict": [
+   "Continuous improvement"
+  ],
+  "bold": [
+   "Accountability"
+  ],
+  "teacher": [
+   "Continuous improvement"
+  ],
+  "id": "6176266f9eb0",
+  "n": 91,
+  "skills": [
+   {
+    "tag": "91a",
+    "n": "Continuous improvement",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "91b",
+    "n": "Accountability",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Inspected, tested, maintained, and repaired parking meter mechanisms.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Repairing"
+  ],
+  "teacher": [
+   "Maintenance and reliability",
+   "Metrology and inspection",
+   "Repairing",
+   "Testing and validation"
+  ],
+  "id": "80cedbe62e21",
+  "n": 92,
+  "skills": [
+   {
+    "tag": "92a",
+    "n": "Repairing",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated effective communication and team leadership skills.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Team management",
+   "Project communication"
+  ],
+  "teacher": [
+   "Team management"
+  ],
+  "id": "afe52bd91338",
+  "n": 93,
+  "skills": [
+   {
+    "tag": "93a",
+    "n": "Team management",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "93b",
+    "n": "Project communication",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Led teams, established clear priorities, and fostered shared accountability.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Accountability"
+  ],
+  "teacher": [],
+  "id": "0601e0505258",
+  "n": 94,
+  "skills": [
+   {
+    "tag": "94a",
+    "n": "Accountability",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Assisted with partner expense reports, resource planning, and time entry",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Resource planning"
+  ],
+  "teacher": [
+   "Resource planning"
+  ],
+  "id": "75cff9a12548",
+  "n": 95,
+  "skills": [
+   {
+    "tag": "95a",
+    "n": "Resource planning",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Assuré la conformité, l'excellence opérationnelle et le support client dans un environnement dynamique.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Operational excellence"
+  ],
+  "teacher": [
+   "Compliance",
+   "Operational excellence"
+  ],
+  "id": "3df197e42127",
+  "n": 96,
+  "skills": [
+   {
+    "tag": "96a",
+    "n": "Operational excellence",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Ensured compliance with corporate branding and customer deliverable requirements.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Compliance"
+  ],
+  "teacher": [
+   "Branding",
+   "Compliance"
+  ],
+  "id": "775eca901ad8",
+  "n": 97,
+  "skills": [
+   {
+    "tag": "97a",
+    "n": "Compliance",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Designed and implemented training modules covering account opening procedures",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Corporate training"
+  ],
+  "teacher": [
+   "Training and development"
+  ],
+  "id": "1c3acf5f40ca",
+  "n": 98,
+  "skills": [
+   {
+    "tag": "98a",
+    "n": "Corporate training",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Managed accounting and financial reporting functions.",
+  "lang": "en",
+  "strict": [
+   "Accounting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Accounting",
+   "Financial accounting"
+  ],
+  "id": "3ee9d20350c0",
+  "n": 99,
+  "skills": [
+   {
+    "tag": "99a",
+    "n": "Accounting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Appliqué un jugement indépendant et des compétences analytiques pour résoudre des problèmes administratifs et de gestion complexes.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Problem-solving methodologies"
+  ],
+  "teacher": [
+   "Business administration",
+   "Problem-solving methodologies"
+  ],
+  "id": "bc258eb82f03",
+  "n": 100,
+  "skills": [
+   {
+    "tag": "100a",
+    "n": "Problem-solving methodologies",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Configured and maintained Workforce Management time and attendance solutions, including pay codes, labour rules, payroll processes, security, and access controls.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Payroll",
+   "Cybersecurity"
+  ],
+  "teacher": [
+   "Attendance management",
+   "Configuration management",
+   "Payroll"
+  ],
+  "id": "9f93c2505df0",
+  "n": 101,
+  "skills": [
+   {
+    "tag": "101a",
+    "n": "Payroll",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "101b",
+    "n": "Cybersecurity",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Co-ordinated releases with QA for shipments.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Logistics coordination"
+  ],
+  "teacher": [
+   "Logistics coordination"
+  ],
+  "id": "173dffd74bda",
+  "n": 102,
+  "skills": [
+   {
+    "tag": "102a",
+    "n": "Logistics coordination",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed a large budget to drive impact.",
+  "lang": "en",
+  "strict": [
+   "Budgeting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Budgeting"
+  ],
+  "id": "05f7733c1988",
+  "n": 103,
+  "skills": [
+   {
+    "tag": "103a",
+    "n": "Budgeting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied strong leadership and influence in multiple projects and disciplinary areas",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Persuasion and influence"
+  ],
+  "teacher": [
+   "Persuasion and influence"
+  ],
+  "id": "2ed5cffdeaa0",
+  "n": 104,
+  "skills": [
+   {
+    "tag": "104a",
+    "n": "Persuasion and influence",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated the ability to perform under stress.",
+  "lang": "en",
+  "strict": [
+   "Works under pressure"
+  ],
+  "bold": [],
+  "teacher": [
+   "Works under pressure"
+  ],
+  "id": "e46c4d8119d0",
+  "n": 105,
+  "skills": [
+   {
+    "tag": "105a",
+    "n": "Works under pressure",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Assessed business plans, forecasts, and financial positions of distressed companies",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Demand forecasting"
+  ],
+  "teacher": [
+   "Financial analysis",
+   "Financial statements analysis"
+  ],
+  "id": "76ebaee27210",
+  "n": 106,
+  "skills": [
+   {
+    "tag": "106a",
+    "n": "Demand forecasting",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Received referrals and assisted with the implementation of rehabilitation plans and programs under direction.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Rehabilitation services"
+  ],
+  "teacher": [
+   "Rehabilitation services"
+  ],
+  "id": "d79ba5dba2c8",
+  "n": 107,
+  "skills": [
+   {
+    "tag": "107a",
+    "n": "Rehabilitation services",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Communiqué en anglais avec des intervenants et collègues à l'extérieur du Québec ou du Canada.",
+  "lang": "fr",
+  "strict": [
+   "English"
+  ],
+  "bold": [],
+  "teacher": [
+   "English"
+  ],
+  "id": "7698ea619b1f",
+  "n": 108,
+  "skills": [
+   {
+    "tag": "108a",
+    "n": "English",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Cleared pipelines and drains and repaired fixtures and leaking pipes.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Repairing"
+  ],
+  "teacher": [
+   "Plumbing and pipefitting",
+   "Repairing"
+  ],
+  "id": "be82fabc4409",
+  "n": 109,
+  "skills": [
+   {
+    "tag": "109a",
+    "n": "Repairing",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained accurate and up-to-date customer records, sales activities, opportunities, and pipeline information within the CRM system",
+  "lang": "en",
+  "strict": [
+   "CRM tools"
+  ],
+  "bold": [
+   "Records management"
+  ],
+  "teacher": [
+   "CRM tools",
+   "Database updates"
+  ],
+  "id": "f279d07e9ddc",
+  "n": 110,
+  "skills": [
+   {
+    "tag": "110a",
+    "n": "CRM tools",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "110b",
+    "n": "Records management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Clarified product requirements, prioritized backlogs, and translated vision into roadmaps.",
+  "lang": "en",
+  "strict": [
+   "Portfolio prioritization"
+  ],
+  "bold": [],
+  "teacher": [
+   "Portfolio prioritization",
+   "Requirements analysis"
+  ],
+  "id": "fe77a6003c12",
+  "n": 111,
+  "skills": [
+   {
+    "tag": "111a",
+    "n": "Portfolio prioritization",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maintained employee information and documentation within HR and payroll systems.",
+  "lang": "en",
+  "strict": [
+   "Payroll"
+  ],
+  "bold": [
+   "Human resources"
+  ],
+  "teacher": [
+   "Human resources",
+   "Payroll",
+   "Records management"
+  ],
+  "id": "d433d64d7281",
+  "n": 112,
+  "skills": [
+   {
+    "tag": "112a",
+    "n": "Payroll",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "112b",
+    "n": "Human resources",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Utilized MS Office, Teams, and SAP.",
+  "lang": "en",
+  "strict": [
+   "Microsoft Office"
+  ],
+  "bold": [
+   "SAP"
+  ],
+  "teacher": [
+   "Collaboration platforms",
+   "Microsoft Office",
+   "SAP"
+  ],
+  "id": "b9a52148861f",
+  "n": 113,
+  "skills": [
+   {
+    "tag": "113a",
+    "n": "Microsoft Office",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "113b",
+    "n": "SAP",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Followed rules, regulations, and procedures in a highly structured work environment.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Compliance"
+  ],
+  "teacher": [
+   "Compliance"
+  ],
+  "id": "3d6d3ed4d773",
+  "n": 114,
+  "skills": [
+   {
+    "tag": "114a",
+    "n": "Compliance",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Input and retrieved financial data in a computerized accounting system, including preparing journals and processing general ledger transactions.",
+  "lang": "en",
+  "strict": [
+   "Accounting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Accounting",
+   "Financial data analysis"
+  ],
+  "id": "4e2cadf24156",
+  "n": 115,
+  "skills": [
+   {
+    "tag": "115a",
+    "n": "Accounting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Conducted discovery and financial planning conversations covering retirement, wealth accumulation, and cash flow management.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Personal financial planning"
+  ],
+  "teacher": [
+   "Personal financial planning"
+  ],
+  "id": "bdc99a035197",
+  "n": 116,
+  "skills": [
+   {
+    "tag": "116a",
+    "n": "Personal financial planning",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed high-value mandates with carefully chosen partners, negotiated agreements, and closed enterprise deals.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Negotiation",
+   "Sales negotiation and closing"
+  ],
+  "teacher": [
+   "Negotiation"
+  ],
+  "id": "3b36140c630a",
+  "n": 117,
+  "skills": [
+   {
+    "tag": "117a",
+    "n": "Negotiation",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "117b",
+    "n": "Sales negotiation and closing",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Led territory planning and cross-architecture opportunities, and maintained pipeline excellence through accurate forecasting and best practices.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Demand forecasting"
+  ],
+  "teacher": [
+   "Benchmark and best practices",
+   "Demand forecasting"
+  ],
+  "id": "23271843b96e",
+  "n": 118,
+  "skills": [
+   {
+    "tag": "118a",
+    "n": "Demand forecasting",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported release planning through readiness assessments, dependency visibility, and risk mitigation.",
+  "lang": "en",
+  "strict": [
+   "Risk management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Implementation planning",
+   "Risk management"
+  ],
+  "id": "4b297448f149",
+  "n": 119,
+  "skills": [
+   {
+    "tag": "119a",
+    "n": "Risk management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Démontré une orientation vers les résultats, la croissance des affaires et l'excellence de l'expérience client.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Results orientation"
+  ],
+  "teacher": [
+   "Candidate experience",
+   "Growth strategy",
+   "Results orientation"
+  ],
+  "id": "719339a88f29",
+  "n": 120,
+  "skills": [
+   {
+    "tag": "120a",
+    "n": "Results orientation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Provided administrative support to the Area Facilities Manager.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Facilities management"
+  ],
+  "teacher": [
+   "Facilities management"
+  ],
+  "id": "5e4b05d797ea",
+  "n": 121,
+  "skills": [
+   {
+    "tag": "121a",
+    "n": "Facilities management",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Used Microsoft Excel and Microsoft 365 applications",
+  "lang": "en",
+  "strict": [
+   "Excel"
+  ],
+  "bold": [
+   "Microsoft 365 administration"
+  ],
+  "teacher": [
+   "Excel",
+   "Microsoft Office"
+  ],
+  "id": "074b409137be",
+  "n": 122,
+  "skills": [
+   {
+    "tag": "122a",
+    "n": "Excel",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "122b",
+    "n": "Microsoft 365 administration",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated proficiency in MS Office including Excel, Word, and PowerPoint",
+  "lang": "en",
+  "strict": [
+   "Microsoft Office"
+  ],
+  "bold": [
+   "PowerPoint",
+   "Excel"
+  ],
+  "teacher": [
+   "Microsoft Office"
+  ],
+  "id": "bb89bcd5e8b9",
+  "n": 123,
+  "skills": [
+   {
+    "tag": "123a",
+    "n": "Microsoft Office",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "123b",
+    "n": "PowerPoint",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "123c",
+    "n": "Excel",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Utilized scripting skills in Tcl, Python, and Perl.",
+  "lang": "en",
+  "strict": [
+   "Python"
+  ],
+  "bold": [],
+  "teacher": [
+   "Programming",
+   "Python"
+  ],
+  "id": "3428217565e3",
+  "n": 124,
+  "skills": [
+   {
+    "tag": "124a",
+    "n": "Python",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Co-managed escalated risks, actions, issues, and decisions while coordinating escalation paths.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Issue and decision tracking"
+  ],
+  "teacher": [
+   "Action planning",
+   "Logistics coordination"
+  ],
+  "id": "aa9171043068",
+  "n": 125,
+  "skills": [
+   {
+    "tag": "125a",
+    "n": "Issue and decision tracking",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Impacted acquisition strategy and long-term value creation within a team.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Customer acquisition strategy"
+  ],
+  "teacher": [
+   "Customer acquisition strategy",
+   "Value creation analysis"
+  ],
+  "id": "12c119746636",
+  "n": 126,
+  "skills": [
+   {
+    "tag": "126a",
+    "n": "Customer acquisition strategy",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Gained experience within the travel industry and demonstrated strong sales potential.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Sales"
+  ],
+  "teacher": [
+   "Sales",
+   "Tourism"
+  ],
+  "id": "7ab6060ffcce",
+  "n": 127,
+  "skills": [
+   {
+    "tag": "127a",
+    "n": "Sales",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Gained experience in commercial credit, analysis, and business development.",
+  "lang": "en",
+  "strict": [
+   "Credit analysis and lending"
+  ],
+  "bold": [],
+  "teacher": [
+   "Business analysis",
+   "Credit analysis and lending"
+  ],
+  "id": "9c4c1a36edc7",
+  "n": 128,
+  "skills": [
+   {
+    "tag": "128a",
+    "n": "Credit analysis and lending",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Maîtrisé l’anglais pour ce poste en raison des interactions avec les clients, partenaires et fournisseurs anglophones.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "English"
+  ],
+  "teacher": [
+   "English"
+  ],
+  "id": "2ba137787b68",
+  "n": 129,
+  "skills": [
+   {
+    "tag": "129a",
+    "n": "English",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Mentored junior and intermediate test engineers through coaching, code reviews, and technical guidance.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Peer review"
+  ],
+  "teacher": [
+   "Life and career coaching"
+  ],
+  "id": "2e34bd184a77",
+  "n": 130,
+  "skills": [
+   {
+    "tag": "130a",
+    "n": "Peer review",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Guided platform evolution by promoting configuration and reusable components while limiting unnecessary customization.",
+  "lang": "en",
+  "strict": [
+   "Configuration management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Configuration management",
+   "Design systems"
+  ],
+  "id": "9b5160f3a4b3",
+  "n": 131,
+  "skills": [
+   {
+    "tag": "131a",
+    "n": "Configuration management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Automated operational workflows and tasks.",
+  "lang": "en",
+  "strict": [
+   "Workflow automation",
+   "Automation"
+  ],
+  "bold": [],
+  "teacher": [
+   "Automation"
+  ],
+  "id": "7948cca9a9ae",
+  "n": 132,
+  "skills": [
+   {
+    "tag": "132a",
+    "n": "Workflow automation",
+    "level": "auto",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "132b",
+    "n": "Automation",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Partnered with Marketing and other teams to plan and execute approved store campaigns, workshops, platform demonstrations, community events, client engagement activities, educational sessions, appreciation events, and premium client programs.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Marketing"
+  ],
+  "teacher": [
+   "Internal events and engagement",
+   "Marketing",
+   "Workshop planning"
+  ],
+  "id": "01bb06a372f2",
+  "n": 133,
+  "skills": [
+   {
+    "tag": "133a",
+    "n": "Marketing",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Influenced stakeholders without direct authority across matrixed organizations.",
+  "lang": "en",
+  "strict": [
+   "Persuasion and influence"
+  ],
+  "bold": [],
+  "teacher": [
+   "Persuasion and influence"
+  ],
+  "id": "b62ba0516682",
+  "n": 134,
+  "skills": [
+   {
+    "tag": "134a",
+    "n": "Persuasion and influence",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied deep ServiceNow platform and architecture knowledge.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "ServiceNow and ITSM tools",
+   "Architecture"
+  ],
+  "teacher": [
+   "ServiceNow and ITSM tools"
+  ],
+  "id": "69d14d3dc693",
+  "n": 135,
+  "skills": [
+   {
+    "tag": "135a",
+    "n": "ServiceNow and ITSM tools",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "135b",
+    "n": "Architecture",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Developed rapid prototypes of AI solutions and AI workflow/agent engineering.",
+  "lang": "en",
+  "strict": [
+   "Prototyping"
+  ],
+  "bold": [
+   "Machine learning and AI"
+  ],
+  "teacher": [
+   "AI agents",
+   "Prototyping"
+  ],
+  "id": "d942e554699c",
+  "n": 136,
+  "skills": [
+   {
+    "tag": "136a",
+    "n": "Prototyping",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "136b",
+    "n": "Machine learning and AI",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Managed fleet related procurement following City corporate procurement policy",
+  "lang": "en",
+  "strict": [
+   "Procurement"
+  ],
+  "bold": [
+   "Fleet management"
+  ],
+  "teacher": [
+   "Procurement"
+  ],
+  "id": "e667bf60ffe5",
+  "n": 137,
+  "skills": [
+   {
+    "tag": "137a",
+    "n": "Procurement",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "137b",
+    "n": "Fleet management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Worked as Product Marketing Manager in Retail Tech",
+  "lang": "fr",
+  "strict": [
+   "Marketing"
+  ],
+  "bold": [],
+  "teacher": [
+   "Marketing"
+  ],
+  "id": "cab02da1a669",
+  "n": 138,
+  "skills": [
+   {
+    "tag": "138a",
+    "n": "Marketing",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Executed territory planning, market analysis, and cross-functional leadership, managing customer relationships and internal strategic initiatives.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Cross-functional work"
+  ],
+  "teacher": [
+   "Cross-functional work",
+   "Market research",
+   "Strategic planning facilitation"
+  ],
+  "id": "d387835ba16b",
+  "n": 139,
+  "skills": [
+   {
+    "tag": "139a",
+    "n": "Cross-functional work",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Produced accurate, high-quality deliverables aligned with business priorities and deadlines.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Meets deadlines"
+  ],
+  "teacher": [
+   "Meets deadlines"
+  ],
+  "id": "da771163c68b",
+  "n": 140,
+  "skills": [
+   {
+    "tag": "140a",
+    "n": "Meets deadlines",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed the full SDLC from requirements through code review to release and support.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Peer review"
+  ],
+  "teacher": [
+   "Peer review",
+   "Requirements engineering",
+   "Software development",
+   "Software maintenance and support"
+  ],
+  "id": "a9d02e4ddf55",
+  "n": 141,
+  "skills": [
+   {
+    "tag": "141a",
+    "n": "Peer review",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed projects, emergencies, contracts, and contractors in a timely manner.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Project management"
+  ],
+  "teacher": [
+   "Emergency management",
+   "Project management"
+  ],
+  "id": "a07d9546b9b7",
+  "n": 142,
+  "skills": [
+   {
+    "tag": "142a",
+    "n": "Project management",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Met minimum standards of performance for KPIs.",
+  "lang": "en",
+  "strict": [
+   "KPIs"
+  ],
+  "bold": [],
+  "teacher": [
+   "KPIs"
+  ],
+  "id": "5115130be2ef",
+  "n": 143,
+  "skills": [
+   {
+    "tag": "143a",
+    "n": "KPIs",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed external agencies, vendors, and freelancers.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "IT vendor management"
+  ],
+  "teacher": [
+   "Freelancer and provider management"
+  ],
+  "id": "517afc30068d",
+  "n": 144,
+  "skills": [
+   {
+    "tag": "144a",
+    "n": "IT vendor management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Analyzed, negotiated, and presented financing proposals while exercising sound credit judgment.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Negotiation",
+   "Project proposals"
+  ],
+  "teacher": [
+   "Credit analysis and lending",
+   "Negotiation"
+  ],
+  "id": "d16d9c78bdab",
+  "n": 145,
+  "skills": [
+   {
+    "tag": "145a",
+    "n": "Negotiation",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "145b",
+    "n": "Project proposals",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Worked effectively in a busy, fast-paced environment.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Works under pressure"
+  ],
+  "teacher": [
+   "Works under pressure"
+  ],
+  "id": "f07ce449a80e",
+  "n": 146,
+  "skills": [
+   {
+    "tag": "146a",
+    "n": "Works under pressure",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Designed, developed, and supported system integrations and evaluated vendor-delivered integration capabilities.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Evaluation"
+  ],
+  "teacher": [
+   "Evaluation",
+   "Software development"
+  ],
+  "id": "7a1ca9412ace",
+  "n": 147,
+  "skills": [
+   {
+    "tag": "147a",
+    "n": "Evaluation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Advised staff regarding applicable administrative policies and procedures.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Administrative procedures"
+  ],
+  "teacher": [
+   "Administrative procedures"
+  ],
+  "id": "a9a33bc0b470",
+  "n": 148,
+  "skills": [
+   {
+    "tag": "148a",
+    "n": "Administrative procedures",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Brought specific examples of AI tools configured or connected.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Configuration management"
+  ],
+  "teacher": [
+   "Configuration management"
+  ],
+  "id": "1ac57211697a",
+  "n": 149,
+  "skills": [
+   {
+    "tag": "149a",
+    "n": "Configuration management",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Distinguished demonstrated achievement from claims requiring verification.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Claims management"
+  ],
+  "teacher": [
+   "Due diligence (financial)"
+  ],
+  "id": "34515416cab4",
+  "n": 150,
+  "skills": [
+   {
+    "tag": "150a",
+    "n": "Claims management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Built leadership capability through talent identification, succession planning, performance management, and training.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Performance reviews",
+   "Training and development"
+  ],
+  "teacher": [
+   "Career development",
+   "Performance reviews",
+   "Training and development"
+  ],
+  "id": "3166a5109020",
+  "n": 151,
+  "skills": [
+   {
+    "tag": "151a",
+    "n": "Performance reviews",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "151b",
+    "n": "Training and development",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Built lasting relationships with guests in the community at the York Station location",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Community building"
+  ],
+  "teacher": [
+   "Community building"
+  ],
+  "id": "42ce6dd2baf0",
+  "n": 152,
+  "skills": [
+   {
+    "tag": "152a",
+    "n": "Community building",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Developed a commercial model and customer hierarchy, and implemented Salesforce configuration changes.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Configuration management"
+  ],
+  "teacher": [
+   "CRM administration"
+  ],
+  "id": "ccd3c0951692",
+  "n": 153,
+  "skills": [
+   {
+    "tag": "153a",
+    "n": "Configuration management",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Traveled to attend international customer meetings and events.",
+  "lang": "en",
+  "strict": [
+   "Meeting coordination"
+  ],
+  "bold": [],
+  "teacher": [],
+  "id": "a204286599b0",
+  "n": 154,
+  "skills": [
+   {
+    "tag": "154a",
+    "n": "Meeting coordination",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Facilitated fair and consistent policies and practices while mitigating undue risk",
+  "lang": "en",
+  "strict": [
+   "Risk management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Risk management"
+  ],
+  "id": "699512f4b463",
+  "n": 155,
+  "skills": [
+   {
+    "tag": "155a",
+    "n": "Risk management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Performed financial analysis as a GTM Financial Analyst.",
+  "lang": "en",
+  "strict": [
+   "Financial analysis"
+  ],
+  "bold": [],
+  "teacher": [
+   "Financial analysis"
+  ],
+  "id": "24c857b4ff94",
+  "n": 156,
+  "skills": [
+   {
+    "tag": "156a",
+    "n": "Financial analysis",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Considered internal and external stakeholders and demonstrated intent of understanding and putting the clients’ needs first.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Customer needs analysis"
+  ],
+  "teacher": [
+   "Customer needs analysis"
+  ],
+  "id": "3004066504d0",
+  "n": 157,
+  "skills": [
+   {
+    "tag": "157a",
+    "n": "Customer needs analysis",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported and strengthened the Canadian procurement function as a proactive and resourceful Procurement Specialist.",
+  "lang": "en",
+  "strict": [
+   "Procurement"
+  ],
+  "bold": [],
+  "teacher": [
+   "Procurement"
+  ],
+  "id": "c575acc7e462",
+  "n": 158,
+  "skills": [
+   {
+    "tag": "158a",
+    "n": "Procurement",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated results orientation and competitiveness by hitting and beating numbers",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Results orientation"
+  ],
+  "teacher": [
+   "Results orientation"
+  ],
+  "id": "b186e796fa4e",
+  "n": 159,
+  "skills": [
+   {
+    "tag": "159a",
+    "n": "Results orientation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed project budgets, resources, risks and stakeholder relationships.",
+  "lang": "en",
+  "strict": [
+   "Budgeting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Budgeting",
+   "Management of Material Resources",
+   "Project management",
+   "Project risk analysis"
+  ],
+  "id": "aa88683b091f",
+  "n": 160,
+  "skills": [
+   {
+    "tag": "160a",
+    "n": "Budgeting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Handled confidential and sensitive client information with discretion.",
+  "lang": "en",
+  "strict": [
+   "Discretion and confidentiality"
+  ],
+  "bold": [],
+  "teacher": [
+   "Discretion and confidentiality"
+  ],
+  "id": "c41c3b6f398c",
+  "n": 161,
+  "skills": [
+   {
+    "tag": "161a",
+    "n": "Discretion and confidentiality",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied knowledge of multi-asset investment strategies, products, and portfolio construction.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Investment management"
+  ],
+  "teacher": [
+   "Investment management"
+  ],
+  "id": "ee014766cf65",
+  "n": 162,
+  "skills": [
+   {
+    "tag": "162a",
+    "n": "Investment management",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed organizational change initiatives.",
+  "lang": "en",
+  "strict": [
+   "Change management"
+  ],
+  "bold": [
+   "Work organization"
+  ],
+  "teacher": [
+   "Change management"
+  ],
+  "id": "77e86309ffed",
+  "n": 163,
+  "skills": [
+   {
+    "tag": "163a",
+    "n": "Change management",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "163b",
+    "n": "Work organization",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Built and led the marketing engine from the ground up.",
+  "lang": "en",
+  "strict": [
+   "Marketing"
+  ],
+  "bold": [],
+  "teacher": [
+   "Marketing"
+  ],
+  "id": "1416fe755905",
+  "n": 164,
+  "skills": [
+   {
+    "tag": "164a",
+    "n": "Marketing",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated reliability and operational excellence.",
+  "lang": "en",
+  "strict": [
+   "Operational excellence"
+  ],
+  "bold": [
+   "Reliability analysis"
+  ],
+  "teacher": [
+   "Operational excellence"
+  ],
+  "id": "af72ab9296de",
+  "n": 165,
+  "skills": [
+   {
+    "tag": "165a",
+    "n": "Operational excellence",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "165b",
+    "n": "Reliability analysis",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Généré et qualifié des prospects interentreprises et atteint des résultats par rapport aux objectifs.",
+  "lang": "fr",
+  "strict": [
+   "Results orientation"
+  ],
+  "bold": [],
+  "teacher": [
+   "B2B sales",
+   "Results orientation"
+  ],
+  "id": "853c38660040",
+  "n": 166,
+  "skills": [
+   {
+    "tag": "166a",
+    "n": "Results orientation",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Performed testing, training, and client support.",
+  "lang": "en",
+  "strict": [
+   "Testing and validation"
+  ],
+  "bold": [
+   "Training and development"
+  ],
+  "teacher": [
+   "Omnichannel support",
+   "Testing and validation",
+   "Training and teaching"
+  ],
+  "id": "efde5bac3ec3",
+  "n": 167,
+  "skills": [
+   {
+    "tag": "167a",
+    "n": "Testing and validation",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "167b",
+    "n": "Training and development",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Procédé au nettoyage de pièces et composants aéronautiques à l’aide de différents procédés spécialisés.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "Cleaning and sanitation"
+  ],
+  "teacher": [
+   "Cleaning and sanitation",
+   "Special processes control"
+  ],
+  "id": "7c916d659136",
+  "n": 168,
+  "skills": [
+   {
+    "tag": "168a",
+    "n": "Cleaning and sanitation",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Tracked certifications, calibrations, resource schedules, and revenue tracking and forecasting.",
+  "lang": "en",
+  "strict": [
+   "Demand forecasting"
+  ],
+  "bold": [
+   "Scheduling"
+  ],
+  "teacher": [
+   "Calibration",
+   "Demand forecasting",
+   "Resource planning"
+  ],
+  "id": "5e633be1e07c",
+  "n": 169,
+  "skills": [
+   {
+    "tag": "169a",
+    "n": "Demand forecasting",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "169b",
+    "n": "Scheduling",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Defined and enforced best practices for scalability, resilience, lifecycle management, and operational excellence.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Operational excellence",
+   "Benchmark and best practices"
+  ],
+  "teacher": [
+   "Benchmark and best practices",
+   "Operational excellence"
+  ],
+  "id": "77009a5ef043",
+  "n": 170,
+  "skills": [
+   {
+    "tag": "170a",
+    "n": "Operational excellence",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "170b",
+    "n": "Benchmark and best practices",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Identified and implemented improvement opportunities while aligning with packaging operations and planning.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Packaging"
+  ],
+  "teacher": [
+   "Continuous improvement",
+   "Operations planning and control"
+  ],
+  "id": "c1eceb6368a0",
+  "n": 171,
+  "skills": [
+   {
+    "tag": "171a",
+    "n": "Packaging",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Analyzed revenue quality, customer concentration, churn, and growth drivers",
+  "lang": "en",
+  "strict": [
+   "Growth strategy"
+  ],
+  "bold": [],
+  "teacher": [
+   "Customer analytics",
+   "Customer retention",
+   "Revenue streams"
+  ],
+  "id": "18b241f248ee",
+  "n": 172,
+  "skills": [
+   {
+    "tag": "172a",
+    "n": "Growth strategy",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Gained proven experience in logistics operations in a coordinator role.",
+  "lang": "en",
+  "strict": [
+   "Logistics"
+  ],
+  "bold": [],
+  "teacher": [
+   "Logistics coordination"
+  ],
+  "id": "9678f99d1469",
+  "n": 173,
+  "skills": [
+   {
+    "tag": "173a",
+    "n": "Logistics",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Collaborated with agile engineering teams to build responsive user interfaces, RESTful APIs, and scalable backend services for software platforms.",
+  "lang": "en",
+  "strict": [
+   "Software development"
+  ],
+  "bold": [
+   "Platform engineering"
+  ],
+  "teacher": [
+   "Agile and Scrum",
+   "Software development",
+   "UI design"
+  ],
+  "id": "e6e959c999d3",
+  "n": 174,
+  "skills": [
+   {
+    "tag": "174a",
+    "n": "Software development",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "174b",
+    "n": "Platform engineering",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Developed and executed local sales plans and drove growth through various channels.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Sales"
+  ],
+  "teacher": [
+   "Growth strategy",
+   "Sales"
+  ],
+  "id": "38a29e12a90a",
+  "n": 175,
+  "skills": [
+   {
+    "tag": "175a",
+    "n": "Sales",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Contributed to career development and continued growth within the company.",
+  "lang": "en",
+  "strict": [
+   "Career development"
+  ],
+  "bold": [],
+  "teacher": [],
+  "id": "0b42a2f8fa68",
+  "n": 176,
+  "skills": [
+   {
+    "tag": "176a",
+    "n": "Career development",
+    "level": "auto",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Oversaw building operations, maintenance programs, and contractor performance.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Maintenance management"
+  ],
+  "teacher": [
+   "Building operations management",
+   "Maintenance management",
+   "Supplier performance"
+  ],
+  "id": "edd831b42fe0",
+  "n": 177,
+  "skills": [
+   {
+    "tag": "177a",
+    "n": "Maintenance management",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed financial retail operations in a bank branch or brokerage.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Retail operations"
+  ],
+  "teacher": [
+   "Banking"
+  ],
+  "id": "62ace606bcce",
+  "n": 178,
+  "skills": [
+   {
+    "tag": "178a",
+    "n": "Retail operations",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Designed and executed a structured onboarding and activation program tailored to each client’s technical and operational needs.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Onboarding"
+  ],
+  "teacher": [
+   "Onboarding",
+   "Training and development"
+  ],
+  "id": "c7531f1d779b",
+  "n": 179,
+  "skills": [
+   {
+    "tag": "179a",
+    "n": "Onboarding",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Créé des interfaces en TypeScript et React à partir des besoins et des commentaires des utilisateurs.",
+  "lang": "fr",
+  "strict": [],
+  "bold": [
+   "React",
+   "JavaScript and TypeScript"
+  ],
+  "teacher": [
+   "JavaScript and TypeScript",
+   "React"
+  ],
+  "id": "0f8d7588f1c2",
+  "n": 180,
+  "skills": [
+   {
+    "tag": "180a",
+    "n": "React",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "180b",
+    "n": "JavaScript and TypeScript",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported strategic initiatives focused on process improvement, pricing excellence, and operational efficiency.",
+  "lang": "en",
+  "strict": [
+   "Process improvement"
+  ],
+  "bold": [
+   "Operational excellence"
+  ],
+  "teacher": [
+   "Operational excellence",
+   "Process improvement"
+  ],
+  "id": "afb76077767e",
+  "n": 181,
+  "skills": [
+   {
+    "tag": "181a",
+    "n": "Process improvement",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "181b",
+    "n": "Operational excellence",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied knowledge of competitive marketplace trends and product offerings.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Product knowledge",
+   "Market research"
+  ],
+  "teacher": [
+   "Market research",
+   "Product knowledge"
+  ],
+  "id": "6a16746c16cb",
+  "n": 182,
+  "skills": [
+   {
+    "tag": "182a",
+    "n": "Product knowledge",
+    "level": "confirm",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "182b",
+    "n": "Market research",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Worked as an Assistant Human Resources Manager.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Human resources"
+  ],
+  "teacher": [
+   "Human resources"
+  ],
+  "id": "0b5f1ec8e8a3",
+  "n": 183,
+  "skills": [
+   {
+    "tag": "183a",
+    "n": "Human resources",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Performed physical work including lifting up to 50 lbs, climbing ladders, and working in mechanical spaces",
+  "lang": "en",
+  "strict": [
+   "Frequent lifting"
+  ],
+  "bold": [],
+  "teacher": [
+   "Frequent lifting",
+   "Working at heights"
+  ],
+  "id": "b29bc3f6e015",
+  "n": 184,
+  "skills": [
+   {
+    "tag": "184a",
+    "n": "Frequent lifting",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Built and evolved automated build, test, and deployment infrastructure with CI/CD systems.",
+  "lang": "en",
+  "strict": [
+   "Infrastructure"
+  ],
+  "bold": [
+   "Automation"
+  ],
+  "teacher": [
+   "DevOps and cloud"
+  ],
+  "id": "7b11c177a0f1",
+  "n": 185,
+  "skills": [
+   {
+    "tag": "185a",
+    "n": "Infrastructure",
+    "level": "auto",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "185b",
+    "n": "Automation",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Applied French proficiency",
+  "lang": "en",
+  "strict": [
+   "French"
+  ],
+  "bold": [],
+  "teacher": [
+   "French"
+  ],
+  "id": "ed1fb747786f",
+  "n": 186,
+  "skills": [
+   {
+    "tag": "186a",
+    "n": "French",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Served as the escalation point for network issues and led problem resolution during outages.",
+  "lang": "en",
+  "strict": [
+   "Problem-solving methodologies"
+  ],
+  "bold": [
+   "Networking"
+  ],
+  "teacher": [
+   "Networking",
+   "Problem-solving methodologies"
+  ],
+  "id": "e950b600548a",
+  "n": 187,
+  "skills": [
+   {
+    "tag": "187a",
+    "n": "Problem-solving methodologies",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "187b",
+    "n": "Networking",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied over 7 years of experience in product management, digital delivery, and process improvement.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Process improvement"
+  ],
+  "teacher": [
+   "Digital transformation",
+   "Process improvement"
+  ],
+  "id": "5a37fcb56337",
+  "n": 188,
+  "skills": [
+   {
+    "tag": "188a",
+    "n": "Process improvement",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Supported stakeholder engagement, communication, rollout planning, and change adoption activities.",
+  "lang": "en",
+  "strict": [
+   "Change management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Change management"
+  ],
+  "id": "85d96ff9f05b",
+  "n": 189,
+  "skills": [
+   {
+    "tag": "189a",
+    "n": "Change management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Leveraged experience within regulated industries including Financial Services, Wealth Management, Banking, Insurance, Healthcare, or Government.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Banking",
+   "Insurance"
+  ],
+  "teacher": [],
+  "id": "d0a3c294056e",
+  "n": 190,
+  "skills": [
+   {
+    "tag": "190a",
+    "n": "Banking",
+    "level": "confirm",
+    "teacher_agrees": false
+   },
+   {
+    "tag": "190b",
+    "n": "Insurance",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Développé des jeux AAA au sein d'une grande équipe avec un moteur de jeu reconnu et Unreal Engine.",
+  "lang": "fr",
+  "strict": [
+   "Game development"
+  ],
+  "bold": [],
+  "teacher": [
+   "Game development"
+  ],
+  "id": "ff06d3dbc7d9",
+  "n": 191,
+  "skills": [
+   {
+    "tag": "191a",
+    "n": "Game development",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Demonstrated organizational skills and prioritized work and delegated responsibilities as required",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Work organization"
+  ],
+  "teacher": [
+   "Portfolio prioritization",
+   "Work organization"
+  ],
+  "id": "7ec5cc5abb3a",
+  "n": 192,
+  "skills": [
+   {
+    "tag": "192a",
+    "n": "Work organization",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Managed a large portfolio of small and mid-sized business clients and promoted industry best practices.",
+  "lang": "en",
+  "strict": [
+   "Benchmark and best practices"
+  ],
+  "bold": [],
+  "teacher": [
+   "Benchmark and best practices",
+   "Customer success",
+   "Portfolio analysis"
+  ],
+  "id": "587f80b4619d",
+  "n": 193,
+  "skills": [
+   {
+    "tag": "193a",
+    "n": "Benchmark and best practices",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Built, led, and managed a team of software professionals, including Principal Engineers",
+  "lang": "en",
+  "strict": [
+   "Team management"
+  ],
+  "bold": [
+   "Software development"
+  ],
+  "teacher": [
+   "Recruitment",
+   "Team management"
+  ],
+  "id": "21a06c857c9c",
+  "n": 194,
+  "skills": [
+   {
+    "tag": "194a",
+    "n": "Team management",
+    "level": "auto",
+    "teacher_agrees": true
+   },
+   {
+    "tag": "194b",
+    "n": "Software development",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Owned client engagements end to end, led and mentored a team of consultants, and ensured high-quality work delivery.",
+  "lang": "en",
+  "strict": [
+   "Team management"
+  ],
+  "bold": [],
+  "teacher": [
+   "Management consulting",
+   "Program and service delivery",
+   "Team management"
+  ],
+  "id": "7904a5d8f43d",
+  "n": 195,
+  "skills": [
+   {
+    "tag": "195a",
+    "n": "Team management",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Built data pipelines and applications using Snowflake, dbt, Airflow, Python, AWS, TypeScript, PostgreSQL, and Express.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Databases"
+  ],
+  "teacher": [
+   "Databases",
+   "DevOps and cloud",
+   "Python"
+  ],
+  "id": "ab0bf8b7ab62",
+  "n": 196,
+  "skills": [
+   {
+    "tag": "196a",
+    "n": "Databases",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Used a ticketing system.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Help desk ticketing"
+  ],
+  "teacher": [
+   "Help desk ticketing"
+  ],
+  "id": "f2c0f2aec655",
+  "n": 197,
+  "skills": [
+   {
+    "tag": "197a",
+    "n": "Help desk ticketing",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Gained exposure to build systems and build graph optimization.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Process optimization"
+  ],
+  "teacher": [],
+  "id": "34bb75117df2",
+  "n": 198,
+  "skills": [
+   {
+    "tag": "198a",
+    "n": "Process optimization",
+    "level": "confirm",
+    "teacher_agrees": false
+   }
+  ]
+ },
+ {
+  "line": "Assisted in cycle counting and physical inventory.",
+  "lang": "en",
+  "strict": [
+   "Inventory control"
+  ],
+  "bold": [],
+  "teacher": [
+   "Inventory control"
+  ],
+  "id": "da0ede36925c",
+  "n": 199,
+  "skills": [
+   {
+    "tag": "199a",
+    "n": "Inventory control",
+    "level": "auto",
+    "teacher_agrees": true
+   }
+  ]
+ },
+ {
+  "line": "Applied knowledge of aggregate, gravel, and quarry operations, including crushing, screening, processing, stockpiling, and material handling.",
+  "lang": "en",
+  "strict": [],
+  "bold": [
+   "Material handling"
+  ],
+  "teacher": [
+   "Material handling"
+  ],
+  "id": "c27721906c55",
+  "n": 200,
+  "skills": [
+   {
+    "tag": "200a",
+    "n": "Material handling",
+    "level": "confirm",
+    "teacher_agrees": true
+   }
+  ]
+ }
+]

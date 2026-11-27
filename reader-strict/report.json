@@ -1,0 +1,168 @@
+{
+ "built": "2026-11-27",
+ "minutes": 4.6,
+ "sentences": {
+  "train": 16370,
+  "validation": 1283,
+  "test": 2347
+ },
+ "training_documents": 41871,
+ "skills_learned": 294,
+ "skills_in_labels": 1293,
+ "clues": 36356,
+ "kept_per_skill": 300,
+ "C": 16.0,
+ "balanced": false,
+ "min_examples": 15,
+ "cut": 0.725,
+ "validation": {
+  "right": 184,
+  "said": 216,
+  "true": 1264,
+  "precision": 0.852,
+  "recall": 0.146
+ },
+ "validation_curve": [
+  {
+   "cut": 0.3,
+   "precision": 0.772,
+   "recall": 0.337,
+   "said": 552
+  },
+  {
+   "cut": 0.35,
+   "precision": 0.78,
+   "recall": 0.312,
+   "said": 505
+  },
+  {
+   "cut": 0.4,
+   "precision": 0.79,
+   "recall": 0.283,
+   "said": 453
+  },
+  {
+   "cut": 0.45,
+   "precision": 0.808,
+   "recall": 0.256,
+   "said": 401
+  },
+  {
+   "cut": 0.5,
+   "precision": 0.806,
+   "recall": 0.237,
+   "said": 372
+  },
+  {
+   "cut": 0.55,
+   "precision": 0.818,
+   "recall": 0.213,
+   "said": 329
+  },
+  {
+   "cut": 0.6,
+   "precision": 0.819,
+   "recall": 0.193,
+   "said": 298
+  },
+  {
+   "cut": 0.65,
+   "precision": 0.826,
+   "recall": 0.172,
+   "said": 264
+  },
+  {
+   "cut": 0.7,
+   "precision": 0.845,
+   "recall": 0.156,
+   "said": 233
+  },
+  {
+   "cut": 0.75,
+   "precision": 0.856,
+   "recall": 0.137,
+   "said": 202
+  },
+  {
+   "cut": 0.8,
+   "precision": 0.863,
+   "recall": 0.124,
+   "said": 182
+  },
+  {
+   "cut": 0.85,
+   "precision": 0.879,
+   "recall": 0.104,
+   "said": 149
+  },
+  {
+   "cut": 0.9,
+   "precision": 0.905,
+   "recall": 0.083,
+   "said": 116
+  },
+  {
+   "cut": 0.95,
+   "precision": 0.911,
+   "recall": 0.057,
+   "said": 79
+  }
+ ],
+ "test_posting_sentences": {
+  "lines": 2347,
+  "model": {
+   "right": 328,
+   "said": 389,
+   "true": 2915,
+   "precision": 0.843,
+   "recall": 0.113
+  },
+  "model_on_skills_it_knows": {
+   "right": 328,
+   "said": 389,
+   "true": 2373,
+   "precision": 0.843,
+   "recall": 0.138
+  },
+  "dictionary": {
+   "right": 1219,
+   "said": 3373,
+   "true": 2915,
+   "precision": 0.361,
+   "recall": 0.418
+  },
+  "dictionary_plus_model": {
+   "right": 1315,
+   "said": 3492,
+   "true": 2915,
+   "precision": 0.377,
+   "recall": 0.451
+  },
+  "skills_the_dictionary_misses": {
+   "true": 1696,
+   "found_by_model": 96,
+   "model_said_new": 119,
+   "of_which_right": 96,
+   "share_found": 0.057,
+   "precision_of_new": 0.807
+  }
+ },
+ "test_cv_style_lines": {
+  "lines": 2148,
+  "model": {
+   "right": 419,
+   "said": 509,
+   "true": 2913,
+   "precision": 0.823,
+   "recall": 0.144
+  },
+  "model_on_skills_it_knows": {
+   "right": 419,
+   "said": 509,
+   "true": 2371,
+   "precision": 0.823,
+   "recall": 0.177
+  }
+ },
+ "file_kb": 2549
+}
